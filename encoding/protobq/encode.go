@@ -13,13 +13,13 @@ import (
 )
 
 // Marshal writes the given proto.Message in BigQuery format using default options.
-func Marshal(m proto.Message) (map[string]bigquery.Value, error) {
-	return MarshalOptions{}.Marshal(m)
+func Marshal(msg proto.Message) (map[string]bigquery.Value, error) {
+	return MarshalOptions{}.Marshal(msg)
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using default options.
-func InferSchema(m proto.Message) bigquery.Schema {
-	return MarshalOptions{}.InferSchema(m)
+func InferSchema(msg proto.Message) bigquery.Schema {
+	return MarshalOptions{}.InferSchema(msg)
 }
 
 // MarshalOptions is a configurable BigQuery format marshaler.
@@ -28,21 +28,21 @@ type MarshalOptions struct {
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
 // MarshalOptions.
-func (o MarshalOptions) InferSchema(m proto.Message) bigquery.Schema {
-	return o.inferMessageSchema(m.ProtoReflect().Descriptor())
+func (o MarshalOptions) InferSchema(msg proto.Message) bigquery.Schema {
+	return o.inferMessageSchema(msg.ProtoReflect().Descriptor())
 }
 
 // Marshal marshals the given proto.Message in the BigQuery format using options in
 // MarshalOptions.
-func (o MarshalOptions) Marshal(m proto.Message) (map[string]bigquery.Value, error) {
-	return o.marshalMessage(m.ProtoReflect())
+func (o MarshalOptions) Marshal(msg proto.Message) (map[string]bigquery.Value, error) {
+	return o.marshalMessage(msg.ProtoReflect())
 }
 
 // inferMessageSchema infers the BigQuery schema for the given protoreflect.MessageDescriptor.
-func (o MarshalOptions) inferMessageSchema(m protoreflect.MessageDescriptor) bigquery.Schema {
-	schema := make(bigquery.Schema, 0, m.Fields().Len())
-	for i := 0; i < m.Fields().Len(); i++ {
-		field := m.Fields().Get(i)
+func (o MarshalOptions) inferMessageSchema(msg protoreflect.MessageDescriptor) bigquery.Schema {
+	schema := make(bigquery.Schema, 0, msg.Fields().Len())
+	for i := 0; i < msg.Fields().Len(); i++ {
+		field := msg.Fields().Get(i)
 		if field.IsMap() {
 			continue // TODO: support maps
 		}
@@ -108,10 +108,10 @@ func (o MarshalOptions) inferMessageSchema(m protoreflect.MessageDescriptor) big
 }
 
 // marshalMessage marshals the given protoreflect.Message.
-func (o MarshalOptions) marshalMessage(m protoreflect.Message) (map[string]bigquery.Value, error) {
-	v := make(map[string]bigquery.Value, m.Descriptor().Fields().Len())
+func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]bigquery.Value, error) {
+	row := make(map[string]bigquery.Value, msg.Descriptor().Fields().Len())
 	var err error
-	m.Range(func(field protoreflect.FieldDescriptor, value protoreflect.Value) bool {
+	msg.Range(func(field protoreflect.FieldDescriptor, value protoreflect.Value) bool {
 		if field.IsMap() {
 			return true // TODO
 		}
@@ -125,21 +125,21 @@ func (o MarshalOptions) marshalMessage(m protoreflect.Message) (map[string]bigqu
 				}
 				l = append(l, f)
 			}
-			v[string(field.Name())] = l
+			row[string(field.Name())] = l
 			return true
 		}
-		f, errF := o.marshalValue(field, value)
-		if errF != nil {
-			err = errF
+		column, errMarshal := o.marshalValue(field, value)
+		if errMarshal != nil {
+			err = errMarshal
 			return false
 		}
-		v[string(field.Name())] = f
+		row[string(field.Name())] = column
 		return true
 	})
 	if err != nil {
 		return nil, err
 	}
-	return v, nil
+	return row, nil
 }
 
 // marshalValue marshals the given protoreflect.Value.
