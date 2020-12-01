@@ -41,18 +41,10 @@ func (o MarshalOptions) Marshal(m proto.Message) (map[string]bigquery.Value, err
 // inferMessageSchema infers the BigQuery schema for the given protoreflect.MessageDescriptor.
 func (o MarshalOptions) inferMessageSchema(m protoreflect.MessageDescriptor) bigquery.Schema {
 	schema := make(bigquery.Schema, 0, m.Fields().Len())
-	hasAddedOneOf := map[protoreflect.FullName]bool{}
 	for i := 0; i < m.Fields().Len(); i++ {
 		field := m.Fields().Get(i)
 		if field.IsMap() {
 			continue // TODO: support maps
-		}
-		if oneOf := field.ContainingOneof(); oneOf != nil && !hasAddedOneOf[oneOf.FullName()] {
-			schema = append(schema, &bigquery.FieldSchema{
-				Name: string(oneOf.Name()),
-				Type: bigquery.StringFieldType,
-			})
-			hasAddedOneOf[oneOf.FullName()] = true
 		}
 		fieldSchema := &bigquery.FieldSchema{
 			Name:     string(field.Name()),
@@ -120,10 +112,6 @@ func (o MarshalOptions) marshalMessage(m protoreflect.Message) (map[string]bigqu
 	v := make(map[string]bigquery.Value, m.Descriptor().Fields().Len())
 	var err error
 	m.Range(func(field protoreflect.FieldDescriptor, value protoreflect.Value) bool {
-		if oneOf := field.ContainingOneof(); oneOf != nil {
-			v[string(oneOf.Name())] = string(field.Name())
-			return true
-		}
 		if field.IsMap() {
 			return true // TODO
 		}
