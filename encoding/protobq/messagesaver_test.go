@@ -9,7 +9,7 @@ import (
 )
 
 func TestMessageSaver_Save(t *testing.T) {
-	m := MessageSaver{
+	messageSaver := MessageSaver{
 		Message: &library.Book{
 			Name:   "test-name",
 			Author: "test-author",
@@ -18,9 +18,9 @@ func TestMessageSaver_Save(t *testing.T) {
 		},
 		InsertID: "test-insert-id",
 	}
-	actual, insertID, err := m.Save()
+	actual, insertID, err := messageSaver.Save()
 	assert.NilError(t, err)
-	assert.Equal(t, m.InsertID, insertID)
+	assert.Equal(t, messageSaver.InsertID, insertID)
 	expected := map[string]bigquery.Value{
 		"name":   "test-name",
 		"author": "test-author",
