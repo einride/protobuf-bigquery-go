@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 .PHONY: all
 all: \
 	commitlint \
@@ -9,6 +11,7 @@ all: \
 include tools/commitlint/rules.mk
 include tools/golangci-lint/rules.mk
 include tools/goreview/rules.mk
+include tools/semantic-release/rules.mk
 
 .PHONY: go-test
 go-test:
