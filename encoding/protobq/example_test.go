@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/bigquery"
-	"github.com/einride/protobuf-bigquery-go/encoding/protobq"
 	"github.com/google/go-cmp/cmp"
+	"go.einride.tech/protobuf-bigquery/encoding/protobq"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/testing/protocmp"
 )
