@@ -2,6 +2,7 @@ package protobq
 
 import (
 	"cloud.google.com/go/bigquery"
+	"go.einride.tech/protobuf-bigquery/internal/wkt"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -70,9 +71,9 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		fieldSchema.Type = bigquery.StringFieldType
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		switch field.Message().FullName() {
-		case "google.protobuf.Timestamp":
+		case wkt.Timestamp:
 			fieldSchema.Type = bigquery.TimestampFieldType
-		case "google.protobuf.Duration":
+		case wkt.Duration:
 			fieldSchema.Type = bigquery.FloatFieldType
 		case "google.protobuf.DoubleValue",
 			"google.protobuf.FloatValue":
