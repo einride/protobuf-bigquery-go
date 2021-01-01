@@ -102,6 +102,9 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				Int64ToString: map[int64]string{
 					1: "value1",
 				},
+				Uint32ToString: map[uint32]string{
+					1: "value1",
+				},
 			},
 			expected: map[string]bigquery.Value{
 				"string_to_string": map[string]bigquery.Value{
@@ -121,6 +124,9 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 					1: "value1",
 				},
 				"int64_to_string": map[int64]bigquery.Value{
+					1: "value1",
+				},
+				"uint32_to_string": map[uint64]bigquery.Value{
 					1: "value1",
 				},
 			},

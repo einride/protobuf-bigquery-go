@@ -11,6 +11,7 @@ message ExampleMap {
 
   map<int32, string> int32_to_string = 4;
   map<int64, string> int64_to_string = 5;
+  map<uint32, string> uint32_to_string = 6;
 
   enum Enum {
     ENUM_UNSPECIFIED = 0;
