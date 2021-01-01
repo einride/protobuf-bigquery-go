@@ -1,4 +1,4 @@
-module github.com/einride/protobuf-bigquery-go
+module go.einride.tech/protobuf-bigquery
 
 go 1.15
 
