@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+option go_package = "go.einride.tech/internal/examples/proto/gen/einride/example/v1;examplev1";
+
+message ExampleMap {
+  map<string, string> string_to_string = 1;
+}

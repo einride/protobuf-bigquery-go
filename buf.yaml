@@ -1,0 +1,9 @@
+version: v1beta1
+
+build:
+  roots:
+    - internal/examples/proto/src
+
+lint:
+  use:
+    - DEFAULT
