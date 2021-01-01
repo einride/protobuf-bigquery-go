@@ -6,4 +6,16 @@ option go_package = "go.einride.tech/internal/examples/proto/gen/einride/example
 
 message ExampleMap {
   map<string, string> string_to_string = 1;
+  map<string, Nested> string_to_nested = 2;
+  map<string, Enum> string_to_enum = 3;
+
+  enum Enum {
+    ENUM_UNSPECIFIED = 0;
+    ENUM_VALUE1 = 1;
+    ENUM_VALUE2 = 2;
+  }
+
+  message Nested {
+    map<string, string> string_to_string = 1;
+  }
 }
