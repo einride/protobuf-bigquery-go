@@ -24,6 +24,9 @@ func Load(row []bigquery.Value, schema bigquery.Schema, message proto.Message) e
 
 // UnmarshalOptions is a configurable BigQuery format parser.
 type UnmarshalOptions struct {
+	// Schema contains the schema options.
+	Schema SchemaOptions
+
 	// If AllowPartial is set, input for messages that will result in missing
 	// required fields will not return an error.
 	AllowPartial bool
