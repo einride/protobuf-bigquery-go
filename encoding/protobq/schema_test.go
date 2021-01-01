@@ -93,6 +93,26 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 						{Name: "value", Type: bigquery.StringFieldType},
 					},
 				},
+
+				{
+					Name:     "int32_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.IntegerFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+
+				{
+					Name:     "int64_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.IntegerFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
 			},
 		},
 	} {
