@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
+	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/example/v1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
 	"gotest.tools/v3/assert"
@@ -26,6 +27,7 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				{Name: "read", Type: bigquery.BooleanFieldType},
 			},
 		},
+
 		{
 			name: "library.UpdateBookRequest",
 			msg:  &library.UpdateBookRequest{},
@@ -39,6 +41,22 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 						{Name: "author", Type: bigquery.StringFieldType},
 						{Name: "title", Type: bigquery.StringFieldType},
 						{Name: "read", Type: bigquery.BooleanFieldType},
+					},
+				},
+			},
+		},
+
+		{
+			name: "examplev1.ExampleMap",
+			msg:  &examplev1.ExampleMap{},
+			expected: bigquery.Schema{
+				{
+					Name:     "string_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
 					},
 				},
 			},
