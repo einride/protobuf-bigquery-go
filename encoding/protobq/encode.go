@@ -31,37 +31,79 @@ func (o MarshalOptions) Marshal(msg proto.Message) (map[string]bigquery.Value, e
 
 // marshalMessage marshals the given protoreflect.Message.
 func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]bigquery.Value, error) {
-	row := make(map[string]bigquery.Value, msg.Descriptor().Fields().Len())
-	var err error
+	result := make(map[string]bigquery.Value, msg.Descriptor().Fields().Len())
+	var returnErr error
 	msg.Range(func(field protoreflect.FieldDescriptor, value protoreflect.Value) bool {
-		if field.IsMap() {
-			return true // TODO
-		}
-		if field.IsList() {
+		switch {
+		case field.IsMap():
+			switch field.MapKey().Kind() {
+			case protoreflect.StringKind:
+				m, err := o.marshalStringMapValue(field, value)
+				if err != nil {
+					returnErr = err
+					return false
+				}
+				result[string(field.Name())] = m
+			// TODO: Support more map keys.
+			case protoreflect.BoolKind,
+				protoreflect.EnumKind,
+				protoreflect.BytesKind,
+				protoreflect.FloatKind, protoreflect.DoubleKind,
+				protoreflect.Fixed32Kind, protoreflect.Fixed64Kind,
+				protoreflect.GroupKind, protoreflect.MessageKind,
+				protoreflect.Int32Kind, protoreflect.Int64Kind,
+				protoreflect.Sfixed32Kind, protoreflect.Sfixed64Kind, protoreflect.Sint32Kind, protoreflect.Sint64Kind,
+				protoreflect.Uint32Kind, protoreflect.Uint64Kind:
+				returnErr = fmt.Errorf("unsupported map key kind: %s", field.MapKey().Kind())
+				return false
+			}
+		case field.IsList():
 			l := make([]bigquery.Value, 0, value.List().Len())
 			for i := 0; i < value.List().Len(); i++ {
-				f, errF := o.marshalValue(field, value.List().Get(i))
-				if errF != nil {
-					err = errF
+				f, err := o.marshalValue(field, value.List().Get(i))
+				if err != nil {
+					returnErr = err
 					return false
 				}
 				l = append(l, f)
 			}
-			row[string(field.Name())] = l
-			return true
+			result[string(field.Name())] = l
+		default:
+			column, errMarshal := o.marshalValue(field, value)
+			if errMarshal != nil {
+				returnErr = errMarshal
+				return false
+			}
+			result[string(field.Name())] = column
 		}
-		column, errMarshal := o.marshalValue(field, value)
-		if errMarshal != nil {
-			err = errMarshal
-			return false
-		}
-		row[string(field.Name())] = column
 		return true
 	})
-	if err != nil {
-		return nil, err
+	if returnErr != nil {
+		return nil, returnErr
 	}
-	return row, nil
+	return result, nil
+}
+
+// marshalStringMapValue marshals the given protoreflect.Value as a map with string keys.
+func (o MarshalOptions) marshalStringMapValue(
+	field protoreflect.FieldDescriptor,
+	value protoreflect.Value,
+) (map[string]bigquery.Value, error) {
+	result := make(map[string]bigquery.Value, value.Map().Len())
+	var returnErr error
+	value.Map().Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
+		v, err := o.marshalValue(field.MapValue(), value)
+		if err != nil {
+			returnErr = err
+			return false
+		}
+		result[key.String()] = v
+		return true
+	})
+	if returnErr != nil {
+		return nil, returnErr
+	}
+	return result, nil
 }
 
 // marshalValue marshals the given protoreflect.Value.

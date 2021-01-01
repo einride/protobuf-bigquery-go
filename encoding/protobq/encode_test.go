@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
+	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/example/v1"
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
@@ -32,6 +33,7 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				"read":   true,
 			},
 		},
+
 		{
 			name: "library.UpdateBookRequest",
 			msg: &library.UpdateBookRequest{
@@ -53,6 +55,7 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 			},
 		},
+
 		{
 			name: "expr.Value (bool)",
 			msg: &expr.Value{
@@ -64,8 +67,9 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				"bool_value": true,
 			},
 		},
+
 		{
-			name: "expr.Value (bool)",
+			name: "expr.Value (double)",
 			msg: &expr.Value{
 				Kind: &expr.Value_DoubleValue{
 					DoubleValue: 42,
@@ -73,6 +77,40 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 			},
 			expected: map[string]bigquery.Value{
 				"double_value": float64(42),
+			},
+		},
+
+		{
+			name: "examplev1.ExampleMap",
+			msg: &examplev1.ExampleMap{
+				StringToString: map[string]string{
+					"key1": "value1",
+				},
+				StringToNested: map[string]*examplev1.ExampleMap_Nested{
+					"key1": {
+						StringToString: map[string]string{
+							"key1": "value1",
+						},
+					},
+				},
+				StringToEnum: map[string]examplev1.ExampleMap_Enum{
+					"key1": examplev1.ExampleMap_ENUM_VALUE1,
+				},
+			},
+			expected: map[string]bigquery.Value{
+				"string_to_string": map[string]bigquery.Value{
+					"key1": "value1",
+				},
+				"string_to_nested": map[string]bigquery.Value{
+					"key1": map[string]bigquery.Value{
+						"string_to_string": map[string]bigquery.Value{
+							"key1": "value1",
+						},
+					},
+				},
+				"string_to_enum": map[string]bigquery.Value{
+					"key1": "ENUM_VALUE1",
+				},
 			},
 		},
 	} {
