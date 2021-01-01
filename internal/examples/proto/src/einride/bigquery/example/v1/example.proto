@@ -9,6 +9,9 @@ message ExampleMap {
   map<string, Nested> string_to_nested = 2;
   map<string, Enum> string_to_enum = 3;
 
+  map<int32, string> int32_to_string = 4;
+  map<int64, string> int64_to_string = 5;
+
   enum Enum {
     ENUM_UNSPECIFIED = 0;
     ENUM_VALUE1 = 1;

@@ -96,6 +96,12 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				StringToEnum: map[string]examplev1.ExampleMap_Enum{
 					"key1": examplev1.ExampleMap_ENUM_VALUE1,
 				},
+				Int32ToString: map[int32]string{
+					1: "value1",
+				},
+				Int64ToString: map[int64]string{
+					1: "value1",
+				},
 			},
 			expected: map[string]bigquery.Value{
 				"string_to_string": map[string]bigquery.Value{
@@ -110,6 +116,12 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 				"string_to_enum": map[string]bigquery.Value{
 					"key1": "ENUM_VALUE1",
+				},
+				"int32_to_string": map[int64]bigquery.Value{
+					1: "value1",
+				},
+				"int64_to_string": map[int64]bigquery.Value{
+					1: "value1",
 				},
 			},
 		},
