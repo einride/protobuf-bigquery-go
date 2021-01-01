@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/bigquery"
+	"go.einride.tech/protobuf-bigquery/internal/wkt"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/known/durationpb"
@@ -222,9 +223,9 @@ func (o MarshalOptions) marshalValue(
 		return nil, fmt.Errorf("unknown enum number: %v", value.Enum())
 	case protoreflect.MessageKind:
 		switch field.Message().FullName() {
-		case "google.protobuf.Timestamp":
+		case wkt.Timestamp:
 			return value.Message().Interface().(*timestamppb.Timestamp).AsTime(), nil
-		case "google.protobuf.Duration":
+		case wkt.Duration:
 			return value.Message().Interface().(*durationpb.Duration).AsDuration().Seconds(), nil
 		case "google.protobuf.DoubleValue":
 			return value.Message().Interface().(*wrapperspb.DoubleValue).GetValue(), nil

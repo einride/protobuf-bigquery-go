@@ -83,14 +83,14 @@ func main() {
 	if err != nil {
 		panic(err) // TODO: Handle error.
 	}
-	// Load BigQuery rows into a library.Book message.
+	// Load BigQuery rows into a FilmLocation message.
 	messageLoader := &protobq.MessageLoader{
 		Message: &examplev1.FilmLocation{},
 	}
 	// Iterate rows in table.
 	rowIterator := client.Dataset(dataset).Table(table).Read(ctx)
 	for {
-		// Load next row into the library.Book message.
+		// Load next row into the FilmLocation message.
 		if err := rowIterator.Next(messageLoader); err != nil {
 			if errors.Is(err, iterator.Done) {
 				break
