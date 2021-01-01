@@ -105,6 +105,10 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				Uint32ToString: map[uint32]string{
 					1: "value1",
 				},
+				BoolToString: map[bool]string{
+					false: "value1",
+					true:  "value2",
+				},
 			},
 			expected: map[string]bigquery.Value{
 				"string_to_string": map[string]bigquery.Value{
@@ -128,6 +132,10 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 				"uint32_to_string": map[uint64]bigquery.Value{
 					1: "value1",
+				},
+				"bool_to_string": map[bool]bigquery.Value{
+					false: "value1",
+					true:  "value2",
 				},
 			},
 		},

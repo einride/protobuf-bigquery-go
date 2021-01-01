@@ -36,42 +36,12 @@ func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]big
 	msg.Range(func(field protoreflect.FieldDescriptor, value protoreflect.Value) bool {
 		switch {
 		case field.IsMap():
-			switch field.MapKey().Kind() {
-			case protoreflect.StringKind:
-				m, err := o.marshalStringMapValue(field, value)
-				if err != nil {
-					returnErr = err
-					return false
-				}
-				result[string(field.Name())] = m
-			case
-				protoreflect.Int32Kind, protoreflect.Int64Kind,
-				protoreflect.Sfixed32Kind, protoreflect.Sfixed64Kind,
-				protoreflect.Sint32Kind, protoreflect.Sint64Kind:
-				m, err := o.marshalIntMapValue(field, value)
-				if err != nil {
-					returnErr = err
-					return false
-				}
-				result[string(field.Name())] = m
-			case
-				protoreflect.Fixed32Kind, protoreflect.Fixed64Kind,
-				protoreflect.Uint32Kind, protoreflect.Uint64Kind:
-				m, err := o.marshalUintMapValue(field, value)
-				if err != nil {
-					returnErr = err
-					return false
-				}
-				result[string(field.Name())] = m
-			// TODO: Support more map keys.
-			case protoreflect.BoolKind,
-				protoreflect.EnumKind,
-				protoreflect.BytesKind,
-				protoreflect.FloatKind, protoreflect.DoubleKind,
-				protoreflect.GroupKind, protoreflect.MessageKind:
-				returnErr = fmt.Errorf("unsupported map key kind: %s", field.MapKey().Kind())
+			m, err := o.marshalMapValue(field, value)
+			if err != nil {
+				returnErr = err
 				return false
 			}
+			result[string(field.Name())] = m
 		case field.IsList():
 			l := make([]bigquery.Value, 0, value.List().Len())
 			for i := 0; i < value.List().Len(); i++ {
@@ -97,6 +67,35 @@ func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]big
 		return nil, returnErr
 	}
 	return result, nil
+}
+
+func (o MarshalOptions) marshalMapValue(
+	field protoreflect.FieldDescriptor,
+	value protoreflect.Value,
+) (bigquery.Value, error) {
+	switch field.MapKey().Kind() {
+	case protoreflect.StringKind:
+		return o.marshalStringMapValue(field, value)
+	case
+		protoreflect.Int32Kind, protoreflect.Int64Kind,
+		protoreflect.Sfixed32Kind, protoreflect.Sfixed64Kind,
+		protoreflect.Sint32Kind, protoreflect.Sint64Kind:
+		return o.marshalIntMapValue(field, value)
+	case
+		protoreflect.Fixed32Kind, protoreflect.Fixed64Kind,
+		protoreflect.Uint32Kind, protoreflect.Uint64Kind:
+		return o.marshalUintMapValue(field, value)
+	case protoreflect.BoolKind:
+		return o.marshalBoolMapValue(field, value)
+	case
+		protoreflect.EnumKind,
+		protoreflect.BytesKind,
+		protoreflect.FloatKind, protoreflect.DoubleKind,
+		protoreflect.GroupKind, protoreflect.MessageKind:
+		fallthrough
+	default:
+		return nil, fmt.Errorf("unsupported map key kind: %s", field.MapKey().Kind())
+	}
 }
 
 // marshalStringMapValue marshals the given protoreflect.Value as a map with string keys.
@@ -157,6 +156,28 @@ func (o MarshalOptions) marshalUintMapValue(
 			return false
 		}
 		result[key.Uint()] = v
+		return true
+	})
+	if returnErr != nil {
+		return nil, returnErr
+	}
+	return result, nil
+}
+
+// marshalBoolMapValue marshals the given protoreflect.Value as a map with bool keys.
+func (o MarshalOptions) marshalBoolMapValue(
+	field protoreflect.FieldDescriptor,
+	value protoreflect.Value,
+) (map[bool]bigquery.Value, error) {
+	result := make(map[bool]bigquery.Value, value.Map().Len())
+	var returnErr error
+	value.Map().Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
+		v, err := o.marshalValue(field.MapValue(), value)
+		if err != nil {
+			returnErr = err
+			return false
+		}
+		result[key.Bool()] = v
 		return true
 	})
 	if returnErr != nil {
