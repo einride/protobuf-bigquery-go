@@ -2,10 +2,12 @@ package protobq
 
 import (
 	"fmt"
+	"time"
 
 	"cloud.google.com/go/bigquery"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // Unmarshal the bigquery.Value map into the given proto.Message.
@@ -134,6 +136,10 @@ func (o UnmarshalOptions) loadSingularField(
 		return nil
 	}
 	if field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind {
+		switch field.Message().FullName() {
+		case "google.protobuf.Timestamp":
+			return o.loadTimestampField(bigqueryValue, fieldSchema, field, message)
+		}
 		if fieldSchema.Type != bigquery.RecordFieldType {
 			return fmt.Errorf("unsupported BigQuery type for message: %v", fieldSchema.Type)
 		}
@@ -156,6 +162,23 @@ func (o UnmarshalOptions) loadSingularField(
 	return nil
 }
 
+func (o UnmarshalOptions) loadTimestampField(
+	bigqueryValue bigquery.Value,
+	fieldSchema *bigquery.FieldSchema,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	if fieldSchema.Type != bigquery.TimestampFieldType {
+		return fmt.Errorf("unsupported BigQuery type for google.protobuf.Timestamp: %v", fieldSchema.Type)
+	}
+	t, ok := bigqueryValue.(time.Time)
+	if !ok {
+		return fmt.Errorf("unsupported BigQuery value for google.protobuf.Timestamp: %v", bigqueryValue)
+	}
+	message.Set(field, protoreflect.ValueOfMessage(timestamppb.New(t).ProtoReflect()))
+	return nil
+}
+
 func (o UnmarshalOptions) unmarshalSingularField(
 	bigqueryValue bigquery.Value,
 	field protoreflect.FieldDescriptor,
@@ -165,6 +188,10 @@ func (o UnmarshalOptions) unmarshalSingularField(
 		return nil
 	}
 	if field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind {
+		switch field.Message().FullName() {
+		case "google.protobuf.Timestamp":
+			return o.unmarshalTimestampField(bigqueryValue, field, message)
+		}
 		bigqueryMessageValue, ok := bigqueryValue.(map[string]bigquery.Value)
 		if !ok {
 			return fmt.Errorf("unsupported BigQuery value for message: %v", bigqueryMessageValue)
@@ -181,6 +208,19 @@ func (o UnmarshalOptions) unmarshalSingularField(
 		}
 		message.Set(field, fieldValue)
 	}
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalTimestampField(
+	bigqueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	t, ok := bigqueryValue.(time.Time)
+	if !ok {
+		return fmt.Errorf("unsupported BigQuery value for google.protobuf.Timestamp: %v", bigqueryValue)
+	}
+	message.Set(field, protoreflect.ValueOfMessage(timestamppb.New(t).ProtoReflect()))
 	return nil
 }
 

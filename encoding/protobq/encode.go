@@ -250,6 +250,14 @@ func (o MarshalOptions) marshalValue(
 				return nil, err
 			}
 			return string(data), nil
+		case "google.type.Date":
+			return nil, fmt.Errorf("TODO: implement support for google.type.Date")
+		case "google.type.DateTime":
+			return nil, fmt.Errorf("TODO: implement support for google.type.DateTime")
+		case "google.type.LatLng":
+			return nil, fmt.Errorf("TODO: implement support for google.type.LatLng")
+		case "google.type.Time":
+			return nil, fmt.Errorf("TODO: implement support for google.type.Time")
 		default:
 			return o.marshalMessage(value.Message())
 		}
