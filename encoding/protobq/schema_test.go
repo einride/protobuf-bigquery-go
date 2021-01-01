@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
-	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/example/v1"
+	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
 	"gotest.tools/v3/assert"

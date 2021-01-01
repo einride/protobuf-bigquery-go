@@ -20,6 +20,10 @@ include tools/protoc-gen-go/rules.mk
 include tools/protoc/rules.mk
 include tools/semantic-release/rules.mk
 
+.PHONY: internal/examples/proto/api-common-protos
+internal/examples/proto/api-common-protos:
+	@git submodule update --init --recursive $@
+
 .PHONY: go-test
 go-test:
 	$(info [$@] running Go tests...)
@@ -36,6 +40,7 @@ buf-check-lint: $(buf)
 	@$(buf) check lint
 
 .PHONY: buf-generate
-buf-generate: $(buf) $(protoc) $(protoc_gen_go)
+buf-generate: $(buf) $(protoc) $(protoc_gen_go) internal/examples/proto/api-common-protos
 	$(info [$@] generating protobuf stubs...)
-	@$(buf) generate
+	@rm -rf internal/examples/proto/gen
+	@$(buf) generate --path internal/examples/proto/src/einride
