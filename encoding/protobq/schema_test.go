@@ -123,6 +123,16 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 						{Name: "value", Type: bigquery.StringFieldType},
 					},
 				},
+
+				{
+					Name:     "bool_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.BooleanFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
 			},
 		},
 	} {
