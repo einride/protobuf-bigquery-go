@@ -1,5 +1,16 @@
 # Protobuf + BigQuery + Go
 
+[![PkgGoDev][pkg-badge]][pkg]
+[![GoReportCard][report-badge]][report]
+[![Codecov][codecov-badge]][codecov]
+
+[pkg-badge]: https://pkg.go.dev/badge/go.einride.tech/protobuf-bigquery
+[pkg]: https://pkg.go.dev/go.einride.tech/protobuf-bigquery
+[report-badge]: https://goreportcard.com/badge/go.einride.tech/protobuf-bigquery
+[report]: https://goreportcard.com/report/go.einride.tech/protobuf-bigquery
+[codecov-badge]: https://codecov.io/gh/einride/protobuf-bigquery-go/branch/master/graph/badge.svg
+[codecov]: https://codecov.io/gh/einride/protobuf-bigquery-go
+
 Add-ons to [cloud.google.com/bigquery][google-cloud-go-bigquery] for
 first-class protobuf support using [protobuf reflection][protobuf-apiv2].
 
