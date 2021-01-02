@@ -1,11 +1,12 @@
 # Protobuf + BigQuery + Go
 
 Add-ons to [cloud.google.com/bigquery][google-cloud-go-bigquery] for
-first-class protobuf support.
+first-class protobuf support using [protobuf reflection][protobuf-apiv2].
 
 **Work in progress:** This library is under active development.
 
 [google-cloud-go-bigquery]: https://pkg.go.dev/cloud.google.com/go/bigquery
+[protobuf-apiv2]: https://blog.golang.org/protobuf-apiv2
 
 ## Installing
 
@@ -38,12 +39,12 @@ _[Reference ≫][well-known-types]_
 
 ### Support for API Common Protos (`google.type`)
 
-| Protobuf             | BigQuery  |
-| -------------------- | --------- |
-| google.type.Date     | DATE      |
-| google.type.DateTime | TIMESTAMP |
-| google.type.LatLng   | GEOGRAPHY |
-| google.type.Time     | TIME      |
+| Protobuf              | BigQuery  |
+| --------------------- | --------- |
+| google.type.Date      | DATE      |
+| google.type.DateTime  | TIMESTAMP |
+| google.type.LatLng    | GEOGRAPHY |
+| google.type.TimeOfDay | TIME      |
 
 _[Reference ≫][api-common-protos]_
 
@@ -53,7 +54,10 @@ _[Reference ≫][api-common-protos]_
 
 ### `protobq.MessageLoader`
 
-Loads BigQuery rows into protobuf messages.
+An implementation of [bigquery.ValueLoader][valueloader] that loads
+BigQuery rows into protobuf messages.
+
+[valueloader]: https://pkg.go.dev/cloud.google.com/go/bigquery#ValueLoader
 
 ```go
 package main

@@ -4,7 +4,7 @@ package einride.bigquery.public.v1;
 
 option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1";
 
-// FilmLocation is the protobuf schema for the BigQuery public table:
+// Protobuf schema for the BigQuery public table:
 //
 //  bigquery-public-data.san_francisco_film_locations.film_locations
 message FilmLocation {

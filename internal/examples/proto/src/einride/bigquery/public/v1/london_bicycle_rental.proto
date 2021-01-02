@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package einride.bigquery.public.v1;
+
+option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+// Protobuf schema for the BigQuery public table:
+//
+//  bigquery-public-data.london_bicycles.cycle_hire
+message LondonBicycleRental {
+  int64 rental_id = 1; // INTEGER REQUIRED
+  google.protobuf.Duration duration = 2; // INTEGER NULLABLE
+  int64 bike_id = 3; // INTEGER NULLABLE
+  google.protobuf.Timestamp end_date = 4; // TIMESTAMP NULLABLE
+  int64 end_station_id = 5; // INTEGER NULLABLE
+  string end_station_name = 6; // STRING NULLABLE
+  google.protobuf.Timestamp start_date = 7; // TIMESTAMP NULLABLE
+  int64 start_station_id = 8; // INTEGER NULLABLE
+  string start_station_name = 9; // STRING NULLABLE
+  int64 end_station_logical_terminal = 10; // INTEGER NULLABLE
+  int64 start_station_logical_terminal = 11; // INTEGER NULLABLE
+  int64 end_station_priority_id = 12; // INTEGER NULLABLE
+}

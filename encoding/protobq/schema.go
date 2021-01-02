@@ -89,15 +89,15 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 			fieldSchema.Type = bigquery.StringFieldType
 		case "google.protobuf.BytesValue":
 			fieldSchema.Type = bigquery.BytesFieldType
-		case "google.protobuf.StructValue":
+		case wkt.Struct:
 			fieldSchema.Type = bigquery.StringFieldType // JSON string
-		case "google.type.Date":
+		case wkt.Date:
 			fieldSchema.Type = bigquery.DateFieldType
 		case "google.type.DateTime":
 			fieldSchema.Type = bigquery.TimestampFieldType
-		case "google.type.LatLng":
+		case wkt.LatLng:
 			fieldSchema.Type = bigquery.GeographyFieldType
-		case "google.type.Time":
+		case wkt.TimeOfDay:
 			fieldSchema.Type = bigquery.TimeFieldType
 		default:
 			fieldSchema.Type = bigquery.RecordFieldType

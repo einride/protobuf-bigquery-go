@@ -27,6 +27,11 @@ internal/examples/proto/api-common-protos:
 .PHONY: go-test
 go-test:
 	$(info [$@] running Go tests...)
+	@go test -short -race -cover ./...
+
+.PHONY: go-integration-test
+go-integration-test:
+	$(info [$@] running Go tests (including integration tests)...)
 	@go test -race -cover ./...
 
 .PHONY: go-mod-tidy
@@ -35,7 +40,7 @@ go-mod-tidy:
 	@go mod tidy -v
 
 .PHONY: buf-check-lint
-buf-check-lint: $(buf)
+buf-check-lint: $(buf) internal/examples/proto/api-common-protos
 	$(info [$@] linting protobuf schemas...)
 	@$(buf) check lint
 
