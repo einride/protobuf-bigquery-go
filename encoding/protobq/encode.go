@@ -214,10 +214,7 @@ func (o MarshalOptions) marshalValue(
 	case protoreflect.BytesKind:
 		return value.Bytes(), nil
 	case protoreflect.EnumKind:
-		if enumValue := field.Enum().Values().ByNumber(value.Enum()); enumValue != nil {
-			return string(enumValue.Name()), nil
-		}
-		return nil, fmt.Errorf("unknown enum number: %v", value.Enum())
+		return o.marshalEnumValue(field, value)
 	case protoreflect.GroupKind, protoreflect.MessageKind:
 		if wkt.IsWellKnownType(string(field.Message().FullName())) {
 			return o.marshalWellKnownTypeValue(field, value)
@@ -226,6 +223,20 @@ func (o MarshalOptions) marshalValue(
 	default:
 		return nil, fmt.Errorf("unsupported field type: %v", field.Name())
 	}
+}
+
+func (o MarshalOptions) marshalEnumValue(
+	field protoreflect.FieldDescriptor,
+	value protoreflect.Value,
+) (bigquery.Value, error) {
+	enumNumber := value.Enum()
+	if o.Schema.UseEnumNumbers {
+		return int64(enumNumber), nil
+	}
+	if enumValue := field.Enum().Values().ByNumber(enumNumber); enumValue != nil {
+		return string(enumValue.Name()), nil
+	}
+	return nil, fmt.Errorf("unknown enum number: %v", value.Enum())
 }
 
 func (o MarshalOptions) marshalWellKnownTypeValue(

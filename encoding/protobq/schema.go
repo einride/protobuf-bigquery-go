@@ -13,7 +13,10 @@ func InferSchema(msg proto.Message) bigquery.Schema {
 }
 
 // SchemaOptions contains configuration options for BigQuery schema inference.
-type SchemaOptions struct{}
+type SchemaOptions struct {
+	// UseEnumNumbers converts enum values to INTEGER types.
+	UseEnumNumbers bool
+}
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
 // MarshalOptions.
@@ -32,24 +35,23 @@ func (o SchemaOptions) inferMessageSchema(msg protoreflect.MessageDescriptor) bi
 
 func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *bigquery.FieldSchema {
 	if field.IsMap() {
-		return &bigquery.FieldSchema{
-			Name:     string(field.Name()),
-			Repeated: true,
-			Type:     bigquery.RecordFieldType,
-			Schema: bigquery.Schema{
-				o.inferFieldSchema(field.MapKey()),
-				o.inferFieldSchema(field.MapValue()),
-			},
-		}
+		return o.inferMapFieldSchema(field)
 	}
 	fieldSchema := &bigquery.FieldSchema{
 		Name:     string(field.Name()),
+		Type:     o.inferFieldSchemaType(field),
 		Repeated: field.IsList(),
 	}
+	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
+		fieldSchema.Schema = o.inferMessageSchema(field.Message())
+	}
+	return fieldSchema
+}
+
+func (o SchemaOptions) inferFieldSchemaType(field protoreflect.FieldDescriptor) bigquery.FieldType {
 	switch field.Kind() {
-	case protoreflect.DoubleKind,
-		protoreflect.FloatKind:
-		fieldSchema.Type = bigquery.FloatFieldType
+	case protoreflect.DoubleKind, protoreflect.FloatKind:
+		return bigquery.FloatFieldType
 	case protoreflect.Int64Kind,
 		protoreflect.Uint64Kind,
 		protoreflect.Int32Kind,
@@ -60,49 +62,65 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		protoreflect.Sfixed64Kind,
 		protoreflect.Sint32Kind,
 		protoreflect.Sint64Kind:
-		fieldSchema.Type = bigquery.IntegerFieldType
+		return bigquery.IntegerFieldType
 	case protoreflect.BoolKind:
-		fieldSchema.Type = bigquery.BooleanFieldType
+		return bigquery.BooleanFieldType
 	case protoreflect.StringKind:
-		fieldSchema.Type = bigquery.StringFieldType
+		return bigquery.StringFieldType
 	case protoreflect.BytesKind:
-		fieldSchema.Type = bigquery.BytesFieldType
+		return bigquery.BytesFieldType
 	case protoreflect.EnumKind:
-		fieldSchema.Type = bigquery.StringFieldType
+		return o.inferEnumFieldType(field)
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		switch field.Message().FullName() {
 		case wkt.Timestamp:
-			fieldSchema.Type = bigquery.TimestampFieldType
+			return bigquery.TimestampFieldType
 		case wkt.Duration:
-			fieldSchema.Type = bigquery.FloatFieldType
+			return bigquery.FloatFieldType
 		case "google.protobuf.DoubleValue",
 			"google.protobuf.FloatValue":
-			fieldSchema.Type = bigquery.FloatFieldType
+			return bigquery.FloatFieldType
 		case "google.protobuf.Int32Value",
 			"google.protobuf.Int64Value",
 			"google.protobuf.UInt32Value",
 			"google.protobuf.UInt64Value":
-			fieldSchema.Type = bigquery.IntegerFieldType
+			return bigquery.IntegerFieldType
 		case "google.protobuf.BoolValue":
-			fieldSchema.Type = bigquery.BooleanFieldType
+			return bigquery.BooleanFieldType
 		case "google.protobuf.StringValue":
-			fieldSchema.Type = bigquery.StringFieldType
+			return bigquery.StringFieldType
 		case "google.protobuf.BytesValue":
-			fieldSchema.Type = bigquery.BytesFieldType
+			return bigquery.BytesFieldType
 		case wkt.Struct:
-			fieldSchema.Type = bigquery.StringFieldType // JSON string
+			return bigquery.StringFieldType // JSON string
 		case wkt.Date:
-			fieldSchema.Type = bigquery.DateFieldType
+			return bigquery.DateFieldType
 		case "google.type.DateTime":
-			fieldSchema.Type = bigquery.TimestampFieldType
+			return bigquery.TimestampFieldType
 		case wkt.LatLng:
-			fieldSchema.Type = bigquery.GeographyFieldType
+			return bigquery.GeographyFieldType
 		case wkt.TimeOfDay:
-			fieldSchema.Type = bigquery.TimeFieldType
-		default:
-			fieldSchema.Type = bigquery.RecordFieldType
-			fieldSchema.Schema = o.inferMessageSchema(field.Message())
+			return bigquery.TimeFieldType
 		}
 	}
-	return fieldSchema
+	return bigquery.RecordFieldType
+}
+
+func (o SchemaOptions) inferEnumFieldType(field protoreflect.FieldDescriptor) bigquery.FieldType {
+	if o.UseEnumNumbers {
+		return bigquery.IntegerFieldType
+	}
+	return bigquery.StringFieldType
+}
+
+func (o SchemaOptions) inferMapFieldSchema(field protoreflect.FieldDescriptor) *bigquery.FieldSchema {
+	return &bigquery.FieldSchema{
+		Name:     string(field.Name()),
+		Repeated: true,
+		Type:     bigquery.RecordFieldType,
+		Schema: bigquery.Schema{
+			o.inferFieldSchema(field.MapKey()),
+			o.inferFieldSchema(field.MapValue()),
+		},
+	}
 }
