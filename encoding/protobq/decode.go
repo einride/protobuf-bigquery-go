@@ -5,10 +5,15 @@ import (
 	"time"
 
 	"cloud.google.com/go/bigquery"
+	"cloud.google.com/go/civil"
 	"go.einride.tech/protobuf-bigquery/internal/wkt"
+	"google.golang.org/genproto/googleapis/type/date"
+	"google.golang.org/genproto/googleapis/type/latlng"
+	"google.golang.org/genproto/googleapis/type/timeofday"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -138,14 +143,14 @@ func (o UnmarshalOptions) loadSingularField(
 		return nil
 	}
 	if field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind {
-		switch field.Message().FullName() {
-		case wkt.Timestamp:
-			return o.unmarshalTimestampField(bigqueryValue, field, message)
-		case wkt.Duration:
-			return o.unmarshalDurationField(bigqueryValue, field, message)
+		if wkt.IsWellKnownType(string(field.Message().FullName())) {
+			if err := o.unmarshalWellKnownTypeField(bigqueryValue, field, message); err != nil {
+				return fmt.Errorf("%s: %w", field.Name(), err)
+			}
+			return nil
 		}
 		if fieldSchema.Type != bigquery.RecordFieldType {
-			return fmt.Errorf("unsupported BigQuery type for message: %v", fieldSchema.Type)
+			return fmt.Errorf("%s: unsupported BigQuery type for message: %v", field.Name(), fieldSchema.Type)
 		}
 		bigqueryMessageValue, ok := bigqueryValue.([]bigquery.Value)
 		if !ok {
@@ -153,13 +158,13 @@ func (o UnmarshalOptions) loadSingularField(
 		}
 		fieldValue := message.NewField(field)
 		if err := o.loadMessage(bigqueryMessageValue, fieldSchema.Schema, fieldValue.Message()); err != nil {
-			return err
+			return fmt.Errorf("%s: %w", field.Name(), err)
 		}
 		message.Set(field, fieldValue)
 	} else {
 		fieldValue, err := o.unmarshalScalar(bigqueryValue, field)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s: %w", field.Name(), err)
 		}
 		message.Set(field, fieldValue)
 	}
@@ -175,29 +180,52 @@ func (o UnmarshalOptions) unmarshalSingularField(
 		return nil
 	}
 	if field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind {
-		switch field.Message().FullName() {
-		case wkt.Timestamp:
-			return o.unmarshalTimestampField(bigqueryValue, field, message)
-		case wkt.Duration:
-			return o.unmarshalDurationField(bigqueryValue, field, message)
+		if wkt.IsWellKnownType(string(field.Message().FullName())) {
+			if err := o.unmarshalWellKnownTypeField(bigqueryValue, field, message); err != nil {
+				return fmt.Errorf("%s: %w", field.Name(), err)
+			}
+			return nil
 		}
 		bigqueryMessageValue, ok := bigqueryValue.(map[string]bigquery.Value)
 		if !ok {
-			return fmt.Errorf("unsupported BigQuery value for message: %v", bigqueryMessageValue)
+			return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bigqueryMessageValue)
 		}
 		fieldValue := message.NewField(field)
 		if err := o.unmarshalMessage(bigqueryMessageValue, fieldValue.Message()); err != nil {
-			return err
+			return fmt.Errorf("%s: %w", field.Name(), err)
 		}
 		message.Set(field, fieldValue)
 	} else {
 		fieldValue, err := o.unmarshalScalar(bigqueryValue, field)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s: %w", field.Name(), err)
 		}
 		message.Set(field, fieldValue)
 	}
 	return nil
+}
+
+func (o UnmarshalOptions) unmarshalWellKnownTypeField(
+	bigqueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	switch field.Message().FullName() {
+	case wkt.Timestamp:
+		return o.unmarshalTimestampField(bigqueryValue, field, message)
+	case wkt.Duration:
+		return o.unmarshalDurationField(bigqueryValue, field, message)
+	case wkt.TimeOfDay:
+		return o.unmarshalTimeOfDayField(bigqueryValue, field, message)
+	case wkt.Date:
+		return o.unmarshalDateField(bigqueryValue, field, message)
+	case wkt.LatLng:
+		return o.unmarshalLatLngField(bigqueryValue, field, message)
+	case wkt.Struct:
+		return o.unmarshalStructField(bigqueryValue, field, message)
+	default:
+		return fmt.Errorf("unsupported well-known-type: %s", field.Message().FullName())
+	}
 }
 
 func (o UnmarshalOptions) unmarshalTimestampField(
@@ -207,7 +235,7 @@ func (o UnmarshalOptions) unmarshalTimestampField(
 ) error {
 	t, ok := bigqueryValue.(time.Time)
 	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for google.protobuf.Timestamp: %v", bigqueryValue)
+		return fmt.Errorf("unsupported BigQuery value for %s: %v", wkt.Timestamp, bigqueryValue)
 	}
 	message.Set(field, protoreflect.ValueOfMessage(timestamppb.New(t).ProtoReflect()))
 	return nil
@@ -218,11 +246,85 @@ func (o UnmarshalOptions) unmarshalDurationField(
 	field protoreflect.FieldDescriptor,
 	message protoreflect.Message,
 ) error {
-	t, ok := bigqueryValue.(time.Duration)
-	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for google.protobuf.Duration: %v", bigqueryValue)
+	var duration time.Duration
+	switch bigqueryValue := bigqueryValue.(type) {
+	case int64:
+		duration = time.Duration(bigqueryValue) * time.Second
+	case float64:
+		duration = time.Duration(bigqueryValue * float64(time.Second))
+	default:
+		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Duration, bigqueryValue)
 	}
-	message.Set(field, protoreflect.ValueOfMessage(durationpb.New(t).ProtoReflect()))
+	message.Set(field, protoreflect.ValueOfMessage(durationpb.New(duration).ProtoReflect()))
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalTimeOfDayField(
+	bigqueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	t, ok := bigqueryValue.(civil.Time)
+	if !ok {
+		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.TimeOfDay, bigqueryValue)
+	}
+	message.Set(field, protoreflect.ValueOfMessage((&timeofday.TimeOfDay{
+		Hours:   int32(t.Hour),
+		Minutes: int32(t.Minute),
+		Seconds: int32(t.Second),
+		Nanos:   int32(t.Nanosecond),
+	}).ProtoReflect()))
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalDateField(
+	bigqueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	d, ok := bigqueryValue.(civil.Date)
+	if !ok {
+		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Date, bigqueryValue)
+	}
+	message.Set(field, protoreflect.ValueOfMessage((&date.Date{
+		Year:  int32(d.Year),
+		Month: int32(d.Month),
+		Day:   int32(d.Day),
+	}).ProtoReflect()))
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalLatLngField(
+	bigqueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	s, ok := bigqueryValue.(string)
+	if !ok {
+		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.LatLng, bigqueryValue)
+	}
+	latLng := &latlng.LatLng{}
+	if _, err := fmt.Sscanf(s, "POINT(%f %f)", &latLng.Longitude, &latLng.Latitude); err != nil {
+		return fmt.Errorf("invalid GEOGRAPHY value for %s: %#v: %w", wkt.LatLng, bigqueryValue, err)
+	}
+	message.Set(field, protoreflect.ValueOfMessage(latLng.ProtoReflect()))
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalStructField(
+	bigqueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	s, ok := bigqueryValue.(string)
+	if !ok {
+		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Struct, bigqueryValue)
+	}
+	var structValue structpb.Struct
+	if err := structValue.UnmarshalJSON([]byte(s)); err != nil {
+		return fmt.Errorf("invalid BigQuery value for %s: %#v: %w", wkt.Struct, bigqueryValue, err)
+	}
+	message.Set(field, protoreflect.ValueOfMessage(structValue.ProtoReflect()))
 	return nil
 }
 
@@ -288,5 +390,5 @@ func (o UnmarshalOptions) unmarshalScalar(
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		// Fall through to return error, these should have been handled by the caller.
 	}
-	return protoreflect.Value{}, fmt.Errorf("invalid BigQuery value %v for kind %v", bigQueryValue, field.Kind())
+	return protoreflect.Value{}, fmt.Errorf("invalid BigQuery value %#v for kind %v", bigQueryValue, field.Kind())
 }

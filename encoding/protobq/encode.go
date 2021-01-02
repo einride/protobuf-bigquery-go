@@ -2,9 +2,14 @@ package protobq
 
 import (
 	"fmt"
+	"time"
 
 	"cloud.google.com/go/bigquery"
+	"cloud.google.com/go/civil"
 	"go.einride.tech/protobuf-bigquery/internal/wkt"
+	"google.golang.org/genproto/googleapis/type/date"
+	"google.golang.org/genproto/googleapis/type/latlng"
+	"google.golang.org/genproto/googleapis/type/timeofday"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/known/durationpb"
@@ -193,27 +198,19 @@ func (o MarshalOptions) marshalValue(
 	value protoreflect.Value,
 ) (bigquery.Value, error) {
 	switch field.Kind() {
-	case protoreflect.DoubleKind,
-		protoreflect.FloatKind:
+	case protoreflect.DoubleKind, protoreflect.FloatKind:
 		return value.Float(), nil
-	case protoreflect.Int64Kind,
-		protoreflect.Int32Kind,
-		protoreflect.Sfixed32Kind,
-		protoreflect.Sfixed64Kind,
-		protoreflect.Sint32Kind,
-		protoreflect.Sint64Kind:
+	case protoreflect.Int32Kind, protoreflect.Int64Kind,
+		protoreflect.Sfixed32Kind, protoreflect.Sfixed64Kind,
+		protoreflect.Sint32Kind, protoreflect.Sint64Kind:
 		return value.Int(), nil
-	case protoreflect.Uint64Kind,
-		protoreflect.Fixed64Kind,
-		protoreflect.Fixed32Kind,
-		protoreflect.Uint32Kind:
+	case protoreflect.Uint32Kind, protoreflect.Uint64Kind,
+		protoreflect.Fixed32Kind, protoreflect.Fixed64Kind:
 		return value.Uint(), nil
 	case protoreflect.BoolKind:
 		return value.Bool(), nil
 	case protoreflect.StringKind:
 		return value.String(), nil
-	case protoreflect.GroupKind:
-		return nil, nil // ignore
 	case protoreflect.BytesKind:
 		return value.Bytes(), nil
 	case protoreflect.EnumKind:
@@ -221,48 +218,79 @@ func (o MarshalOptions) marshalValue(
 			return string(enumValue.Name()), nil
 		}
 		return nil, fmt.Errorf("unknown enum number: %v", value.Enum())
-	case protoreflect.MessageKind:
-		switch field.Message().FullName() {
-		case wkt.Timestamp:
-			return value.Message().Interface().(*timestamppb.Timestamp).AsTime(), nil
-		case wkt.Duration:
-			return value.Message().Interface().(*durationpb.Duration).AsDuration().Seconds(), nil
-		case "google.protobuf.DoubleValue":
-			return value.Message().Interface().(*wrapperspb.DoubleValue).GetValue(), nil
-		case "google.protobuf.FloatValue":
-			return value.Message().Interface().(*wrapperspb.FloatValue).GetValue(), nil
-		case "google.protobuf.Int32Value":
-			return value.Message().Interface().(*wrapperspb.Int32Value).GetValue(), nil
-		case "google.protobuf.Int64Value":
-			return value.Message().Interface().(*wrapperspb.Int64Value).GetValue(), nil
-		case "google.protobuf.UInt32Value":
-			return value.Message().Interface().(*wrapperspb.UInt32Value).GetValue(), nil
-		case "google.protobuf.UInt64Value":
-			return value.Message().Interface().(*wrapperspb.UInt64Value).GetValue(), nil
-		case "google.protobuf.BoolValue":
-			return value.Message().Interface().(*wrapperspb.BoolValue).GetValue(), nil
-		case "google.protobuf.StringValue":
-			return value.Message().Interface().(*wrapperspb.StringValue).GetValue(), nil
-		case "google.protobuf.BytesValue":
-			return value.Message().Interface().(*wrapperspb.BytesValue).GetValue(), nil
-		case "google.protobuf.StructValue":
-			data, err := value.Message().Interface().(*structpb.Struct).MarshalJSON()
-			if err != nil {
-				return nil, err
-			}
-			return string(data), nil
-		case "google.type.Date":
-			return nil, fmt.Errorf("TODO: implement support for google.type.Date")
-		case "google.type.DateTime":
-			return nil, fmt.Errorf("TODO: implement support for google.type.DateTime")
-		case "google.type.LatLng":
-			return nil, fmt.Errorf("TODO: implement support for google.type.LatLng")
-		case "google.type.Time":
-			return nil, fmt.Errorf("TODO: implement support for google.type.Time")
-		default:
-			return o.marshalMessage(value.Message())
+	case protoreflect.GroupKind, protoreflect.MessageKind:
+		if wkt.IsWellKnownType(string(field.Message().FullName())) {
+			return o.marshalWellKnownTypeValue(field, value)
 		}
+		return o.marshalMessage(value.Message())
 	default:
 		return nil, fmt.Errorf("unsupported field type: %v", field.Name())
+	}
+}
+
+func (o MarshalOptions) marshalWellKnownTypeValue(
+	field protoreflect.FieldDescriptor,
+	value protoreflect.Value,
+) (bigquery.Value, error) {
+	switch field.Message().FullName() {
+	case wkt.Timestamp:
+		return value.Message().Interface().(*timestamppb.Timestamp).AsTime(), nil
+	case wkt.Duration:
+		return value.Message().Interface().(*durationpb.Duration).AsDuration().Seconds(), nil
+	case "google.protobuf.DoubleValue":
+		return value.Message().Interface().(*wrapperspb.DoubleValue).GetValue(), nil
+	case "google.protobuf.FloatValue":
+		return value.Message().Interface().(*wrapperspb.FloatValue).GetValue(), nil
+	case "google.protobuf.Int32Value":
+		return value.Message().Interface().(*wrapperspb.Int32Value).GetValue(), nil
+	case "google.protobuf.Int64Value":
+		return value.Message().Interface().(*wrapperspb.Int64Value).GetValue(), nil
+	case "google.protobuf.UInt32Value":
+		return value.Message().Interface().(*wrapperspb.UInt32Value).GetValue(), nil
+	case "google.protobuf.UInt64Value":
+		return value.Message().Interface().(*wrapperspb.UInt64Value).GetValue(), nil
+	case "google.protobuf.BoolValue":
+		return value.Message().Interface().(*wrapperspb.BoolValue).GetValue(), nil
+	case "google.protobuf.StringValue":
+		return value.Message().Interface().(*wrapperspb.StringValue).GetValue(), nil
+	case "google.protobuf.BytesValue":
+		return value.Message().Interface().(*wrapperspb.BytesValue).GetValue(), nil
+	case wkt.Struct:
+		data, err := value.Message().Interface().(*structpb.Struct).MarshalJSON()
+		if err != nil {
+			return nil, err
+		}
+		return string(data), nil
+	case wkt.Date:
+		d, ok := value.Message().Interface().(*date.Date)
+		if !ok {
+			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.Date, value)
+		}
+		return civil.Date{
+			Year:  int(d.Year),
+			Month: time.Month(d.Month),
+			Day:   int(d.Day),
+		}, nil
+	case "google.type.DateTime":
+		return nil, fmt.Errorf("TODO: implement support for google.type.DateTime")
+	case wkt.LatLng:
+		latLng, ok := value.Message().Interface().(*latlng.LatLng)
+		if !ok {
+			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.LatLng, value)
+		}
+		return fmt.Sprintf("POINT(%f %f)", latLng.Longitude, latLng.Latitude), nil
+	case wkt.TimeOfDay:
+		timeOfDay, ok := value.Message().Interface().(*timeofday.TimeOfDay)
+		if !ok {
+			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.TimeOfDay, value)
+		}
+		return civil.Time{
+			Hour:       int(timeOfDay.Hours),
+			Minute:     int(timeOfDay.Minutes),
+			Second:     int(timeOfDay.Seconds),
+			Nanosecond: int(timeOfDay.Nanos),
+		}, nil
+	default:
+		return nil, fmt.Errorf("unsupported well-known-type %s", field.Message().FullName())
 	}
 }

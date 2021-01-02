@@ -26,7 +26,7 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-// HackerNewsStory is the protobuf schema for the BigQuery public table:
+// Protobuf schema for the BigQuery public table:
 //
 //  bigquery-public-data.hacker_news.stories
 type HackerNewsStory struct {
@@ -34,30 +34,18 @@ type HackerNewsStory struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Unique story ID.
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // INTEGER NULLABLE
-	// Username of submitter.
-	By string `protobuf:"bytes,2,opt,name=by,proto3" json:"by,omitempty"` // STRING NULLABLE
-	// Story score.
-	Score int32 `protobuf:"varint,3,opt,name=score,proto3" json:"score,omitempty"` // INTEGER NULLABLE
-	// Unix time.
-	Time int64 `protobuf:"varint,4,opt,name=time,proto3" json:"time,omitempty"` // INTEGER NULLABLE
-	// Human readable time in UTC (format: YYYY-MM-DD hh:mm:ss).
-	TimeTs *timestamp.Timestamp `protobuf:"bytes,5,opt,name=time_ts,json=timeTs,proto3" json:"time_ts,omitempty"` // TIMESTAMP NULLABLE
-	// Story title.
-	Title string `protobuf:"bytes,6,opt,name=title,proto3" json:"title,omitempty"` // STRING NULLABLE
-	// Story url.
-	Url string `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"` // STRING NULLABLE
-	// Story text.
-	Text string `protobuf:"bytes,8,opt,name=text,proto3" json:"text,omitempty"` // STRING NULLABLE
-	// Is deleted?.
-	Deleted bool `protobuf:"varint,9,opt,name=deleted,proto3" json:"deleted,omitempty"` // BOOLEAN NULLABLE
-	// Is dead?.
-	Dead bool `protobuf:"varint,10,opt,name=dead,proto3" json:"dead,omitempty"` // BOOLEAN NULLABLE
-	// Number of story descendants.
-	Descendants int32 `protobuf:"varint,11,opt,name=descendants,proto3" json:"descendants,omitempty"` // INTEGER NULLABLE
-	// Username of author.
-	Author string `protobuf:"bytes,12,opt,name=author,proto3" json:"author,omitempty"` // STRING NULLABLE
+	Id          int64                `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                      // INTEGER NULLABLE
+	By          string               `protobuf:"bytes,2,opt,name=by,proto3" json:"by,omitempty"`                       // STRING NULLABLE
+	Score       int32                `protobuf:"varint,3,opt,name=score,proto3" json:"score,omitempty"`                // INTEGER NULLABLE
+	Time        int64                `protobuf:"varint,4,opt,name=time,proto3" json:"time,omitempty"`                  // INTEGER NULLABLE
+	TimeTs      *timestamp.Timestamp `protobuf:"bytes,5,opt,name=time_ts,json=timeTs,proto3" json:"time_ts,omitempty"` // TIMESTAMP NULLABLE
+	Title       string               `protobuf:"bytes,6,opt,name=title,proto3" json:"title,omitempty"`                 // STRING NULLABLE
+	Url         string               `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`                     // STRING NULLABLE
+	Text        string               `protobuf:"bytes,8,opt,name=text,proto3" json:"text,omitempty"`                   // STRING NULLABLE
+	Deleted     bool                 `protobuf:"varint,9,opt,name=deleted,proto3" json:"deleted,omitempty"`            // BOOLEAN NULLABLE
+	Dead        bool                 `protobuf:"varint,10,opt,name=dead,proto3" json:"dead,omitempty"`                 // BOOLEAN NULLABLE
+	Descendants int32                `protobuf:"varint,11,opt,name=descendants,proto3" json:"descendants,omitempty"`   // INTEGER NULLABLE
+	Author      string               `protobuf:"bytes,12,opt,name=author,proto3" json:"author,omitempty"`              // STRING NULLABLE
 }
 
 func (x *HackerNewsStory) Reset() {

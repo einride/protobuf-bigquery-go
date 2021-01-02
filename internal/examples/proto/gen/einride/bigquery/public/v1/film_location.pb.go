@@ -25,7 +25,7 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-// FilmLocation is the protobuf schema for the BigQuery public table:
+// Protobuf schema for the BigQuery public table:
 //
 //  bigquery-public-data.san_francisco_film_locations.film_locations
 type FilmLocation struct {
