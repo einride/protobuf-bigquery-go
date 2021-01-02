@@ -20,6 +20,11 @@ include tools/protoc-gen-go/rules.mk
 include tools/protoc/rules.mk
 include tools/semantic-release/rules.mk
 
+.PHONY: clean
+clean:
+	$(info [$@] removing build files...)
+	@rm -rf build
+
 .PHONY: internal/examples/proto/api-common-protos
 internal/examples/proto/api-common-protos:
 	@git submodule update --init --recursive $@
@@ -27,12 +32,14 @@ internal/examples/proto/api-common-protos:
 .PHONY: go-test
 go-test:
 	$(info [$@] running Go tests...)
-	@go test -short -race -cover ./...
+	@mkdir -p build/coverage
+	@go test -short -race -coverprofile=build/coverage/$@.txt -covermode=atomic ./...
 
 .PHONY: go-integration-test
 go-integration-test:
 	$(info [$@] running Go tests (including integration tests)...)
-	@go test -race -cover ./...
+	@mkdir -p build/coverage
+	@go test -race -cover -coverprofile=build/coverage/$@.txt -covermode=atomic ./...
 
 .PHONY: go-mod-tidy
 go-mod-tidy:
