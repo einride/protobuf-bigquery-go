@@ -379,16 +379,37 @@ func (o UnmarshalOptions) unmarshalScalar(
 		}
 
 	case protoreflect.EnumKind:
-		switch v := bigQueryValue.(type) {
-		case string:
-			if enumVal := field.Enum().Values().ByName(protoreflect.Name(v)); enumVal != nil {
-				return protoreflect.ValueOfEnum(enumVal.Number()), nil
-			}
-		case int64:
-			return protoreflect.ValueOfEnum(protoreflect.EnumNumber(int32(v))), nil
-		}
+		return o.unmarshalEnumScalar(bigQueryValue, field)
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		// Fall through to return error, these should have been handled by the caller.
 	}
 	return protoreflect.Value{}, fmt.Errorf("invalid BigQuery value %#v for kind %v", bigQueryValue, field.Kind())
+}
+
+func (o UnmarshalOptions) unmarshalEnumScalar(
+	bigQueryValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+) (protoreflect.Value, error) {
+	if o.Schema.UseEnumNumbers {
+		v, ok := bigQueryValue.(int64)
+		if !ok {
+			return protoreflect.Value{}, fmt.Errorf(
+				"invalid BigQuery value %#v for enum %s number", bigQueryValue, field.Enum().FullName(),
+			)
+		}
+		return protoreflect.ValueOfEnum(protoreflect.EnumNumber(int32(v))), nil
+	}
+	v, ok := bigQueryValue.(string)
+	if !ok {
+		return protoreflect.Value{}, fmt.Errorf(
+			"invalid BigQuery value %#v for enum %s", bigQueryValue, field.Enum().FullName(),
+		)
+	}
+	enumVal := field.Enum().Values().ByName(protoreflect.Name(v))
+	if enumVal == nil {
+		return protoreflect.Value{}, fmt.Errorf(
+			"unknown enum value %#v for enum %s", bigQueryValue, field.Enum().FullName(),
+		)
+	}
+	return protoreflect.ValueOfEnum(enumVal.Number()), nil
 }

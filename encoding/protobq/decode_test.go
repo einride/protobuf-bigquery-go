@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
+	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1"
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
@@ -101,6 +102,31 @@ func TestUnmarshalOptions_Unmarshal(t *testing.T) {
 				Kind: &expr.Value_DoubleValue{
 					DoubleValue: 42,
 				},
+			},
+		},
+
+		{
+			name: "enum values",
+			row: map[string]bigquery.Value{
+				"enum_value": "ENUM_VALUE1",
+			},
+			expected: &examplev1.ExampleEnum{
+				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
+			},
+		},
+
+		{
+			name: "enum numbers",
+			row: map[string]bigquery.Value{
+				"enum_value": int64(1),
+			},
+			opt: UnmarshalOptions{
+				Schema: SchemaOptions{
+					UseEnumNumbers: true,
+				},
+			},
+			expected: &examplev1.ExampleEnum{
+				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
 			},
 		},
 	} {
@@ -251,6 +277,37 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				Kind: &expr.Value_DoubleValue{
 					DoubleValue: 42,
 				},
+			},
+		},
+
+		{
+			name: "enum values",
+			row: []bigquery.Value{
+				"ENUM_VALUE1",
+			},
+			schema: bigquery.Schema{
+				{Name: "enum_value", Type: bigquery.StringFieldType},
+			},
+			expected: &examplev1.ExampleEnum{
+				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
+			},
+		},
+
+		{
+			name: "enum numbers",
+			row: []bigquery.Value{
+				int64(1),
+			},
+			schema: bigquery.Schema{
+				{Name: "enum_value", Type: bigquery.IntegerFieldType},
+			},
+			opt: UnmarshalOptions{
+				Schema: SchemaOptions{
+					UseEnumNumbers: true,
+				},
+			},
+			expected: &examplev1.ExampleEnum{
+				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
 			},
 		},
 	} {

@@ -135,6 +135,25 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "examplev1.ExampleEnum",
+			msg:  &examplev1.ExampleEnum{},
+			expected: bigquery.Schema{
+				{Name: "enum_value", Type: bigquery.StringFieldType},
+			},
+		},
+
+		{
+			name: "examplev1.ExampleEnum (UseEnumNumbers)",
+			msg:  &examplev1.ExampleEnum{},
+			opt: SchemaOptions{
+				UseEnumNumbers: true,
+			},
+			expected: bigquery.Schema{
+				{Name: "enum_value", Type: bigquery.IntegerFieldType},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

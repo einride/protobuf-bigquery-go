@@ -139,6 +139,31 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "enum strings",
+			msg: &examplev1.ExampleEnum{
+				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
+			},
+			expected: map[string]bigquery.Value{
+				"enum_value": "ENUM_VALUE1",
+			},
+		},
+
+		{
+			name: "enum numbers",
+			msg: &examplev1.ExampleEnum{
+				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
+			},
+			opt: MarshalOptions{
+				Schema: SchemaOptions{
+					UseEnumNumbers: true,
+				},
+			},
+			expected: map[string]bigquery.Value{
+				"enum_value": int64(1),
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
