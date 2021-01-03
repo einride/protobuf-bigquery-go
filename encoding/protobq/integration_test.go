@@ -95,6 +95,17 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Limit:     10,
 			Message:   &publicv1.WhosOnFirstGeoJson{},
 		},
+
+		{
+			ProjectID: "bigquery-public-data",
+			DatasetID: "crypto_dogecoin",
+			TableID:   "transactions",
+			Limit:     10,
+			UnmarshalOptions: protobq.UnmarshalOptions{
+				DiscardUnknown: true, // discard NUMERIC currency fields
+			},
+			Message: &publicv1.DogecoinTransaction{},
+		},
 	} {
 		tt := tt
 		t.Run(fmt.Sprintf("%s.%s.%s", tt.ProjectID, tt.DatasetID, tt.TableID), func(t *testing.T) {
