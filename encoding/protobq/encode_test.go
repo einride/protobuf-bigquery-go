@@ -164,6 +164,40 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				"enum_value": int64(1),
 			},
 		},
+
+		{
+			name: "primitive lists",
+			msg: &examplev1.ExampleList{
+				Int64List:  []int64{1, 2},
+				StringList: []string{"a", "b"},
+				EnumList:   []examplev1.ExampleList_Enum{examplev1.ExampleList_ENUM_VALUE1},
+			},
+			expected: map[string]bigquery.Value{
+				"int64_list":  []bigquery.Value{int64(1), int64(2)},
+				"string_list": []bigquery.Value{"a", "b"},
+				"enum_list":   []bigquery.Value{"ENUM_VALUE1"},
+			},
+		},
+
+		{
+			name: "nested lists",
+			msg: &examplev1.ExampleList{
+				NestedList: []*examplev1.ExampleList_Nested{
+					{StringList: []string{"a", "b"}},
+					{StringList: []string{"c", "d"}},
+				},
+			},
+			expected: map[string]bigquery.Value{
+				"nested_list": []bigquery.Value{
+					map[string]bigquery.Value{
+						"string_list": []bigquery.Value{"a", "b"},
+					},
+					map[string]bigquery.Value{
+						"string_list": []bigquery.Value{"c", "d"},
+					},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
