@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1";
+
+message ExampleList {
+  repeated int64 int64_list = 1;
+  repeated string string_list = 2;
+  repeated Enum enum_list = 3;
+  repeated Nested nested_list = 4;
+
+  enum Enum {
+    ENUM_UNSPECIFIED = 0;
+    ENUM_VALUE1 = 1;
+    ENUM_VALUE2 = 2;
+  }
+
+  message Nested {
+    repeated string string_list = 1;
+  }
+}
