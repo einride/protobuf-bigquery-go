@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package einride.bigquery.public.v1;
+
+option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/type/date.proto";
+
+// Protobuf schema for the BigQuery public table:
+//
+//  bigquery-public-data.crypto_dogecoin.transactions
+message DogecoinTransaction {
+  string hash = 1; // STRING REQUIRED
+  int64 size = 2; // INTEGER NULLABLE
+  int64 virtual_size = 3; // INTEGER NULLABLE
+  int64 version = 4; // INTEGER NULLABLE
+  int64 lock_time = 5; // INTEGER NULLABLE
+  string block_hash = 6; // STRING REQUIRED
+  int64 block_number = 7; // INTEGER REQUIRED
+  google.protobuf.Timestamp block_timestamp = 8; // TIMESTAMP REQUIRED
+  google.type.Date block_timestamp_month = 9; // DATE REQUIRED
+  int64 input_count = 10; // INTEGER NULLABLE
+  int64 output_count = 11; // INTEGER NULLABLE
+  // TOOD: Figure out if there's a common protobuf type for NUMERIC.
+  //string input_value = 12; // NUMERIC NULLABLE
+  //string output_value = 13; // NUMERIC NULLABLE
+  bool is_coinbase = 14; // BOOLEAN NULLABLE
+  // TOOD: Figure out if there's a common protobuf type for NUMERIC.
+  //string fee = 15; // NUMERIC NULLABLE
+  repeated Input inputs = 16; // RECORD REPEATED
+  repeated Output outputs = 17; // RECORD REPEATED
+
+  message Input {
+    int64 index = 1; // INTEGER REQUIRED
+    string spent_transaction_hash = 2; // STRING NULLABLE
+    int64 spent_output_index = 3; // INTEGER NULLABLE
+    string script_asm = 4; // STRING NULLABLE
+    string script_hex = 5; // STRING NULLABLE
+    int64 sequence = 6; // INTEGER NULLABLE
+    int64 required_signatures = 7; // INTEGER NULLABLE
+    string type = 8; // STRING NULLABLE
+    repeated string addresses = 9; // STRING REPEATED
+    // TOOD: Figure out if there's a common protobuf type for NUMERIC.
+    //string value = 10; // NUMERIC NULLABLE
+  }
+
+  message Output {
+    int64 index = 1; // INTEGER REQUIRED
+    string script_asm = 2; // STRING NULLABLE
+    string script_hex = 3; // STRING NULLABLE
+    int64 required_signatures = 4; // INTEGER NULLABLE
+    string type = 5; // STRING NULLABLE
+    repeated string addresses = 6; // STRING REPEATED
+    // TOOD: Figure out if there's a common protobuf type for NUMERIC.
+    //string value = 7; // NUMERIC NULLABLE
+  }
+}
