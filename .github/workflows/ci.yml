@@ -28,11 +28,11 @@ jobs:
       - name: Make
         run: make
 
-      - uses: codecov/codecov-action@v1
+      - name: Report Code Coverage
+        uses: codecov/codecov-action@v1
         with:
           file: ./build/coverage/go-test.txt
           fail_ci_if_error: true
-          verbose: true
 
   release:
     needs: [make]
