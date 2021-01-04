@@ -12,17 +12,17 @@ import (
 // Load the bigquery.Value list into the given proto.Message using the given bigquery.Schema.
 // It will clear the message first before setting the fields. If it returns an error,
 // the given message may be partially set.
-func Load(row []bigquery.Value, schema bigquery.Schema, message proto.Message) error {
-	return UnmarshalOptions{}.Load(row, schema, message)
+func Load(bqMessage []bigquery.Value, bqSchema bigquery.Schema, message proto.Message) error {
+	return UnmarshalOptions{}.Load(bqMessage, bqSchema, message)
 }
 
 // Load the bigquery.Value list into the given proto.Message using the given bigquery.Schema
 // using options in UnmarshalOptions object.
 // It will clear the message first before setting the fields. If it returns an error,
 // the given message may be partially set.
-func (o UnmarshalOptions) Load(row []bigquery.Value, schema bigquery.Schema, message proto.Message) error {
+func (o UnmarshalOptions) Load(bqMessage []bigquery.Value, bqSchema bigquery.Schema, message proto.Message) error {
 	proto.Reset(message)
-	if err := o.loadMessage(row, schema, message.ProtoReflect()); err != nil {
+	if err := o.loadMessage(bqMessage, bqSchema, message.ProtoReflect()); err != nil {
 		return err
 	}
 	if o.AllowPartial {
@@ -32,16 +32,16 @@ func (o UnmarshalOptions) Load(row []bigquery.Value, schema bigquery.Schema, mes
 }
 
 func (o UnmarshalOptions) loadMessage(
-	bigQueryFields []bigquery.Value,
-	schema bigquery.Schema,
+	bqMessage []bigquery.Value,
+	bqSchema bigquery.Schema,
 	message protoreflect.Message,
 ) error {
-	if len(bigQueryFields) != len(schema) {
-		return fmt.Errorf("message has %d fields but schema has %d fields", len(bigQueryFields), len(schema))
+	if len(bqMessage) != len(bqSchema) {
+		return fmt.Errorf("message has %d fields but schema has %d fields", len(bqMessage), len(bqSchema))
 	}
-	for i, fieldSchema := range schema {
-		bigQueryFieldValue := bigQueryFields[i]
-		fieldName := protoreflect.Name(fieldSchema.Name)
+	for i, bqFieldSchema := range bqSchema {
+		bqField := bqMessage[i]
+		fieldName := protoreflect.Name(bqFieldSchema.Name)
 		field := message.Descriptor().Fields().ByName(fieldName)
 		if field == nil {
 			if !o.DiscardUnknown && !message.Descriptor().ReservedNames().Has(fieldName) {
@@ -51,52 +51,67 @@ func (o UnmarshalOptions) loadMessage(
 		}
 		switch {
 		case field.IsList():
-			return fmt.Errorf("TODO: implement support for lists")
+			return o.loadListField(bqField, bqFieldSchema, field, message)
 		case field.IsMap():
-			return fmt.Errorf("TODO: implement support for maps")
+			return o.loadMapField(bqField, bqFieldSchema, field, message)
 		default:
-			if err := o.loadSingularField(bigQueryFieldValue, fieldSchema, field, message); err != nil {
+			value, err := o.loadSingularField(bqField, bqFieldSchema, field, message)
+			if err != nil {
 				return err
+			}
+			if value.IsValid() {
+				message.Set(field, value)
 			}
 		}
 	}
 	return nil
 }
 
-func (o UnmarshalOptions) loadSingularField(
-	bigqueryValue bigquery.Value,
-	fieldSchema *bigquery.FieldSchema,
+func (o UnmarshalOptions) loadListField(
+	bqField bigquery.Value,
+	bqFieldSchema *bigquery.FieldSchema,
 	field protoreflect.FieldDescriptor,
 	message protoreflect.Message,
 ) error {
-	if bigqueryValue == nil {
-		return nil
+	return fmt.Errorf("TODO: implement support for lists")
+}
+
+func (o UnmarshalOptions) loadMapField(
+	bqField bigquery.Value,
+	bqFieldSchema *bigquery.FieldSchema,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	return fmt.Errorf("TODO: implement support for maps")
+}
+
+func (o UnmarshalOptions) loadSingularField(
+	bqField bigquery.Value,
+	bqFieldSchema *bigquery.FieldSchema,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) (protoreflect.Value, error) {
+	if bqField == nil {
+		return protoreflect.ValueOf(nil), nil
 	}
 	if field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind {
 		if wkt.IsWellKnownType(string(field.Message().FullName())) {
-			if err := o.unmarshalWellKnownTypeField(bigqueryValue, field, message); err != nil {
-				return fmt.Errorf("%s: %w", field.Name(), err)
-			}
-			return nil
+			return o.unmarshalWellKnownTypeField(bqField, field)
 		}
-		if fieldSchema.Type != bigquery.RecordFieldType {
-			return fmt.Errorf("%s: unsupported BigQuery type for message: %v", field.Name(), fieldSchema.Type)
+		if bqFieldSchema.Type != bigquery.RecordFieldType {
+			return protoreflect.ValueOf(nil), fmt.Errorf(
+				"%s: unsupported BigQuery type for message: %v", field.Name(), bqFieldSchema.Type,
+			)
 		}
-		bigqueryMessageValue, ok := bigqueryValue.([]bigquery.Value)
+		bqMessage, ok := bqField.([]bigquery.Value)
 		if !ok {
-			return fmt.Errorf("unsupported BigQuery value for message: %v", bigqueryMessageValue)
+			return protoreflect.ValueOf(nil), fmt.Errorf("unsupported BigQuery value for message: %v", bqMessage)
 		}
 		fieldValue := message.NewField(field)
-		if err := o.loadMessage(bigqueryMessageValue, fieldSchema.Schema, fieldValue.Message()); err != nil {
-			return fmt.Errorf("%s: %w", field.Name(), err)
+		if err := o.loadMessage(bqMessage, bqFieldSchema.Schema, fieldValue.Message()); err != nil {
+			return protoreflect.ValueOf(nil), fmt.Errorf("%s: %w", field.Name(), err)
 		}
-		message.Set(field, fieldValue)
-	} else {
-		fieldValue, err := o.unmarshalScalar(bigqueryValue, field)
-		if err != nil {
-			return fmt.Errorf("%s: %w", field.Name(), err)
-		}
-		message.Set(field, fieldValue)
+		return fieldValue, nil
 	}
-	return nil
+	return o.unmarshalScalar(bqField, field)
 }
