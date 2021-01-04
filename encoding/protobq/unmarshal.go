@@ -20,8 +20,8 @@ import (
 // Unmarshal the bigquery.Value map into the given proto.Message.
 // It will clear the message first before setting the fields. If it returns an error,
 // the given message may be partially set.
-func Unmarshal(row map[string]bigquery.Value, message proto.Message) error {
-	return UnmarshalOptions{}.Unmarshal(row, message)
+func Unmarshal(bqMessage map[string]bigquery.Value, message proto.Message) error {
+	return UnmarshalOptions{}.Unmarshal(bqMessage, message)
 }
 
 // UnmarshalOptions is a configurable BigQuery format parser.
@@ -41,9 +41,9 @@ type UnmarshalOptions struct {
 // options in UnmarshalOptions object.
 // It will clear the message first before setting the fields. If it returns an error,
 // the given message may be partially set.
-func (o UnmarshalOptions) Unmarshal(row map[string]bigquery.Value, message proto.Message) error {
+func (o UnmarshalOptions) Unmarshal(bqMessage map[string]bigquery.Value, message proto.Message) error {
 	proto.Reset(message)
-	if err := o.unmarshalMessage(row, message.ProtoReflect()); err != nil {
+	if err := o.unmarshalMessage(bqMessage, message.ProtoReflect()); err != nil {
 		return err
 	}
 	if o.AllowPartial {
@@ -53,11 +53,11 @@ func (o UnmarshalOptions) Unmarshal(row map[string]bigquery.Value, message proto
 }
 
 func (o UnmarshalOptions) unmarshalMessage(
-	bigQueryFields map[string]bigquery.Value,
+	bqMessage map[string]bigquery.Value,
 	message protoreflect.Message,
 ) error {
-	for bigQueryFieldName, bigQueryFieldValue := range bigQueryFields {
-		fieldName := protoreflect.Name(bigQueryFieldName)
+	for bqFieldName, bqField := range bqMessage {
+		fieldName := protoreflect.Name(bqFieldName)
 		field := message.Descriptor().Fields().ByName(fieldName)
 		if field == nil {
 			if !o.DiscardUnknown && !message.Descriptor().ReservedNames().Has(fieldName) {
@@ -67,256 +67,244 @@ func (o UnmarshalOptions) unmarshalMessage(
 		}
 		switch {
 		case field.IsList():
-			return fmt.Errorf("TODO: implement support for lists")
+			return o.unmarshalListField(bqField, field, message)
 		case field.IsMap():
-			return fmt.Errorf("TODO: implement support for maps")
+			return o.unmarshalMapField(bqField, field, message)
 		default:
-			if err := o.unmarshalSingularField(bigQueryFieldValue, field, message); err != nil {
+			value, err := o.unmarshalSingularField(bqField, field, message)
+			if err != nil {
 				return err
+			}
+			if value.IsValid() {
+				message.Set(field, value)
 			}
 		}
 	}
 	return nil
+}
+
+func (o UnmarshalOptions) unmarshalListField(
+	bqValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	return fmt.Errorf("TODO: implement support for lists")
+}
+
+func (o UnmarshalOptions) unmarshalMapField(
+	bqValue bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	return fmt.Errorf("TODO: implement support for maps")
 }
 
 func (o UnmarshalOptions) unmarshalSingularField(
-	bigqueryValue bigquery.Value,
+	bqValue bigquery.Value,
 	field protoreflect.FieldDescriptor,
 	message protoreflect.Message,
-) error {
-	if bigqueryValue == nil {
-		return nil
+) (protoreflect.Value, error) {
+	if bqValue == nil {
+		return protoreflect.ValueOf(nil), nil
 	}
 	if field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind {
 		if wkt.IsWellKnownType(string(field.Message().FullName())) {
-			if err := o.unmarshalWellKnownTypeField(bigqueryValue, field, message); err != nil {
-				return fmt.Errorf("%s: %w", field.Name(), err)
-			}
-			return nil
+			return o.unmarshalWellKnownTypeField(bqValue, field)
 		}
-		bigqueryMessageValue, ok := bigqueryValue.(map[string]bigquery.Value)
+		bqMessage, ok := bqValue.(map[string]bigquery.Value)
 		if !ok {
-			return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bigqueryMessageValue)
+			return protoreflect.ValueOf(nil), fmt.Errorf(
+				"%s: unsupported BigQuery value for message: %v", field.Name(), bqMessage,
+			)
 		}
 		fieldValue := message.NewField(field)
-		if err := o.unmarshalMessage(bigqueryMessageValue, fieldValue.Message()); err != nil {
-			return fmt.Errorf("%s: %w", field.Name(), err)
+		if err := o.unmarshalMessage(bqMessage, fieldValue.Message()); err != nil {
+			return protoreflect.ValueOf(nil), fmt.Errorf("%s: %w", field.Name(), err)
 		}
-		message.Set(field, fieldValue)
-	} else {
-		fieldValue, err := o.unmarshalScalar(bigqueryValue, field)
-		if err != nil {
-			return fmt.Errorf("%s: %w", field.Name(), err)
-		}
-		message.Set(field, fieldValue)
+		return fieldValue, nil
 	}
-	return nil
+	return o.unmarshalScalar(bqValue, field)
 }
 
 func (o UnmarshalOptions) unmarshalWellKnownTypeField(
-	bigqueryValue bigquery.Value,
+	bqValue bigquery.Value,
 	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
+) (protoreflect.Value, error) {
+	var result proto.Message
+	var err error
 	switch field.Message().FullName() {
 	case wkt.Timestamp:
-		return o.unmarshalTimestampField(bigqueryValue, field, message)
+		result, err = o.unmarshalTimestamp(bqValue)
 	case wkt.Duration:
-		return o.unmarshalDurationField(bigqueryValue, field, message)
+		result, err = o.unmarshalDuration(bqValue)
 	case wkt.TimeOfDay:
-		return o.unmarshalTimeOfDayField(bigqueryValue, field, message)
+		result, err = o.unmarshalTimeOfDay(bqValue)
 	case wkt.Date:
-		return o.unmarshalDateField(bigqueryValue, field, message)
+		result, err = o.unmarshalDate(bqValue)
 	case wkt.LatLng:
-		return o.unmarshalLatLngField(bigqueryValue, field, message)
+		result, err = o.unmarshalLatLng(bqValue)
 	case wkt.Struct:
-		return o.unmarshalStructField(bigqueryValue, field, message)
+		result, err = o.unmarshalStruct(bqValue)
 	default:
-		return fmt.Errorf("unsupported well-known-type: %s", field.Message().FullName())
+		result, err = nil, fmt.Errorf("unsupported well-known-type: %s", field.Message().FullName())
 	}
+	if err != nil {
+		return protoreflect.ValueOf(nil), err
+	}
+	return protoreflect.ValueOf(result.ProtoReflect()), nil
 }
 
-func (o UnmarshalOptions) unmarshalTimestampField(
-	bigqueryValue bigquery.Value,
-	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
-	t, ok := bigqueryValue.(time.Time)
+func (o UnmarshalOptions) unmarshalTimestamp(bqValue bigquery.Value) (*timestamppb.Timestamp, error) {
+	t, ok := bqValue.(time.Time)
 	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for %s: %v", wkt.Timestamp, bigqueryValue)
+		return nil, fmt.Errorf("unsupported BigQuery value for %s: %v", wkt.Timestamp, bqValue)
 	}
-	message.Set(field, protoreflect.ValueOfMessage(timestamppb.New(t).ProtoReflect()))
-	return nil
+	return timestamppb.New(t), nil
 }
 
-func (o UnmarshalOptions) unmarshalDurationField(
-	bigqueryValue bigquery.Value,
-	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
+func (o UnmarshalOptions) unmarshalDuration(bqValue bigquery.Value) (*durationpb.Duration, error) {
 	var duration time.Duration
-	switch bigqueryValue := bigqueryValue.(type) {
+	switch bigqueryValue := bqValue.(type) {
 	case int64:
 		duration = time.Duration(bigqueryValue) * time.Second
 	case float64:
 		duration = time.Duration(bigqueryValue * float64(time.Second))
 	default:
-		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Duration, bigqueryValue)
+		return nil, fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Duration, bigqueryValue)
 	}
-	message.Set(field, protoreflect.ValueOfMessage(durationpb.New(duration).ProtoReflect()))
-	return nil
+	return durationpb.New(duration), nil
 }
 
-func (o UnmarshalOptions) unmarshalTimeOfDayField(
-	bigqueryValue bigquery.Value,
-	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
-	t, ok := bigqueryValue.(civil.Time)
+func (o UnmarshalOptions) unmarshalTimeOfDay(bqValue bigquery.Value) (*timeofday.TimeOfDay, error) {
+	t, ok := bqValue.(civil.Time)
 	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.TimeOfDay, bigqueryValue)
+		return nil, fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.TimeOfDay, bqValue)
 	}
-	message.Set(field, protoreflect.ValueOfMessage((&timeofday.TimeOfDay{
+	return &timeofday.TimeOfDay{
 		Hours:   int32(t.Hour),
 		Minutes: int32(t.Minute),
 		Seconds: int32(t.Second),
 		Nanos:   int32(t.Nanosecond),
-	}).ProtoReflect()))
-	return nil
+	}, nil
 }
 
-func (o UnmarshalOptions) unmarshalDateField(
-	bigqueryValue bigquery.Value,
-	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
-	d, ok := bigqueryValue.(civil.Date)
+func (o UnmarshalOptions) unmarshalDate(bqValue bigquery.Value) (*date.Date, error) {
+	d, ok := bqValue.(civil.Date)
 	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Date, bigqueryValue)
+		return nil, fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Date, bqValue)
 	}
-	message.Set(field, protoreflect.ValueOfMessage((&date.Date{
+	return &date.Date{
 		Year:  int32(d.Year),
 		Month: int32(d.Month),
 		Day:   int32(d.Day),
-	}).ProtoReflect()))
-	return nil
+	}, nil
 }
 
-func (o UnmarshalOptions) unmarshalLatLngField(
-	bigqueryValue bigquery.Value,
-	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
-	s, ok := bigqueryValue.(string)
+func (o UnmarshalOptions) unmarshalLatLng(bqValue bigquery.Value) (*latlng.LatLng, error) {
+	s, ok := bqValue.(string)
 	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.LatLng, bigqueryValue)
+		return nil, fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.LatLng, bqValue)
 	}
 	latLng := &latlng.LatLng{}
 	if _, err := fmt.Sscanf(s, "POINT(%f %f)", &latLng.Longitude, &latLng.Latitude); err != nil {
-		return fmt.Errorf("invalid GEOGRAPHY value for %s: %#v: %w", wkt.LatLng, bigqueryValue, err)
+		return nil, fmt.Errorf("invalid GEOGRAPHY value for %s: %#v: %w", wkt.LatLng, bqValue, err)
 	}
-	message.Set(field, protoreflect.ValueOfMessage(latLng.ProtoReflect()))
-	return nil
+	return latLng, nil
 }
 
-func (o UnmarshalOptions) unmarshalStructField(
-	bigqueryValue bigquery.Value,
-	field protoreflect.FieldDescriptor,
-	message protoreflect.Message,
-) error {
-	s, ok := bigqueryValue.(string)
+func (o UnmarshalOptions) unmarshalStruct(bqValue bigquery.Value) (*structpb.Struct, error) {
+	s, ok := bqValue.(string)
 	if !ok {
-		return fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Struct, bigqueryValue)
+		return nil, fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Struct, bqValue)
 	}
 	var structValue structpb.Struct
 	if err := structValue.UnmarshalJSON([]byte(s)); err != nil {
-		return fmt.Errorf("invalid BigQuery value for %s: %#v: %w", wkt.Struct, bigqueryValue, err)
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v: %w", wkt.Struct, bqValue, err)
 	}
-	message.Set(field, protoreflect.ValueOfMessage(structValue.ProtoReflect()))
-	return nil
+	return &structValue, nil
 }
 
 func (o UnmarshalOptions) unmarshalScalar(
-	bigQueryValue bigquery.Value,
+	bqValue bigquery.Value,
 	field protoreflect.FieldDescriptor,
 ) (protoreflect.Value, error) {
 	switch field.Kind() {
 	case protoreflect.BoolKind:
-		if b, ok := bigQueryValue.(bool); ok {
+		if b, ok := bqValue.(bool); ok {
 			return protoreflect.ValueOfBool(b), nil
 		}
 
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		if n, ok := bigQueryValue.(int64); ok {
+		if n, ok := bqValue.(int64); ok {
 			return protoreflect.ValueOfInt32(int32(n)), nil
 		}
 
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		if n, ok := bigQueryValue.(int64); ok {
+		if n, ok := bqValue.(int64); ok {
 			return protoreflect.ValueOfInt64(n), nil
 		}
 
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		if n, ok := bigQueryValue.(int64); ok {
+		if n, ok := bqValue.(int64); ok {
 			return protoreflect.ValueOfUint32(uint32(n)), nil
 		}
 
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		if n, ok := bigQueryValue.(int64); ok {
+		if n, ok := bqValue.(int64); ok {
 			return protoreflect.ValueOfUint64(uint64(n)), nil
 		}
 
 	case protoreflect.FloatKind:
-		if n, ok := bigQueryValue.(float64); ok {
+		if n, ok := bqValue.(float64); ok {
 			return protoreflect.ValueOfFloat32(float32(n)), nil
 		}
 
 	case protoreflect.DoubleKind:
-		if n, ok := bigQueryValue.(float64); ok {
+		if n, ok := bqValue.(float64); ok {
 			return protoreflect.ValueOfFloat64(n), nil
 		}
 
 	case protoreflect.StringKind:
-		if s, ok := bigQueryValue.(string); ok {
+		if s, ok := bqValue.(string); ok {
 			return protoreflect.ValueOfString(s), nil
 		}
 
 	case protoreflect.BytesKind:
-		if b, ok := bigQueryValue.([]byte); ok {
+		if b, ok := bqValue.([]byte); ok {
 			return protoreflect.ValueOfBytes(b), nil
 		}
 
 	case protoreflect.EnumKind:
-		return o.unmarshalEnumScalar(bigQueryValue, field)
+		return o.unmarshalEnumScalar(bqValue, field)
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		// Fall through to return error, these should have been handled by the caller.
 	}
-	return protoreflect.Value{}, fmt.Errorf("invalid BigQuery value %#v for kind %v", bigQueryValue, field.Kind())
+	return protoreflect.Value{}, fmt.Errorf("invalid BigQuery value %#v for kind %v", bqValue, field.Kind())
 }
 
 func (o UnmarshalOptions) unmarshalEnumScalar(
-	bigQueryValue bigquery.Value,
+	bqValue bigquery.Value,
 	field protoreflect.FieldDescriptor,
 ) (protoreflect.Value, error) {
 	if o.Schema.UseEnumNumbers {
-		v, ok := bigQueryValue.(int64)
+		v, ok := bqValue.(int64)
 		if !ok {
 			return protoreflect.Value{}, fmt.Errorf(
-				"invalid BigQuery value %#v for enum %s number", bigQueryValue, field.Enum().FullName(),
+				"invalid BigQuery value %#v for enum %s number", bqValue, field.Enum().FullName(),
 			)
 		}
 		return protoreflect.ValueOfEnum(protoreflect.EnumNumber(int32(v))), nil
 	}
-	v, ok := bigQueryValue.(string)
+	v, ok := bqValue.(string)
 	if !ok {
 		return protoreflect.Value{}, fmt.Errorf(
-			"invalid BigQuery value %#v for enum %s", bigQueryValue, field.Enum().FullName(),
+			"invalid BigQuery value %#v for enum %s", bqValue, field.Enum().FullName(),
 		)
 	}
 	enumVal := field.Enum().Values().ByName(protoreflect.Name(v))
 	if enumVal == nil {
 		return protoreflect.Value{}, fmt.Errorf(
-			"unknown enum value %#v for enum %s", bigQueryValue, field.Enum().FullName(),
+			"unknown enum value %#v for enum %s", bqValue, field.Enum().FullName(),
 		)
 	}
 	return protoreflect.ValueOfEnum(enumVal.Number()), nil
