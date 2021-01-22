@@ -248,23 +248,23 @@ func (o MarshalOptions) marshalWellKnownTypeValue(
 		return value.Message().Interface().(*timestamppb.Timestamp).AsTime(), nil
 	case wkt.Duration:
 		return value.Message().Interface().(*durationpb.Duration).AsDuration().Seconds(), nil
-	case "google.protobuf.DoubleValue":
+	case wkt.DoubleValue:
 		return value.Message().Interface().(*wrapperspb.DoubleValue).GetValue(), nil
-	case "google.protobuf.FloatValue":
-		return value.Message().Interface().(*wrapperspb.FloatValue).GetValue(), nil
-	case "google.protobuf.Int32Value":
-		return value.Message().Interface().(*wrapperspb.Int32Value).GetValue(), nil
-	case "google.protobuf.Int64Value":
+	case wkt.FloatValue:
+		return float64(value.Message().Interface().(*wrapperspb.FloatValue).GetValue()), nil
+	case wkt.Int32Value:
+		return int64(value.Message().Interface().(*wrapperspb.Int32Value).GetValue()), nil
+	case wkt.Int64Value:
 		return value.Message().Interface().(*wrapperspb.Int64Value).GetValue(), nil
-	case "google.protobuf.UInt32Value":
-		return value.Message().Interface().(*wrapperspb.UInt32Value).GetValue(), nil
-	case "google.protobuf.UInt64Value":
+	case wkt.UInt32Value:
+		return uint64(value.Message().Interface().(*wrapperspb.UInt32Value).GetValue()), nil
+	case wkt.UInt64Value:
 		return value.Message().Interface().(*wrapperspb.UInt64Value).GetValue(), nil
-	case "google.protobuf.BoolValue":
+	case wkt.BoolValue:
 		return value.Message().Interface().(*wrapperspb.BoolValue).GetValue(), nil
-	case "google.protobuf.StringValue":
+	case wkt.StringValue:
 		return value.Message().Interface().(*wrapperspb.StringValue).GetValue(), nil
-	case "google.protobuf.BytesValue":
+	case wkt.BytesValue:
 		return value.Message().Interface().(*wrapperspb.BytesValue).GetValue(), nil
 	case wkt.Struct:
 		data, err := value.Message().Interface().(*structpb.Struct).MarshalJSON()
