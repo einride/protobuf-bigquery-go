@@ -8,6 +8,7 @@ import (
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gotest.tools/v3/assert"
 )
 
@@ -196,6 +197,32 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 						"string_list": []bigquery.Value{"c", "d"},
 					},
 				},
+			},
+		},
+
+		{
+			name: "wrappers",
+			msg: &examplev1.ExampleWrappers{
+				FloatValue:  wrapperspb.Float(1),
+				DoubleValue: wrapperspb.Double(2),
+				StringValue: wrapperspb.String("foo"),
+				BytesValue:  wrapperspb.Bytes([]byte("bar")),
+				Int32Value:  wrapperspb.Int32(3),
+				Int64Value:  wrapperspb.Int64(4),
+				Uint32Value: wrapperspb.UInt32(5),
+				Uint64Value: wrapperspb.UInt64(6),
+				BoolValue:   wrapperspb.Bool(true),
+			},
+			expected: map[string]bigquery.Value{
+				"float_value":  float64(1),
+				"double_value": float64(2),
+				"string_value": "foo",
+				"bytes_value":  []byte("bar"),
+				"int32_value":  int64(3),
+				"int64_value":  int64(4),
+				"uint32_value": uint64(5),
+				"uint64_value": uint64(6),
+				"bool_value":   true,
 			},
 		},
 	} {

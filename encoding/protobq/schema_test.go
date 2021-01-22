@@ -154,6 +154,22 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				{Name: "enum_value", Type: bigquery.IntegerFieldType},
 			},
 		},
+
+		{
+			name: "examplev1.ExampleWrappers",
+			msg:  &examplev1.ExampleWrappers{},
+			expected: bigquery.Schema{
+				{Name: "float_value", Type: bigquery.FloatFieldType},
+				{Name: "double_value", Type: bigquery.FloatFieldType},
+				{Name: "string_value", Type: bigquery.StringFieldType},
+				{Name: "bytes_value", Type: bigquery.BytesFieldType},
+				{Name: "int32_value", Type: bigquery.IntegerFieldType},
+				{Name: "int64_value", Type: bigquery.IntegerFieldType},
+				{Name: "uint32_value", Type: bigquery.IntegerFieldType},
+				{Name: "uint64_value", Type: bigquery.IntegerFieldType},
+				{Name: "bool_value", Type: bigquery.BooleanFieldType},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
