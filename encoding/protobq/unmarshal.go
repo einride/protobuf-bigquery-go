@@ -68,9 +68,13 @@ func (o UnmarshalOptions) unmarshalMessage(
 		}
 		switch {
 		case field.IsList():
-			return o.unmarshalListField(bqField, field, message)
+			if err := o.unmarshalListField(bqField, field, message); err != nil {
+				return err
+			}
 		case field.IsMap():
-			return o.unmarshalMapField(bqField, field, message)
+			if err := o.unmarshalMapField(bqField, field, message); err != nil {
+				return err
+			}
 		default:
 			value, err := o.unmarshalSingularField(bqField, field, message)
 			if err != nil {
@@ -89,7 +93,41 @@ func (o UnmarshalOptions) unmarshalListField(
 	field protoreflect.FieldDescriptor,
 	message protoreflect.Message,
 ) error {
-	return fmt.Errorf("TODO: implement support for lists")
+	bqListValue, ok := bqValue.([]bigquery.Value)
+	if !ok {
+		return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bqValue)
+	}
+	list := message.Mutable(field).List()
+	for _, bqListElementValue := range bqListValue {
+		isMessage := field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind
+		switch {
+		case isMessage && wkt.IsWellKnownType(string(field.Message().FullName())):
+			value, err := o.unmarshalWellKnownTypeField(bqListElementValue, field)
+			if err != nil {
+				return err
+			}
+			list.Append(value)
+		case isMessage:
+			bqListElementMessageValue, ok := bqListElementValue.(map[string]bigquery.Value)
+			if !ok {
+				return fmt.Errorf(
+					"%s: unsupported BigQuery value for message: %v", field.Name(), bqListElementMessageValue,
+				)
+			}
+			listElementValue := list.NewElement()
+			if err := o.unmarshalMessage(bqListElementMessageValue, listElementValue.Message()); err != nil {
+				return err
+			}
+			list.Append(listElementValue)
+		default:
+			value, err := o.unmarshalScalar(bqListElementValue, field)
+			if err != nil {
+				return err
+			}
+			list.Append(value)
+		}
+	}
+	return nil
 }
 
 func (o UnmarshalOptions) unmarshalMapField(

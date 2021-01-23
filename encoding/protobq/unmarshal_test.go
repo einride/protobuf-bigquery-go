@@ -156,6 +156,64 @@ func TestUnmarshalOptions_Unmarshal(t *testing.T) {
 				BoolValue:   wrapperspb.Bool(true),
 			},
 		},
+
+		{
+			name: "primitive lists",
+			row: map[string]bigquery.Value{
+				"int64_list":  []bigquery.Value{int64(1), int64(2)},
+				"string_list": []bigquery.Value{"a", "b"},
+				"enum_list":   []bigquery.Value{"ENUM_VALUE1", "ENUM_VALUE2"},
+			},
+			expected: &examplev1.ExampleList{
+				Int64List:  []int64{1, 2},
+				StringList: []string{"a", "b"},
+				EnumList: []examplev1.ExampleList_Enum{
+					examplev1.ExampleList_ENUM_VALUE1,
+					examplev1.ExampleList_ENUM_VALUE2,
+				},
+			},
+		},
+
+		{
+			name: "well-known-type lists",
+			row: map[string]bigquery.Value{
+				"float_value_list": []bigquery.Value{float32(1), float32(2)},
+			},
+			expected: &examplev1.ExampleList{
+				FloatValueList: []*wrapperspb.FloatValue{
+					wrapperspb.Float(1), wrapperspb.Float(2),
+				},
+			},
+		},
+
+		{
+			name: "lists",
+			row: map[string]bigquery.Value{
+				"int64_list":  []bigquery.Value{int64(1), int64(2)},
+				"string_list": []bigquery.Value{"a", "b"},
+				"enum_list":   []bigquery.Value{"ENUM_VALUE1", "ENUM_VALUE2"},
+				"nested_list": []bigquery.Value{
+					map[string]bigquery.Value{
+						"string_list": []bigquery.Value{"a", "b"},
+					},
+					map[string]bigquery.Value{
+						"string_list": []bigquery.Value{"c", "d"},
+					},
+				},
+			},
+			expected: &examplev1.ExampleList{
+				Int64List:  []int64{1, 2},
+				StringList: []string{"a", "b"},
+				EnumList: []examplev1.ExampleList_Enum{
+					examplev1.ExampleList_ENUM_VALUE1,
+					examplev1.ExampleList_ENUM_VALUE2,
+				},
+				NestedList: []*examplev1.ExampleList_Nested{
+					{StringList: []string{"a", "b"}},
+					{StringList: []string{"c", "d"}},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
