@@ -9,6 +9,7 @@ import (
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gotest.tools/v3/assert"
 )
 
@@ -176,6 +177,43 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 			},
 			expected: &examplev1.ExampleEnum{
 				EnumValue: examplev1.ExampleEnum_ENUM_VALUE1,
+			},
+		},
+
+		{
+			name: "wrappers",
+			row: []bigquery.Value{
+				float64(1),
+				float64(2),
+				"foo",
+				[]byte("bar"),
+				int64(3),
+				int64(4),
+				uint64(5),
+				uint64(6),
+				true,
+			},
+			schema: bigquery.Schema{
+				{Name: "float_value", Type: bigquery.FloatFieldType},
+				{Name: "double_value", Type: bigquery.FloatFieldType},
+				{Name: "string_value", Type: bigquery.StringFieldType},
+				{Name: "bytes_value", Type: bigquery.BytesFieldType},
+				{Name: "int32_value", Type: bigquery.IntegerFieldType},
+				{Name: "int64_value", Type: bigquery.IntegerFieldType},
+				{Name: "uint32_value", Type: bigquery.IntegerFieldType},
+				{Name: "uint64_value", Type: bigquery.IntegerFieldType},
+				{Name: "bool_value", Type: bigquery.BooleanFieldType},
+			},
+			expected: &examplev1.ExampleWrappers{
+				FloatValue:  wrapperspb.Float(1),
+				DoubleValue: wrapperspb.Double(2),
+				StringValue: wrapperspb.String("foo"),
+				BytesValue:  wrapperspb.Bytes([]byte("bar")),
+				Int32Value:  wrapperspb.Int32(3),
+				Int64Value:  wrapperspb.Int64(4),
+				Uint32Value: wrapperspb.UInt32(5),
+				Uint64Value: wrapperspb.UInt64(6),
+				BoolValue:   wrapperspb.Bool(true),
 			},
 		},
 	} {

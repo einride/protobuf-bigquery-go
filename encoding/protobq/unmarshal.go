@@ -15,6 +15,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 // Unmarshal the bigquery.Value map into the given proto.Message.
@@ -145,6 +146,24 @@ func (o UnmarshalOptions) unmarshalWellKnownTypeField(
 		result, err = o.unmarshalLatLng(bqValue)
 	case wkt.Struct:
 		result, err = o.unmarshalStruct(bqValue)
+	case wkt.DoubleValue:
+		result, err = o.unmarshalDoubleValue(bqValue)
+	case wkt.FloatValue:
+		result, err = o.unmarshalFloatValue(bqValue)
+	case wkt.Int32Value:
+		result, err = o.unmarshalInt32Value(bqValue)
+	case wkt.Int64Value:
+		result, err = o.unmarshalInt64Value(bqValue)
+	case wkt.UInt32Value:
+		result, err = o.unmarshalUInt32Value(bqValue)
+	case wkt.UInt64Value:
+		result, err = o.unmarshalUInt64Value(bqValue)
+	case wkt.BoolValue:
+		result, err = o.unmarshalBoolValue(bqValue)
+	case wkt.StringValue:
+		result, err = o.unmarshalStringValue(bqValue)
+	case wkt.BytesValue:
+		result, err = o.unmarshalBytesValue(bqValue)
 	default:
 		result, err = nil, fmt.Errorf("unsupported well-known-type: %s", field.Message().FullName())
 	}
@@ -222,6 +241,93 @@ func (o UnmarshalOptions) unmarshalStruct(bqValue bigquery.Value) (*structpb.Str
 		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v: %w", wkt.Struct, bqValue, err)
 	}
 	return &structValue, nil
+}
+
+func (o UnmarshalOptions) unmarshalDoubleValue(bqValue bigquery.Value) (*wrapperspb.DoubleValue, error) {
+	switch bqValue := bqValue.(type) {
+	case float32:
+		return wrapperspb.Double(float64(bqValue)), nil
+	case float64:
+		return wrapperspb.Double(bqValue), nil
+	default:
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.DoubleValue, bqValue)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalFloatValue(bqValue bigquery.Value) (*wrapperspb.FloatValue, error) {
+	switch bqValue := bqValue.(type) {
+	case float32:
+		return wrapperspb.Float(bqValue), nil
+	case float64:
+		return wrapperspb.Float(float32(bqValue)), nil
+	default:
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.FloatValue, bqValue)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalInt32Value(bqValue bigquery.Value) (*wrapperspb.Int32Value, error) {
+	switch bqValue := bqValue.(type) {
+	case int32:
+		return wrapperspb.Int32(bqValue), nil
+	case int64:
+		return wrapperspb.Int32(int32(bqValue)), nil
+	default:
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.Int32Value, bqValue)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalInt64Value(bqValue bigquery.Value) (*wrapperspb.Int64Value, error) {
+	switch bqValue := bqValue.(type) {
+	case int32:
+		return wrapperspb.Int64(int64(bqValue)), nil
+	case int64:
+		return wrapperspb.Int64(bqValue), nil
+	default:
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.Int64Value, bqValue)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalUInt32Value(bqValue bigquery.Value) (*wrapperspb.UInt32Value, error) {
+	switch bqValue := bqValue.(type) {
+	case uint32:
+		return wrapperspb.UInt32(bqValue), nil
+	case uint64:
+		return wrapperspb.UInt32(uint32(bqValue)), nil
+	default:
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.UInt32Value, bqValue)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalUInt64Value(bqValue bigquery.Value) (*wrapperspb.UInt64Value, error) {
+	switch bqValue := bqValue.(type) {
+	case uint32:
+		return wrapperspb.UInt64(uint64(bqValue)), nil
+	case uint64:
+		return wrapperspb.UInt64(bqValue), nil
+	default:
+		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.UInt64Value, bqValue)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalBoolValue(bqValue bigquery.Value) (*wrapperspb.BoolValue, error) {
+	if bqValue, ok := bqValue.(bool); ok {
+		return wrapperspb.Bool(bqValue), nil
+	}
+	return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.BoolValue, bqValue)
+}
+
+func (o UnmarshalOptions) unmarshalStringValue(bqValue bigquery.Value) (*wrapperspb.StringValue, error) {
+	if bqValue, ok := bqValue.(string); ok {
+		return wrapperspb.String(bqValue), nil
+	}
+	return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.StringValue, bqValue)
+}
+
+func (o UnmarshalOptions) unmarshalBytesValue(bqValue bigquery.Value) (*wrapperspb.BytesValue, error) {
+	if bqValue, ok := bqValue.([]byte); ok {
+		return wrapperspb.Bytes(bqValue), nil
+	}
+	return nil, fmt.Errorf("invalid BigQuery value for %s: %#v", wkt.BytesValue, bqValue)
 }
 
 func (o UnmarshalOptions) unmarshalScalar(
