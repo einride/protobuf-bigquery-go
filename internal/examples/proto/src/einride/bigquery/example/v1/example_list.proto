@@ -4,11 +4,14 @@ package einride.bigquery.example.v1;
 
 option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1";
 
+import "google/protobuf/wrappers.proto";
+
 message ExampleList {
   repeated int64 int64_list = 1;
   repeated string string_list = 2;
   repeated Enum enum_list = 3;
   repeated Nested nested_list = 4;
+  repeated google.protobuf.FloatValue float_value_list = 5;
 
   enum Enum {
     ENUM_UNSPECIFIED = 0;
