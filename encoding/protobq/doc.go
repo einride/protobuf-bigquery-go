@@ -1,3 +1,3 @@
-// Package protobq marshals and unmarshals protocol buffer messages as BigQuery
-// format.
+// Package protobq implements saving and loading protobuf messages to and from
+// BigQuery.
 package protobq
