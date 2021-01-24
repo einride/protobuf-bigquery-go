@@ -112,31 +112,34 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 			},
 			expected: map[string]bigquery.Value{
-				"string_to_string": map[string]bigquery.Value{
-					"key1": "value1",
+				"string_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": "key1", "value": "value1"},
 				},
-				"string_to_nested": map[string]bigquery.Value{
-					"key1": map[string]bigquery.Value{
-						"string_to_string": map[string]bigquery.Value{
-							"key1": "value1",
+				"string_to_nested": []bigquery.Value{
+					map[string]bigquery.Value{
+						"key": "key1",
+						"value": map[string]bigquery.Value{
+							"string_to_string": []bigquery.Value{
+								map[string]bigquery.Value{"key": "key1", "value": "value1"},
+							},
 						},
 					},
 				},
-				"string_to_enum": map[string]bigquery.Value{
-					"key1": "ENUM_VALUE1",
+				"string_to_enum": []bigquery.Value{
+					map[string]bigquery.Value{"key": "key1", "value": "ENUM_VALUE1"},
 				},
-				"int32_to_string": map[int64]bigquery.Value{
-					1: "value1",
+				"int32_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": int64(1), "value": "value1"},
 				},
-				"int64_to_string": map[int64]bigquery.Value{
-					1: "value1",
+				"int64_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": int64(1), "value": "value1"},
 				},
-				"uint32_to_string": map[uint64]bigquery.Value{
-					1: "value1",
+				"uint32_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": uint64(1), "value": "value1"},
 				},
-				"bool_to_string": map[bool]bigquery.Value{
-					false: "value1",
-					true:  "value2",
+				"bool_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": false, "value": "value1"},
+					map[string]bigquery.Value{"key": true, "value": "value2"},
 				},
 			},
 		},

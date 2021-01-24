@@ -108,8 +108,8 @@ func (o MarshalOptions) marshalMapValue(
 func (o MarshalOptions) marshalStringMapValue(
 	field protoreflect.FieldDescriptor,
 	value protoreflect.Value,
-) (map[string]bigquery.Value, error) {
-	result := make(map[string]bigquery.Value, value.Map().Len())
+) ([]bigquery.Value, error) {
+	result := make([]bigquery.Value, 0, value.Map().Len())
 	var returnErr error
 	value.Map().Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
 		v, err := o.marshalValue(field.MapValue(), value)
@@ -117,7 +117,10 @@ func (o MarshalOptions) marshalStringMapValue(
 			returnErr = err
 			return false
 		}
-		result[key.String()] = v
+		result = append(result, map[string]bigquery.Value{
+			"key":   key.String(),
+			"value": v,
+		})
 		return true
 	})
 	if returnErr != nil {
@@ -130,8 +133,8 @@ func (o MarshalOptions) marshalStringMapValue(
 func (o MarshalOptions) marshalIntMapValue(
 	field protoreflect.FieldDescriptor,
 	value protoreflect.Value,
-) (map[int64]bigquery.Value, error) {
-	result := make(map[int64]bigquery.Value, value.Map().Len())
+) ([]bigquery.Value, error) {
+	result := make([]bigquery.Value, 0, value.Map().Len())
 	var returnErr error
 	value.Map().Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
 		v, err := o.marshalValue(field.MapValue(), value)
@@ -139,7 +142,10 @@ func (o MarshalOptions) marshalIntMapValue(
 			returnErr = err
 			return false
 		}
-		result[key.Int()] = v
+		result = append(result, map[string]bigquery.Value{
+			"key":   key.Int(),
+			"value": v,
+		})
 		return true
 	})
 	if returnErr != nil {
@@ -152,8 +158,8 @@ func (o MarshalOptions) marshalIntMapValue(
 func (o MarshalOptions) marshalUintMapValue(
 	field protoreflect.FieldDescriptor,
 	value protoreflect.Value,
-) (map[uint64]bigquery.Value, error) {
-	result := make(map[uint64]bigquery.Value, value.Map().Len())
+) ([]bigquery.Value, error) {
+	result := make([]bigquery.Value, 0, value.Map().Len())
 	var returnErr error
 	value.Map().Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
 		v, err := o.marshalValue(field.MapValue(), value)
@@ -161,7 +167,10 @@ func (o MarshalOptions) marshalUintMapValue(
 			returnErr = err
 			return false
 		}
-		result[key.Uint()] = v
+		result = append(result, map[string]bigquery.Value{
+			"key":   key.Uint(),
+			"value": v,
+		})
 		return true
 	})
 	if returnErr != nil {
@@ -174,8 +183,8 @@ func (o MarshalOptions) marshalUintMapValue(
 func (o MarshalOptions) marshalBoolMapValue(
 	field protoreflect.FieldDescriptor,
 	value protoreflect.Value,
-) (map[bool]bigquery.Value, error) {
-	result := make(map[bool]bigquery.Value, value.Map().Len())
+) ([]bigquery.Value, error) {
+	result := make([]bigquery.Value, 0, value.Map().Len())
 	var returnErr error
 	value.Map().Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
 		v, err := o.marshalValue(field.MapValue(), value)
@@ -183,7 +192,10 @@ func (o MarshalOptions) marshalBoolMapValue(
 			returnErr = err
 			return false
 		}
-		result[key.Bool()] = v
+		result = append(result, map[string]bigquery.Value{
+			"key":   key.Bool(),
+			"value": v,
+		})
 		return true
 	})
 	if returnErr != nil {
