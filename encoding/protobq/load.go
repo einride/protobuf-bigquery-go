@@ -51,9 +51,13 @@ func (o UnmarshalOptions) loadMessage(
 		}
 		switch {
 		case field.IsList():
-			return o.loadListField(bqField, bqFieldSchema, field, message)
+			if err := o.loadListField(bqField, bqFieldSchema, field, message); err != nil {
+				return err
+			}
 		case field.IsMap():
-			return o.loadMapField(bqField, bqFieldSchema, field, message)
+			if err := o.loadMapField(bqField, bqFieldSchema, field, message); err != nil {
+				return err
+			}
 		default:
 			value, err := o.loadSingularField(bqField, bqFieldSchema, field, message)
 			if err != nil {
@@ -73,7 +77,52 @@ func (o UnmarshalOptions) loadListField(
 	field protoreflect.FieldDescriptor,
 	message protoreflect.Message,
 ) error {
-	return fmt.Errorf("TODO: implement support for lists")
+	if !bqFieldSchema.Repeated {
+		return fmt.Errorf("%s: unsupported field schema for list field: not repeated", field.Name())
+	}
+	bqList, ok := bqField.([]bigquery.Value)
+	if !ok {
+		return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bqField)
+	}
+	list := message.Mutable(field).List()
+	for _, bqElement := range bqList {
+		isMessage := field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind
+		switch {
+		case isMessage && wkt.IsWellKnownType(string(field.Message().FullName())):
+			value, err := o.unmarshalWellKnownTypeField(bqElement, field)
+			if err != nil {
+				return err
+			}
+			list.Append(value)
+		case isMessage:
+			if bqFieldSchema.Type != bigquery.RecordFieldType {
+				return fmt.Errorf(
+					"%s: field schema has type %s but expected %s",
+					field.Name(),
+					bqFieldSchema.Type,
+					bigquery.RecordFieldType,
+				)
+			}
+			bqMessageElement, ok := bqElement.([]bigquery.Value)
+			if !ok {
+				return fmt.Errorf(
+					"%s: unsupported BigQuery value for message: %v", field.Name(), bqMessageElement,
+				)
+			}
+			listElementValue := list.NewElement()
+			if err := o.loadMessage(bqMessageElement, bqFieldSchema.Schema, listElementValue.Message()); err != nil {
+				return err
+			}
+			list.Append(listElementValue)
+		default:
+			value, err := o.unmarshalScalar(bqElement, field)
+			if err != nil {
+				return err
+			}
+			list.Append(value)
+		}
+	}
+	return nil
 }
 
 func (o UnmarshalOptions) loadMapField(

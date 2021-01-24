@@ -216,6 +216,85 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				BoolValue:   wrapperspb.Bool(true),
 			},
 		},
+
+		{
+			name: "primitive lists",
+			row: []bigquery.Value{
+				[]bigquery.Value{int64(1), int64(2)},
+				[]bigquery.Value{"a", "b"},
+				[]bigquery.Value{"ENUM_VALUE1", "ENUM_VALUE2"},
+			},
+			schema: bigquery.Schema{
+				{Name: "int64_list", Type: bigquery.IntegerFieldType, Repeated: true},
+				{Name: "string_list", Type: bigquery.StringFieldType, Repeated: true},
+				{Name: "enum_list", Type: bigquery.StringFieldType, Repeated: true},
+			},
+			expected: &examplev1.ExampleList{
+				Int64List:  []int64{1, 2},
+				StringList: []string{"a", "b"},
+				EnumList: []examplev1.ExampleList_Enum{
+					examplev1.ExampleList_ENUM_VALUE1,
+					examplev1.ExampleList_ENUM_VALUE2,
+				},
+			},
+		},
+
+		{
+			name: "well-known-type lists",
+			row: []bigquery.Value{
+				[]bigquery.Value{float32(1), float32(2)},
+			},
+			schema: bigquery.Schema{
+				{Name: "float_value_list", Type: bigquery.FloatFieldType, Repeated: true},
+			},
+			expected: &examplev1.ExampleList{
+				FloatValueList: []*wrapperspb.FloatValue{
+					wrapperspb.Float(1), wrapperspb.Float(2),
+				},
+			},
+		},
+
+		{
+			name: "lists",
+			row: []bigquery.Value{
+				[]bigquery.Value{int64(1), int64(2)},
+				[]bigquery.Value{"a", "b"},
+				[]bigquery.Value{"ENUM_VALUE1", "ENUM_VALUE2"},
+				[]bigquery.Value{
+					[]bigquery.Value{
+						[]bigquery.Value{"a", "b"},
+					},
+					[]bigquery.Value{
+						[]bigquery.Value{"c", "d"},
+					},
+				},
+			},
+			schema: bigquery.Schema{
+				{Name: "int64_list", Type: bigquery.IntegerFieldType, Repeated: true},
+				{Name: "string_list", Type: bigquery.StringFieldType, Repeated: true},
+				{Name: "enum_list", Type: bigquery.StringFieldType, Repeated: true},
+				{
+					Name:     "nested_list",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "string_list", Type: bigquery.StringFieldType, Repeated: true},
+					},
+				},
+			},
+			expected: &examplev1.ExampleList{
+				Int64List:  []int64{1, 2},
+				StringList: []string{"a", "b"},
+				EnumList: []examplev1.ExampleList_Enum{
+					examplev1.ExampleList_ENUM_VALUE1,
+					examplev1.ExampleList_ENUM_VALUE2,
+				},
+				NestedList: []*examplev1.ExampleList_Nested{
+					{StringList: []string{"a", "b"}},
+					{StringList: []string{"c", "d"}},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
