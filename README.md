@@ -11,10 +11,11 @@
 [codecov-badge]: https://codecov.io/gh/einride/protobuf-bigquery-go/branch/master/graph/badge.svg
 [codecov]: https://codecov.io/gh/einride/protobuf-bigquery-go
 
-Add-ons to [cloud.google.com/bigquery][google-cloud-go-bigquery] for
-first-class protobuf support using [protobuf reflection][protobuf-apiv2].
+Seamlessly save and load protocol buffers to and from BigQuery using Go.
 
-**Work in progress:** This library is under active development.
+This library provides add-ons to
+[cloud.google.com/bigquery][google-cloud-go-bigquery] for first-class
+protobuf support using [protobuf reflection][protobuf-apiv2].
 
 [google-cloud-go-bigquery]: https://pkg.go.dev/cloud.google.com/go/bigquery
 [protobuf-apiv2]: https://blog.golang.org/protobuf-apiv2
@@ -23,6 +24,115 @@ first-class protobuf support using [protobuf reflection][protobuf-apiv2].
 
 ```bash
 $ go get -u go.einride.tech/protobuf-bigquery
+```
+
+## Examples
+
+### `protobq.InferSchema`
+
+BigQuery schema inference for arbitrary protobuf messages.
+
+```go
+func ExampleInferSchema() {
+	msg := &library.Book{}
+	schema := protobq.InferSchema(msg)
+	expected := bigquery.Schema{
+		{Name: "name", Type: bigquery.StringFieldType},
+		{Name: "author", Type: bigquery.StringFieldType},
+		{Name: "title", Type: bigquery.StringFieldType},
+		{Name: "read", Type: bigquery.BooleanFieldType},
+	}
+	fmt.Println(cmp.Equal(expected, schema))
+	// Output: true
+}
+```
+
+### `protobq.MessageSaver`
+
+An implementation of [bigquery.ValueSaver][valuesaver] that saves
+arbitrary protobuf messages to BigQuery.
+
+[valuesaver]: https://pkg.go.dev/cloud.google.com/go/bigquery#ValueSaver
+
+```go
+func ExampleMessageSaver() {
+	ctx := context.Background()
+	// Write protobuf messages to a BigQuery table.
+	projectID := flag.String("project", "", "BigQuery project to write to.")
+	datasetID := flag.String("dataset", "", "BigQuery dataset to write to.")
+	tableID := flag.String("table", "", "BigQuery table to write to.")
+	create := flag.Bool("create", false, "Flag indicating whether to create the table.")
+	flag.Parse()
+	// Connect to BigQuery.
+	client, err := bigquery.NewClient(ctx, *projectID)
+	if err != nil {
+		panic(err) // TODO: Handle error.
+	}
+	table := client.Dataset(*datasetID).Table(*tableID)
+	// Create the table by inferring the BigQuery schema from the protobuf schema.
+	if *create {
+		if err := table.Create(ctx, &bigquery.TableMetadata{
+			Schema: protobq.InferSchema(&publicv1.FilmLocation{}),
+		}); err != nil {
+			panic(err) // TODO: Handle error.
+		}
+	}
+	// Insert the protobuf messages.
+	inserter := table.Inserter()
+	for i, filmLocation := range []*publicv1.FilmLocation{
+		{Title: "Dark Passage", ReleaseYear: 1947, Locations: "Filbert Steps"},
+		{Title: "D.O.A", ReleaseYear: 1950, Locations: "Union Square"},
+		{Title: "Flower Drum Song", ReleaseYear: 1961, Locations: "Chinatown"},
+	} {
+		if err := inserter.Put(ctx, &protobq.MessageSaver{
+			Message:  filmLocation,
+			InsertID: strconv.Itoa(i), // include an optional insert ID
+		}); err != nil {
+			panic(err) // TODO: Handle error.
+		}
+	}
+}
+```
+
+### `protobq.MessageLoader`
+
+An implementation of [bigquery.ValueLoader][valueloader] that loads
+arbitrary protobuf messages from BigQuery.
+
+[valueloader]: https://pkg.go.dev/cloud.google.com/go/bigquery#ValueLoader
+
+```go
+func ExampleMessageLoader() {
+	ctx := context.Background()
+	// Read from the public "film locations" BigQuery dataset into a proto message.
+	const (
+		project = "bigquery-public-data"
+		dataset = "san_francisco_film_locations"
+		table   = "film_locations"
+	)
+	// Connect to BigQuery.
+	client, err := bigquery.NewClient(ctx, project)
+	if err != nil {
+		panic(err) // TODO: Handle error.
+	}
+	// Load BigQuery rows into a FilmLocation message.
+	messageLoader := &protobq.MessageLoader{
+		Message: &publicv1.FilmLocation{},
+	}
+	// Iterate rows in table.
+	rowIterator := client.Dataset(dataset).Table(table).Read(ctx)
+	for {
+		// Load next row into the FilmLocation message.
+		if err := rowIterator.Next(messageLoader); err != nil {
+			if errors.Is(err, iterator.Done) {
+				break
+			}
+			panic(err) // TODO: Handle error.
+		}
+		// Print the message.
+		fmt.Println(prototext.Format(messageLoader.Message))
+	}
+}
 ```
 
 ## Features
@@ -60,127 +170,3 @@ _[Reference ≫][well-known-types]_
 _[Reference ≫][api-common-protos]_
 
 [api-common-protos]: https://github.com/googleapis/api-common-protos
-
-## Examples
-
-### `protobq.MessageLoader`
-
-An implementation of [bigquery.ValueLoader][valueloader] that loads
-BigQuery rows into protobuf messages.
-
-[valueloader]: https://pkg.go.dev/cloud.google.com/go/bigquery#ValueLoader
-
-```go
-package main
-
-import (
-	"context"
-	"errors"
-	"fmt"
-
-	"cloud.google.com/go/bigquery"
-	"go.einride.tech/protobuf-bigquery/encoding/protobq"
-	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/example/v1"
-	"google.golang.org/api/iterator"
-	"google.golang.org/protobuf/encoding/prototext"
-)
-
-func main() {
-	ctx := context.Background()
-	// Read from the public "film locations" BigQuery dataset into a proto message.
-	const (
-		project = "bigquery-public-data"
-		dataset = "san_francisco_film_locations"
-		table   = "film_locations"
-	)
-	// Connect to BigQuery.
-	client, err := bigquery.NewClient(ctx, project)
-	if err != nil {
-		panic(err) // TODO: Handle error.
-	}
-	// Load BigQuery rows into a FilmLocation message.
-	messageLoader := &protobq.MessageLoader{
-		Message: &examplev1.FilmLocation{},
-	}
-	// Iterate rows in table.
-	rowIterator := client.Dataset(dataset).Table(table).Read(ctx)
-	for {
-		// Load next row into the FilmLocation message.
-		if err := rowIterator.Next(messageLoader); err != nil {
-			if errors.Is(err, iterator.Done) {
-				break
-			}
-			panic(err) // TODO: Handle error.
-		}
-		// Print the message.
-		fmt.Println(prototext.Format(messageLoader.Message))
-	}
-}
-```
-
-### Schema inference
-
-```go
-func ExampleInferSchema() {
-	msg := &library.Book{}
-	schema := protobq.InferSchema(msg)
-	expected := bigquery.Schema{
-		{Name: "name", Type: bigquery.StringFieldType},
-		{Name: "author", Type: bigquery.StringFieldType},
-		{Name: "title", Type: bigquery.StringFieldType},
-		{Name: "read", Type: bigquery.BooleanFieldType},
-	}
-	fmt.Println(cmp.Equal(expected, schema))
-	// Output: true
-}
-```
-
-### Marshaling
-
-```go
-func ExampleMarshal() {
-	msg := &library.Book{
-		Name:   "publishers/123/books/456",
-		Author: "P.L. Travers",
-		Title:  "Mary Poppins",
-		Read:   true,
-	}
-	row, err := protobq.Marshal(msg)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	expected := map[string]bigquery.Value{
-		"name":   "publishers/123/books/456",
-		"author": "P.L. Travers",
-		"title":  "Mary Poppins",
-		"read":   true,
-	}
-	fmt.Println(cmp.Equal(expected, row))
-	// Output: true
-}
-```
-
-### Unmarshaling
-
-```go
-func ExampleUnmarshal() {
-	row := map[string]bigquery.Value{
-		"name":   "publishers/123/books/456",
-		"author": "P.L. Travers",
-		"title":  "Mary Poppins",
-		"read":   true,
-	}
-	msg := &library.Book{}
-	if err := protobq.Unmarshal(row, msg); err != nil {
-		// TODO: Handle error.
-	}
-	expected := &library.Book{
-		Name:   "publishers/123/books/456",
-		Author: "P.L. Travers",
-		Title:  "Mary Poppins",
-		Read:   true,
-	}
-	fmt.Println(cmp.Equal(expected, msg, protocmp.Transform()))
-	// Output: true
-}
-```
