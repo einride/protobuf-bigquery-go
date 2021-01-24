@@ -295,6 +295,174 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "primitive maps",
+			row: []bigquery.Value{
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": "a", "value": "b"},
+				},
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": "a", "value": "ENUM_VALUE1"},
+				},
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": int64(1), "value": "a"},
+				},
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": int64(2), "value": "a"},
+				},
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": uint64(3), "value": "a"},
+				},
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": true, "value": "a"},
+				},
+			},
+			schema: bigquery.Schema{
+				{
+					Name:     "string_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+
+				{
+					Name:     "string_to_enum",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+
+				{
+					Name:     "int32_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.IntegerFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+
+				{
+					Name:     "int64_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.IntegerFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+
+				{
+					Name:     "uint32_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.IntegerFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+
+				{
+					Name:     "bool_to_string",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.BooleanFieldType},
+						{Name: "value", Type: bigquery.StringFieldType},
+					},
+				},
+			},
+			expected: &examplev1.ExampleMap{
+				StringToString: map[string]string{"a": "b"},
+				StringToEnum:   map[string]examplev1.ExampleMap_Enum{"a": examplev1.ExampleMap_ENUM_VALUE1},
+				Int32ToString:  map[int32]string{1: "a"},
+				Int64ToString:  map[int64]string{2: "a"},
+				Uint32ToString: map[uint32]string{3: "a"},
+				BoolToString:   map[bool]string{true: "a"},
+			},
+		},
+
+		{
+			name: "well-known-type maps",
+			row: []bigquery.Value{
+				[]bigquery.Value{
+					map[string]bigquery.Value{"key": "a", "value": float64(1)},
+				},
+			},
+			schema: bigquery.Schema{
+				{
+					Name:     "string_to_float_value",
+					Repeated: true,
+					Type:     bigquery.RecordFieldType,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType},
+						{Name: "value", Type: bigquery.FloatFieldType},
+					},
+				},
+			},
+			expected: &examplev1.ExampleMap{
+				StringToFloatValue: map[string]*wrapperspb.FloatValue{
+					"a": wrapperspb.Float(1),
+				},
+			},
+		},
+
+		{
+			name: "nested maps",
+			row: []bigquery.Value{
+				[]bigquery.Value{
+					map[string]bigquery.Value{
+						"key": "a",
+						"value": []bigquery.Value{
+							[]bigquery.Value{
+								map[string]bigquery.Value{"key": "a", "value": "b"},
+							},
+						},
+					},
+				},
+			},
+			schema: bigquery.Schema{
+				{
+					Name:     "string_to_nested",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType},
+						{
+							Name: "value",
+							Type: bigquery.RecordFieldType,
+							Schema: bigquery.Schema{
+								{
+									Name:     "string_to_string",
+									Type:     bigquery.RecordFieldType,
+									Repeated: true,
+									Schema: bigquery.Schema{
+										{Name: "key", Type: bigquery.StringFieldType},
+										{Name: "value", Type: bigquery.StringFieldType},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expected: &examplev1.ExampleMap{
+				StringToNested: map[string]*examplev1.ExampleMap_Nested{
+					"a": {
+						StringToString: map[string]string{
+							"a": "b",
+						},
+					},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

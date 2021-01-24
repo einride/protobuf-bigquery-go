@@ -133,6 +133,16 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 						{Name: "value", Type: bigquery.StringFieldType},
 					},
 				},
+
+				{
+					Name:     "string_to_float_value",
+					Repeated: true,
+					Type:     bigquery.RecordFieldType,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType},
+						{Name: "value", Type: bigquery.FloatFieldType},
+					},
+				},
 			},
 		},
 

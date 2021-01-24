@@ -214,6 +214,77 @@ func TestUnmarshalOptions_Unmarshal(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "primitive maps",
+			row: map[string]bigquery.Value{
+				"string_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": "a", "value": "b"},
+				},
+				"string_to_enum": []bigquery.Value{
+					map[string]bigquery.Value{"key": "a", "value": "ENUM_VALUE1"},
+				},
+				"int32_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": int64(1), "value": "a"},
+				},
+				"int64_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": int64(2), "value": "a"},
+				},
+				"uint32_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": uint64(3), "value": "a"},
+				},
+				"bool_to_string": []bigquery.Value{
+					map[string]bigquery.Value{"key": true, "value": "a"},
+				},
+			},
+			expected: &examplev1.ExampleMap{
+				StringToString: map[string]string{"a": "b"},
+				StringToEnum:   map[string]examplev1.ExampleMap_Enum{"a": examplev1.ExampleMap_ENUM_VALUE1},
+				Int32ToString:  map[int32]string{1: "a"},
+				Int64ToString:  map[int64]string{2: "a"},
+				Uint32ToString: map[uint32]string{3: "a"},
+				BoolToString:   map[bool]string{true: "a"},
+			},
+		},
+
+		{
+			name: "well-known-type maps",
+			row: map[string]bigquery.Value{
+				"string_to_float_value": []bigquery.Value{
+					map[string]bigquery.Value{"key": "a", "value": float64(1)},
+				},
+			},
+			expected: &examplev1.ExampleMap{
+				StringToFloatValue: map[string]*wrapperspb.FloatValue{
+					"a": wrapperspb.Float(1),
+				},
+			},
+		},
+
+		{
+			name: "nested maps",
+			row: map[string]bigquery.Value{
+				"string_to_nested": []bigquery.Value{
+					map[string]bigquery.Value{
+						"key": "a",
+						"value": map[string]bigquery.Value{
+							"string_to_string": []bigquery.Value{
+								map[string]bigquery.Value{"key": "a", "value": "b"},
+							},
+						},
+					},
+				},
+			},
+			expected: &examplev1.ExampleMap{
+				StringToNested: map[string]*examplev1.ExampleMap_Nested{
+					"a": {
+						StringToString: map[string]string{
+							"a": "b",
+						},
+					},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

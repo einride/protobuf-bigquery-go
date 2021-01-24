@@ -107,8 +107,7 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 					1: "value1",
 				},
 				BoolToString: map[bool]string{
-					false: "value1",
-					true:  "value2",
+					true: "value1",
 				},
 			},
 			expected: map[string]bigquery.Value{
@@ -138,8 +137,7 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 					map[string]bigquery.Value{"key": uint64(1), "value": "value1"},
 				},
 				"bool_to_string": []bigquery.Value{
-					map[string]bigquery.Value{"key": false, "value": "value1"},
-					map[string]bigquery.Value{"key": true, "value": "value2"},
+					map[string]bigquery.Value{"key": true, "value": "value1"},
 				},
 			},
 		},
