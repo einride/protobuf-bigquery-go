@@ -82,9 +82,11 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			TableID:   "storms_2020",
 			Limit:     10,
 			Message:   &publicv1.HistoricSevereStorm{},
+			MarshalOptions: protobq.MarshalOptions{
+				Schema: protobq.SchemaOptions{UseDateTimeWithoutOffset: true},
+			},
 			UnmarshalOptions: protobq.UnmarshalOptions{
-				// TODO: Add support for lossy DateTime <=> DATETIME mapping.
-				DiscardUnknown: true,
+				Schema: protobq.SchemaOptions{UseDateTimeWithoutOffset: true},
 			},
 		},
 

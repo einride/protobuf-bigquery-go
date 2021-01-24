@@ -8,6 +8,7 @@ import (
 	"cloud.google.com/go/civil"
 	"go.einride.tech/protobuf-bigquery/internal/wkt"
 	"google.golang.org/genproto/googleapis/type/date"
+	"google.golang.org/genproto/googleapis/type/datetime"
 	"google.golang.org/genproto/googleapis/type/latlng"
 	"google.golang.org/genproto/googleapis/type/timeofday"
 	"google.golang.org/protobuf/proto"
@@ -294,8 +295,27 @@ func (o MarshalOptions) marshalWellKnownTypeValue(
 			Month: time.Month(d.Month),
 			Day:   int(d.Day),
 		}, nil
-	case "google.type.DateTime":
-		return nil, fmt.Errorf("TODO: implement support for google.type.DateTime")
+	case wkt.DateTime:
+		d, ok := value.Message().Interface().(*datetime.DateTime)
+		if !ok {
+			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.DateTime, value)
+		}
+		if o.Schema.UseDateTimeWithoutOffset {
+			return civil.DateTime{
+				Date: civil.Date{
+					Year:  int(d.Year),
+					Month: time.Month(d.Month),
+					Day:   int(d.Day),
+				},
+				Time: civil.Time{
+					Hour:       int(d.Hours),
+					Minute:     int(d.Minutes),
+					Second:     int(d.Seconds),
+					Nanosecond: int(d.Nanos),
+				},
+			}, nil
+		}
+		return nil, fmt.Errorf("TODO: implement support for google.type.DateTime with offset")
 	case wkt.LatLng:
 		latLng, ok := value.Message().Interface().(*latlng.LatLng)
 		if !ok {

@@ -2,12 +2,16 @@ package protobq
 
 import (
 	"testing"
+	"time"
 
 	"cloud.google.com/go/bigquery"
+	"cloud.google.com/go/civil"
 	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1"
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
+	"google.golang.org/genproto/googleapis/type/datetime"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gotest.tools/v3/assert"
 )
@@ -224,6 +228,44 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				"uint32_value": uint64(5),
 				"uint64_value": uint64(6),
 				"bool_value":   true,
+			},
+		},
+
+		{
+			name: "datetime (without offset)",
+			msg: &examplev1.ExampleDateTime{
+				DateTime: &datetime.DateTime{
+					Year:    2021,
+					Month:   int32(time.February),
+					Day:     1,
+					Hours:   8,
+					Minutes: 30,
+					Seconds: 1,
+					Nanos:   2,
+					TimeOffset: &datetime.DateTime_UtcOffset{
+						UtcOffset: durationpb.New(2 * time.Hour),
+					},
+				},
+			},
+			opt: MarshalOptions{
+				Schema: SchemaOptions{
+					UseDateTimeWithoutOffset: true,
+				},
+			},
+			expected: map[string]bigquery.Value{
+				"date_time": civil.DateTime{
+					Date: civil.Date{
+						Year:  2021,
+						Month: time.February,
+						Day:   1,
+					},
+					Time: civil.Time{
+						Hour:       8,
+						Minute:     30,
+						Second:     1,
+						Nanosecond: 2,
+					},
+				},
 			},
 		},
 	} {
