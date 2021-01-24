@@ -97,45 +97,188 @@ func (o UnmarshalOptions) unmarshalListField(
 	if !ok {
 		return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bqValue)
 	}
+	isMessage := field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind
+	switch {
+	case isMessage && wkt.IsWellKnownType(string(field.Message().FullName())):
+		return o.unmarshalWellKnownTypeListField(bqListValue, field, message)
+	case isMessage:
+		return o.unmarshalMessageListField(bqListValue, field, message)
+	default:
+		return o.unmarshalScalarListField(bqListValue, field, message)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalWellKnownTypeListField(
+	bqListValue []bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
 	list := message.Mutable(field).List()
 	for _, bqListElementValue := range bqListValue {
-		isMessage := field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind
-		switch {
-		case isMessage && wkt.IsWellKnownType(string(field.Message().FullName())):
-			value, err := o.unmarshalWellKnownTypeField(bqListElementValue, field)
-			if err != nil {
-				return err
-			}
-			list.Append(value)
-		case isMessage:
-			bqListElementMessageValue, ok := bqListElementValue.(map[string]bigquery.Value)
-			if !ok {
-				return fmt.Errorf(
-					"%s: unsupported BigQuery value for message: %v", field.Name(), bqListElementMessageValue,
-				)
-			}
-			listElementValue := list.NewElement()
-			if err := o.unmarshalMessage(bqListElementMessageValue, listElementValue.Message()); err != nil {
-				return err
-			}
-			list.Append(listElementValue)
-		default:
-			value, err := o.unmarshalScalar(bqListElementValue, field)
-			if err != nil {
-				return err
-			}
-			list.Append(value)
+		value, err := o.unmarshalWellKnownTypeField(bqListElementValue, field)
+		if err != nil {
+			return err
 		}
+		list.Append(value)
+	}
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalMessageListField(
+	bqListValue []bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	list := message.Mutable(field).List()
+	for _, bqListElementValue := range bqListValue {
+		bqListElementMessageValue, ok := bqListElementValue.(map[string]bigquery.Value)
+		if !ok {
+			return fmt.Errorf(
+				"%s: unsupported BigQuery value for message: %v", field.Name(), bqListElementMessageValue,
+			)
+		}
+		listElementValue := list.NewElement()
+		if err := o.unmarshalMessage(bqListElementMessageValue, listElementValue.Message()); err != nil {
+			return err
+		}
+		list.Append(listElementValue)
+	}
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalScalarListField(
+	bqListValue []bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	list := message.Mutable(field).List()
+	for _, bqListElementValue := range bqListValue {
+		value, err := o.unmarshalScalar(bqListElementValue, field)
+		if err != nil {
+			return err
+		}
+		list.Append(value)
 	}
 	return nil
 }
 
 func (o UnmarshalOptions) unmarshalMapField(
-	bqValue bigquery.Value,
+	bqField bigquery.Value,
 	field protoreflect.FieldDescriptor,
 	message protoreflect.Message,
 ) error {
-	return fmt.Errorf("TODO: implement support for maps")
+	bqMapField, ok := bqField.([]bigquery.Value)
+	if !ok {
+		return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bqField)
+	}
+	mapValue := field.MapValue()
+	isMessage := mapValue.Kind() == protoreflect.MessageKind || mapValue.Kind() == protoreflect.GroupKind
+	switch {
+	case isMessage && wkt.IsWellKnownType(string(mapValue.Message().FullName())):
+		return o.unmarshalWellKnownTypeValueMapField(bqMapField, field, message)
+	case isMessage:
+		return o.unmarshalMessageValueMapField(bqMapField, field, message)
+	default:
+		return o.unmarshalScalarValueMapField(bqMapField, field, message)
+	}
+}
+
+func (o UnmarshalOptions) unmarshalScalarValueMapField(
+	bqMapField []bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	mapField := message.Mutable(field).Map()
+	for _, bqMapEntry := range bqMapField {
+		bqMapEntry, ok := bqMapEntry.(map[string]bigquery.Value)
+		if !ok {
+			return fmt.Errorf("%s: unsupported BigQuery value for map entry: %v", field.Name(), bqMapEntry)
+		}
+		mapEntryKey, err := o.unmarshalMapEntryKey(bqMapEntry)
+		if err != nil {
+			return err
+		}
+		bqMapEntryValue, ok := bqMapEntry["value"]
+		if !ok {
+			return fmt.Errorf("%s: map entry is missing value field", field.Name())
+		}
+		mapEntryValue, err := o.unmarshalScalar(bqMapEntryValue, field.MapValue())
+		if err != nil {
+			return err
+		}
+		mapField.Set(mapEntryKey, mapEntryValue)
+	}
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalWellKnownTypeValueMapField(
+	bqMapField []bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	mapField := message.Mutable(field).Map()
+	for _, bqMapEntry := range bqMapField {
+		bqMapEntry, ok := bqMapEntry.(map[string]bigquery.Value)
+		if !ok {
+			return fmt.Errorf("%s: unsupported BigQuery value for map entry: %v", field.Name(), bqMapEntry)
+		}
+		mapEntryKey, err := o.unmarshalMapEntryKey(bqMapEntry)
+		if err != nil {
+			return err
+		}
+		bqMapEntryValue, ok := bqMapEntry["value"]
+		if !ok {
+			return fmt.Errorf("%s: map entry is missing value field", field.Name())
+		}
+		mapEntryValue, err := o.unmarshalWellKnownTypeField(bqMapEntryValue, field.MapValue())
+		if err != nil {
+			return err
+		}
+		mapField.Set(mapEntryKey, mapEntryValue)
+	}
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalMessageValueMapField(
+	bqMapField []bigquery.Value,
+	field protoreflect.FieldDescriptor,
+	message protoreflect.Message,
+) error {
+	mapField := message.Mutable(field).Map()
+	for _, bqMapEntry := range bqMapField {
+		bqMapEntry, ok := bqMapEntry.(map[string]bigquery.Value)
+		if !ok {
+			return fmt.Errorf("%s: unsupported BigQuery value for map entry: %v", field.Name(), bqMapEntry)
+		}
+		mapEntryKey, err := o.unmarshalMapEntryKey(bqMapEntry)
+		if err != nil {
+			return err
+		}
+		bqMapEntryValue, ok := bqMapEntry["value"]
+		if !ok {
+			return fmt.Errorf("%s: map entry is missing value field", field.Name())
+		}
+		bqMapEntryMessageValue, ok := bqMapEntryValue.(map[string]bigquery.Value)
+		if !ok {
+			return fmt.Errorf("%s: unsupported BigQuery value for message: %v", field.Name(), bqMapEntryValue)
+		}
+		mapEntryValue := mapField.NewValue()
+		if err := o.unmarshalMessage(bqMapEntryMessageValue, mapEntryValue.Message()); err != nil {
+			return err
+		}
+		mapField.Set(mapEntryKey, mapEntryValue)
+	}
+	return nil
+}
+
+func (o UnmarshalOptions) unmarshalMapEntryKey(
+	bqMapEntry map[string]bigquery.Value,
+) (protoreflect.MapKey, error) {
+	bqMapEntryKey, ok := bqMapEntry["key"]
+	if !ok {
+		return protoreflect.MapKey{}, fmt.Errorf("map entry is missing key field")
+	}
+	return protoreflect.ValueOf(bqMapEntryKey).MapKey(), nil
 }
 
 func (o UnmarshalOptions) unmarshalSingularField(

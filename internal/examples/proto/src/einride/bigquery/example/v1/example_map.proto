@@ -4,6 +4,8 @@ package einride.bigquery.example.v1;
 
 option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1";
 
+import "google/protobuf/wrappers.proto";
+
 message ExampleMap {
   map<string, string> string_to_string = 1;
   map<string, Nested> string_to_nested = 2;
@@ -13,6 +15,8 @@ message ExampleMap {
   map<int64, string> int64_to_string = 5;
   map<uint32, string> uint32_to_string = 6;
   map<bool, string> bool_to_string = 7;
+
+  map<string, google.protobuf.FloatValue> string_to_float_value = 8;
 
   enum Enum {
     ENUM_UNSPECIFIED = 0;
