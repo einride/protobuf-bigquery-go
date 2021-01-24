@@ -8,6 +8,7 @@ import (
 	"cloud.google.com/go/civil"
 	"go.einride.tech/protobuf-bigquery/internal/wkt"
 	"google.golang.org/genproto/googleapis/type/date"
+	"google.golang.org/genproto/googleapis/type/datetime"
 	"google.golang.org/genproto/googleapis/type/latlng"
 	"google.golang.org/genproto/googleapis/type/timeofday"
 	"google.golang.org/protobuf/proto"
@@ -323,6 +324,8 @@ func (o UnmarshalOptions) unmarshalWellKnownTypeField(
 		result, err = o.unmarshalTimeOfDay(bqValue)
 	case wkt.Date:
 		result, err = o.unmarshalDate(bqValue)
+	case wkt.DateTime:
+		result, err = o.unmarshalDateTime(bqValue)
 	case wkt.LatLng:
 		result, err = o.unmarshalLatLng(bqValue)
 	case wkt.Struct:
@@ -398,6 +401,25 @@ func (o UnmarshalOptions) unmarshalDate(bqValue bigquery.Value) (*date.Date, err
 		Month: int32(d.Month),
 		Day:   int32(d.Day),
 	}, nil
+}
+
+func (o UnmarshalOptions) unmarshalDateTime(bqValue bigquery.Value) (*datetime.DateTime, error) {
+	if o.Schema.UseDateTimeWithoutOffset {
+		d, ok := bqValue.(civil.DateTime)
+		if !ok {
+			return nil, fmt.Errorf("unsupported BigQuery value for %s (without offset): %#v", wkt.DateTime, bqValue)
+		}
+		return &datetime.DateTime{
+			Year:    int32(d.Date.Year),
+			Month:   int32(d.Date.Month),
+			Day:     int32(d.Date.Day),
+			Hours:   int32(d.Time.Hour),
+			Minutes: int32(d.Time.Minute),
+			Seconds: int32(d.Time.Second),
+			Nanos:   int32(d.Time.Nanosecond),
+		}, nil
+	}
+	return nil, fmt.Errorf("TODO: implement support for %s with offset", wkt.DateTime)
 }
 
 func (o UnmarshalOptions) unmarshalLatLng(bqValue bigquery.Value) (*latlng.LatLng, error) {

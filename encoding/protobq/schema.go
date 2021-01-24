@@ -16,6 +16,8 @@ func InferSchema(msg proto.Message) bigquery.Schema {
 type SchemaOptions struct {
 	// UseEnumNumbers converts enum values to INTEGER types.
 	UseEnumNumbers bool
+	// UseDateTimeWithoutOffset converts google.type.DateTime values to DATETIME, discarding the optional time offset.
+	UseDateTimeWithoutOffset bool
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
@@ -37,6 +39,10 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 	if field.IsMap() {
 		return o.inferMapFieldSchema(field)
 	}
+	if (field.Kind() == protoreflect.MessageKind || field.Kind() == protoreflect.GroupKind) &&
+		field.Message().FullName() == wkt.DateTime {
+		return o.inferDateTimeFieldSchema(field)
+	}
 	fieldSchema := &bigquery.FieldSchema{
 		Name:     string(field.Name()),
 		Type:     o.inferFieldSchemaType(field),
@@ -44,6 +50,31 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 	}
 	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
 		fieldSchema.Schema = o.inferMessageSchema(field.Message())
+	}
+	return fieldSchema
+}
+
+func (o SchemaOptions) inferDateTimeFieldSchema(field protoreflect.FieldDescriptor) *bigquery.FieldSchema {
+	fieldSchema := &bigquery.FieldSchema{
+		Name:     string(field.Name()),
+		Repeated: field.IsList(),
+	}
+	if o.UseDateTimeWithoutOffset {
+		fieldSchema.Type = bigquery.DateTimeFieldType
+	} else {
+		fieldSchema.Type = bigquery.RecordFieldType
+		fieldSchema.Schema = bigquery.Schema{
+			{Name: "datetime", Type: bigquery.DateTimeFieldType},
+			{Name: "utc_offset", Type: bigquery.FloatFieldType},
+			{
+				Name: "time_zone",
+				Type: bigquery.RecordFieldType,
+				Schema: bigquery.Schema{
+					{Name: "id", Type: bigquery.StringFieldType},
+					{Name: "version", Type: bigquery.StringFieldType},
+				},
+			},
+		}
 	}
 	return fieldSchema
 }
@@ -77,26 +108,25 @@ func (o SchemaOptions) inferFieldSchemaType(field protoreflect.FieldDescriptor) 
 			return bigquery.TimestampFieldType
 		case wkt.Duration:
 			return bigquery.FloatFieldType
-		case "google.protobuf.DoubleValue",
-			"google.protobuf.FloatValue":
+		case wkt.DoubleValue, wkt.FloatValue:
 			return bigquery.FloatFieldType
-		case "google.protobuf.Int32Value",
-			"google.protobuf.Int64Value",
-			"google.protobuf.UInt32Value",
-			"google.protobuf.UInt64Value":
+		case wkt.Int32Value, wkt.Int64Value, wkt.UInt32Value, wkt.UInt64Value:
 			return bigquery.IntegerFieldType
-		case "google.protobuf.BoolValue":
+		case wkt.BoolValue:
 			return bigquery.BooleanFieldType
-		case "google.protobuf.StringValue":
+		case wkt.StringValue:
 			return bigquery.StringFieldType
-		case "google.protobuf.BytesValue":
+		case wkt.BytesValue:
 			return bigquery.BytesFieldType
 		case wkt.Struct:
 			return bigquery.StringFieldType // JSON string
 		case wkt.Date:
 			return bigquery.DateFieldType
-		case "google.type.DateTime":
-			return bigquery.TimestampFieldType
+		case wkt.DateTime:
+			if o.UseDateTimeWithoutOffset {
+				return bigquery.DateTimeFieldType
+			}
+			return bigquery.RecordFieldType // to include explicit UTC offset or time zone
 		case wkt.LatLng:
 			return bigquery.GeographyFieldType
 		case wkt.TimeOfDay:

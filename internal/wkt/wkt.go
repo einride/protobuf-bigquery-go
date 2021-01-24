@@ -6,6 +6,7 @@ const (
 	Struct      = "google.protobuf.Struct"
 	TimeOfDay   = "google.type.TimeOfDay"
 	Date        = "google.type.Date"
+	DateTime    = "google.type.DateTime"
 	LatLng      = "google.type.LatLng"
 	DoubleValue = "google.protobuf.DoubleValue"
 	FloatValue  = "google.protobuf.FloatValue"
@@ -25,6 +26,7 @@ func IsWellKnownType(t string) bool {
 		Struct,
 		TimeOfDay,
 		Date,
+		DateTime,
 		LatLng,
 		DoubleValue,
 		FloatValue,

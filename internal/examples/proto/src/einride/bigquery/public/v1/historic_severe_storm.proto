@@ -20,11 +20,9 @@ message HistoricSevereStorm {
   string cz_fips_code = 7; // STRING NULLABLE
   string cz_name = 8; // STRING NULLABLE
   string wfo = 9; // STRING NULLABLE
-  // TODO: Add support for lossy DateTime <=> DATETIME mapping.
-  //google.type.DateTime event_begin_time = 10; // DATETIME NULLABLE
+  google.type.DateTime event_begin_time = 10; // DATETIME NULLABLE
   string event_timezone = 11; // STRING NULLABLE
-  // TODO: Add support for lossy DateTime <=> DATETIME mapping.
-  //google.type.DateTime event_end_time = 12; // DATETIME NULLABLE
+  google.type.DateTime event_end_time = 12; // DATETIME NULLABLE
   int64 injuries_direct = 13; // INTEGER NULLABLE
   int64 injuries_indirect = 14; // INTEGER NULLABLE
   int64 deaths_direct = 15; // INTEGER NULLABLE

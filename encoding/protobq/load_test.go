@@ -2,11 +2,14 @@ package protobq
 
 import (
 	"testing"
+	"time"
 
 	"cloud.google.com/go/bigquery"
+	"cloud.google.com/go/civil"
 	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1"
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
+	"google.golang.org/genproto/googleapis/type/datetime"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -460,6 +463,44 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 							"a": "b",
 						},
 					},
+				},
+			},
+		},
+
+		{
+			name: "datetime (without offset)",
+			row: []bigquery.Value{
+				civil.DateTime{
+					Date: civil.Date{
+						Year:  2021,
+						Month: time.February,
+						Day:   1,
+					},
+					Time: civil.Time{
+						Hour:       8,
+						Minute:     30,
+						Second:     1,
+						Nanosecond: 2,
+					},
+				},
+			},
+			schema: bigquery.Schema{
+				{Name: "date_time", Type: bigquery.DateTimeFieldType},
+			},
+			opt: UnmarshalOptions{
+				Schema: SchemaOptions{
+					UseDateTimeWithoutOffset: true,
+				},
+			},
+			expected: &examplev1.ExampleDateTime{
+				DateTime: &datetime.DateTime{
+					Year:    2021,
+					Month:   int32(time.February),
+					Day:     1,
+					Hours:   8,
+					Minutes: 30,
+					Seconds: 1,
+					Nanos:   2,
 				},
 			},
 		},

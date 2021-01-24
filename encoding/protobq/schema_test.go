@@ -180,6 +180,40 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				{Name: "bool_value", Type: bigquery.BooleanFieldType},
 			},
 		},
+
+		{
+			name: "examplev1.ExampleDateTime (no offset)",
+			msg:  &examplev1.ExampleDateTime{},
+			opt: SchemaOptions{
+				UseDateTimeWithoutOffset: true,
+			},
+			expected: bigquery.Schema{
+				{Name: "date_time", Type: bigquery.DateTimeFieldType},
+			},
+		},
+
+		{
+			name: "examplev1.ExampleDateTime (with offset)",
+			msg:  &examplev1.ExampleDateTime{},
+			expected: bigquery.Schema{
+				{
+					Name: "date_time",
+					Type: bigquery.RecordFieldType,
+					Schema: bigquery.Schema{
+						{Name: "datetime", Type: bigquery.DateTimeFieldType},
+						{Name: "utc_offset", Type: bigquery.FloatFieldType},
+						{
+							Name: "time_zone",
+							Type: bigquery.RecordFieldType,
+							Schema: bigquery.Schema{
+								{Name: "id", Type: bigquery.StringFieldType},
+								{Name: "version", Type: bigquery.StringFieldType},
+							},
+						},
+					},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

@@ -50,12 +50,12 @@ _[Reference ≫][well-known-types]_
 
 ### Support for API Common Protos (`google.type`)
 
-| Protobuf              | BigQuery  |
-| --------------------- | --------- |
-| google.type.Date      | DATE      |
-| google.type.DateTime  | TIMESTAMP |
-| google.type.LatLng    | GEOGRAPHY |
-| google.type.TimeOfDay | TIME      |
+| Protobuf              | BigQuery             |
+| --------------------- | -------------------- |
+| google.type.Date      | DATE                 |
+| google.type.DateTime  | RECORD (or DATETIME) |
+| google.type.LatLng    | GEOGRAPHY            |
+| google.type.TimeOfDay | TIME                 |
 
 _[Reference ≫][api-common-protos]_
 
