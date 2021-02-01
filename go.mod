@@ -8,7 +8,7 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.4
 	golang.org/x/oauth2 v0.0.0-20210113160501-8b1d76fa0423
-	google.golang.org/api v0.36.0
+	google.golang.org/api v0.38.0
 	google.golang.org/genproto v0.0.0-20210113195801-ae06605f4595
 	google.golang.org/protobuf v1.25.0
 	gotest.tools/v3 v3.0.3
