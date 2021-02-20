@@ -15,3 +15,7 @@ linters:
     - unparam # allow constant parameters
     - goerr113 # allow "dynamic" errors
     - nlreturn # don't require blank lines before returns
+    - wrapcheck # don't enforce error wrapping
+    - paralleltest # don't require all tests to use t.Parallel()
+    - exhaustivestruct # don't require exhaustive structs
+    - cyclop # don't enforce cyclomatic complexity
