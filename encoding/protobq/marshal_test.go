@@ -42,7 +42,6 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 		{
 			name: "library.UpdateBookRequest",
 			msg: &library.UpdateBookRequest{
-				Name: "name",
 				Book: &library.Book{
 					Name:   "name",
 					Author: "author",
@@ -51,7 +50,6 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 			},
 			expected: map[string]bigquery.Value{
-				"name": "name",
 				"book": map[string]bigquery.Value{
 					"name":   "name",
 					"author": "author",

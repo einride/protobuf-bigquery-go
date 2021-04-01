@@ -43,7 +43,6 @@ func TestUnmarshalOptions_Unmarshal(t *testing.T) {
 		{
 			name: "library.UpdateBookRequest",
 			row: map[string]bigquery.Value{
-				"name": "name",
 				"book": map[string]bigquery.Value{
 					"name":   "name",
 					"author": "author",
@@ -52,7 +51,6 @@ func TestUnmarshalOptions_Unmarshal(t *testing.T) {
 				},
 			},
 			expected: &library.UpdateBookRequest{
-				Name: "name",
 				Book: &library.Book{
 					Name:   "name",
 					Author: "author",
