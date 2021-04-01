@@ -50,7 +50,6 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 		{
 			name: "library.UpdateBookRequest",
 			row: []bigquery.Value{
-				"name",
 				[]bigquery.Value{
 					"name",
 					"author",
@@ -59,7 +58,6 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				},
 			},
 			schema: bigquery.Schema{
-				{Name: "name", Type: bigquery.StringFieldType},
 				{
 					Name: "book",
 					Type: bigquery.RecordFieldType,
@@ -72,7 +70,6 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				},
 			},
 			expected: &library.UpdateBookRequest{
-				Name: "name",
 				Book: &library.Book{
 					Name:   "name",
 					Author: "author",

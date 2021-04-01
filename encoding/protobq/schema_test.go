@@ -32,7 +32,6 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 			name: "library.UpdateBookRequest",
 			msg:  &library.UpdateBookRequest{},
 			expected: bigquery.Schema{
-				{Name: "name", Type: bigquery.StringFieldType},
 				{
 					Name: "book",
 					Type: bigquery.RecordFieldType,
@@ -41,6 +40,13 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 						{Name: "author", Type: bigquery.StringFieldType},
 						{Name: "title", Type: bigquery.StringFieldType},
 						{Name: "read", Type: bigquery.BooleanFieldType},
+					},
+				},
+				{
+					Name: "update_mask",
+					Type: bigquery.RecordFieldType,
+					Schema: bigquery.Schema{
+						{Name: "paths", Type: bigquery.StringFieldType, Repeated: true},
 					},
 				},
 			},

@@ -1,5 +1,5 @@
 protoc_cwd := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
-protoc_version := 3.14.0
+protoc_version := 3.15.6
 protoc_dir := $(protoc_cwd)/$(protoc_version)
 protoc := $(protoc_dir)/bin/protoc
 export PATH := $(dir $(protoc)):$(PATH)
