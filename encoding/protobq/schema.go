@@ -1,6 +1,9 @@
 package protobq
 
 import (
+	"fmt"
+	"strings"
+
 	"cloud.google.com/go/bigquery"
 	"go.einride.tech/protobuf-bigquery/internal/wkt"
 	"google.golang.org/protobuf/proto"
@@ -18,6 +21,9 @@ type SchemaOptions struct {
 	UseEnumNumbers bool
 	// UseDateTimeWithoutOffset converts google.type.DateTime values to DATETIME, discarding the optional time offset.
 	UseDateTimeWithoutOffset bool
+	// UseOneofFields adds an extra STRING field for oneof fields with the name of the oneof,
+	// containing the name of the field that is set.
+	UseOneofFields bool
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
@@ -30,7 +36,16 @@ func (o SchemaOptions) InferSchema(msg proto.Message) bigquery.Schema {
 func (o SchemaOptions) inferMessageSchema(msg protoreflect.MessageDescriptor) bigquery.Schema {
 	schema := make(bigquery.Schema, 0, msg.Fields().Len())
 	for i := 0; i < msg.Fields().Len(); i++ {
-		schema = append(schema, o.inferFieldSchema(msg.Fields().Get(i)))
+		fieldSchema := o.inferFieldSchema(msg.Fields().Get(i))
+		if fieldSchema != nil {
+			schema = append(schema, fieldSchema)
+		}
+	}
+	if o.UseOneofFields {
+		for i := 0; i < msg.Oneofs().Len(); i++ {
+			oneof := msg.Oneofs().Get(i)
+			schema = append(schema, o.inferOneofFieldSchema(oneof))
+		}
 	}
 	return schema
 }
@@ -50,7 +65,24 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 	}
 	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
 		fieldSchema.Schema = o.inferMessageSchema(field.Message())
+		if len(fieldSchema.Schema) == 0 {
+			return nil
+		}
 	}
+	return fieldSchema
+}
+
+func (o SchemaOptions) inferOneofFieldSchema(oneof protoreflect.OneofDescriptor) *bigquery.FieldSchema {
+	fieldSchema := &bigquery.FieldSchema{
+		Name: string(oneof.Name()),
+		Type: bigquery.StringFieldType,
+	}
+	oneofFieldNames := make([]string, 0, oneof.Fields().Len())
+	for i := 0; i < oneof.Fields().Len(); i++ {
+		field := oneof.Fields().Get(i)
+		oneofFieldNames = append(oneofFieldNames, string(field.Name()))
+	}
+	fieldSchema.Description = fmt.Sprintf("One of: %s.", strings.Join(oneofFieldNames, ", "))
 	return fieldSchema
 }
 

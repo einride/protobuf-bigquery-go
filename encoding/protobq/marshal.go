@@ -66,12 +66,25 @@ func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]big
 				returnErr = errMarshal
 				return false
 			}
+			if m, ok := column.(map[string]bigquery.Value); ok && len(m) == 0 {
+				// don't set anything for empty records
+				return true
+			}
 			result[string(field.Name())] = column
 		}
 		return true
 	})
 	if returnErr != nil {
 		return nil, returnErr
+	}
+	if o.Schema.UseOneofFields {
+		for i := 0; i < msg.Descriptor().Oneofs().Len(); i++ {
+			oneofDescriptor := msg.Descriptor().Oneofs().Get(i)
+			oneofField := msg.WhichOneof(oneofDescriptor)
+			if oneofField != nil {
+				result[string(oneofDescriptor.Name())] = string(oneofField.Name())
+			}
+		}
 	}
 	return result, nil
 }

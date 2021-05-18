@@ -266,6 +266,75 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "oneof empty messages",
+			msg: &examplev1.ExampleOneof{
+				OneofFields_1: &examplev1.ExampleOneof_OneofEmptyMessage_1{
+					OneofEmptyMessage_1: &examplev1.ExampleOneof_EmptyMessage{},
+				},
+				OneofFields_2: &examplev1.ExampleOneof_OneofEmptyMessage_2{
+					OneofEmptyMessage_2: &examplev1.ExampleOneof_EmptyMessage{},
+				},
+			},
+			opt: MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
+			expected: map[string]bigquery.Value{
+				"oneof_fields_1": "oneof_empty_message_1",
+				"oneof_fields_2": "oneof_empty_message_2",
+			},
+		},
+
+		{
+			name: "one oneof empty message, one non-empty",
+			msg: &examplev1.ExampleOneof{
+				OneofFields_1: &examplev1.ExampleOneof_OneofEmptyMessage_1{
+					OneofEmptyMessage_1: &examplev1.ExampleOneof_EmptyMessage{},
+				},
+				OneofFields_2: &examplev1.ExampleOneof_OneofMessage{
+					OneofMessage: &examplev1.ExampleOneof_Message{
+						StringValue: "value",
+					},
+				},
+			},
+			opt: MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
+			expected: map[string]bigquery.Value{
+				"oneof_fields_1": "oneof_empty_message_1",
+				"oneof_fields_2": "oneof_message",
+				"oneof_message": map[string]bigquery.Value{
+					"string_value": "value",
+				},
+			},
+		},
+
+		{
+			name: "oneof non-empty messages",
+			msg: &examplev1.ExampleOneof{
+				OneofFields_1: &examplev1.ExampleOneof_OneofBool_1{
+					OneofBool_1: true,
+				},
+				OneofFields_2: &examplev1.ExampleOneof_OneofMessage{
+					OneofMessage: &examplev1.ExampleOneof_Message{
+						StringValue: "value",
+					},
+				},
+			},
+			opt: MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
+			expected: map[string]bigquery.Value{
+				"oneof_fields_1": "oneof_bool_1",
+				"oneof_bool_1":   true,
+				"oneof_fields_2": "oneof_message",
+				"oneof_message": map[string]bigquery.Value{
+					"string_value": "value",
+				},
+			},
+		},
+
+		{
+			name:     "oneof empty root message",
+			msg:      &examplev1.ExampleOneof{},
+			opt:      MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
+			expected: map[string]bigquery.Value{},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

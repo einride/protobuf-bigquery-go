@@ -220,6 +220,40 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "examplev1.ExampleOneof",
+			msg:  &examplev1.ExampleOneof{},
+			opt: SchemaOptions{
+				UseOneofFields: true,
+			},
+			expected: bigquery.Schema{
+				{
+					Name: "oneof_bool_1",
+					Type: bigquery.BooleanFieldType,
+				},
+				{
+					Name: "oneof_message",
+					Type: bigquery.RecordFieldType,
+					Schema: bigquery.Schema{
+						{
+							Name: "string_value",
+							Type: bigquery.StringFieldType,
+						},
+					},
+				},
+				{
+					Name:        "oneof_fields_1",
+					Type:        bigquery.StringFieldType,
+					Description: "One of: oneof_empty_message_1, oneof_bool_1.",
+				},
+				{
+					Name:        "oneof_fields_2",
+					Type:        bigquery.StringFieldType,
+					Description: "One of: oneof_empty_message_2, oneof_message.",
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

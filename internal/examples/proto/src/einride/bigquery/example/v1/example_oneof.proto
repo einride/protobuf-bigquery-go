@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1";
+
+message ExampleOneof {
+  oneof oneof_fields_1 {
+    EmptyMessage oneof_empty_message_1 = 1;
+    bool oneof_bool_1 = 2;
+  }
+  oneof oneof_fields_2 {
+    EmptyMessage oneof_empty_message_2 = 3;
+    Message oneof_message = 4;
+  }
+  message EmptyMessage {
+  }
+  message Message {
+    string string_value = 1;
+  }
+}
