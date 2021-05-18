@@ -58,10 +58,23 @@ func (o UnmarshalOptions) unmarshalMessage(
 	bqMessage map[string]bigquery.Value,
 	message protoreflect.Message,
 ) error {
+	oneofFields := make(map[protoreflect.Name]string)
 	for bqFieldName, bqField := range bqMessage {
 		fieldName := protoreflect.Name(bqFieldName)
 		field := message.Descriptor().Fields().ByName(fieldName)
 		if field == nil {
+			if o.Schema.UseOneofFields && o.isOneOfField(fieldName, message) {
+				stringVal, ok := bqField.(string)
+				if !ok {
+					return fmt.Errorf(
+						"unexpected type %T for oneof field %s, expected string",
+						bqField,
+						bqFieldName,
+					)
+				}
+				oneofFields[fieldName] = stringVal
+				continue
+			}
 			if !o.DiscardUnknown && !message.Descriptor().ReservedNames().Has(fieldName) {
 				return fmt.Errorf("unknown field: %s", fieldName)
 			}
@@ -86,7 +99,31 @@ func (o UnmarshalOptions) unmarshalMessage(
 			}
 		}
 	}
+	if o.Schema.UseOneofFields {
+		o.ensureOneofsAreSet(oneofFields, message)
+	}
 	return nil
+}
+
+func (o UnmarshalOptions) isOneOfField(fieldName protoreflect.Name, message protoreflect.Message) bool {
+	descriptor := message.Descriptor().Oneofs().ByName(fieldName)
+	return descriptor != nil
+}
+
+func (o UnmarshalOptions) ensureOneofsAreSet(
+	oneofFields map[protoreflect.Name]string,
+	message protoreflect.Message,
+) {
+	for name, value := range oneofFields {
+		oneofDesc := message.Descriptor().Oneofs().ByName(name)
+		field := message.WhichOneof(oneofDesc)
+		if field != nil {
+			continue
+		}
+		field = message.Descriptor().Fields().ByName(protoreflect.Name(value))
+		fieldValue := message.NewField(field)
+		message.Set(field, fieldValue)
+	}
 }
 
 func (o UnmarshalOptions) unmarshalListField(
