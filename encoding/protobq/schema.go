@@ -24,6 +24,10 @@ type SchemaOptions struct {
 	// UseOneofFields adds an extra STRING field for oneof fields with the name of the oneof,
 	// containing the name of the field that is set.
 	UseOneofFields bool
+	// UseOptionalFields causes any field not marked "optional" in the proto to be a REQUIRED field.
+	// Lists and Maps are always NULLABLE as proto3 does not seem to support optional for those types.
+	// Types inside maps are always marked as required.
+	UseOptionalFields bool
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
@@ -62,6 +66,7 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		Name:     string(field.Name()),
 		Type:     o.inferFieldSchemaType(field),
 		Repeated: field.IsList(),
+		Required: o.UseOptionalFields && !field.HasOptionalKeyword() && !field.IsList(),
 	}
 	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
 		fieldSchema.Schema = o.inferMessageSchema(field.Message())
@@ -90,6 +95,7 @@ func (o SchemaOptions) inferDateTimeFieldSchema(field protoreflect.FieldDescript
 	fieldSchema := &bigquery.FieldSchema{
 		Name:     string(field.Name()),
 		Repeated: field.IsList(),
+		Required: o.UseOptionalFields && !field.HasOptionalKeyword() && !field.IsList(),
 	}
 	if o.UseDateTimeWithoutOffset {
 		fieldSchema.Type = bigquery.DateTimeFieldType

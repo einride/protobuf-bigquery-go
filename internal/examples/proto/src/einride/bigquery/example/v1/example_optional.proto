@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+option go_package = "go.einride.tech/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1";
+
+import "google/type/datetime.proto";
+
+message Nested {
+  optional string optional_string = 1;
+  string non_optional_string = 2;
+}
+
+message ExampleOptional {
+  optional string optional_string = 1;
+  string non_optional_string = 2;
+  optional int32 optional_int32 = 3;
+  int32 non_optional_int32 = 4;
+  optional int64 optional_int64 = 5;
+  int64 non_optional_int64 = 6;
+  optional float optional_float = 7;
+  float non_optional_float = 8;
+  optional Nested optional_nested = 9;
+  Nested non_optional_nested = 10;
+  repeated string string_list = 11;
+  optional google.type.DateTime optional_date_time = 12;
+  google.type.DateTime non_optional_date_time = 13;
+  map<string, string> string_to_string_map = 14;
+}

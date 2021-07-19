@@ -254,6 +254,140 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "examplev1.ExampleOptional",
+			msg:  &examplev1.ExampleOptional{},
+			opt: SchemaOptions{
+				UseOptionalFields: true,
+			},
+			expected: bigquery.Schema{
+				{
+					Name:     "optional_string",
+					Type:     bigquery.StringFieldType,
+					Required: false,
+				},
+				{
+					Name:     "non_optional_string",
+					Type:     bigquery.StringFieldType,
+					Required: true,
+				},
+				{
+					Name:     "optional_int32",
+					Type:     bigquery.IntegerFieldType,
+					Required: false,
+				},
+				{
+					Name:     "non_optional_int32",
+					Type:     bigquery.IntegerFieldType,
+					Required: true,
+				},
+				{
+					Name:     "optional_int64",
+					Type:     bigquery.IntegerFieldType,
+					Required: false,
+				},
+				{
+					Name:     "non_optional_int64",
+					Type:     bigquery.IntegerFieldType,
+					Required: true,
+				},
+				{
+					Name:     "optional_float",
+					Type:     bigquery.FloatFieldType,
+					Required: false,
+				},
+				{
+					Name:     "non_optional_float",
+					Type:     bigquery.FloatFieldType,
+					Required: true,
+				},
+				{
+					Name:     "optional_nested",
+					Type:     bigquery.RecordFieldType,
+					Required: false,
+					Schema: bigquery.Schema{
+						{
+							Name:     "optional_string",
+							Type:     bigquery.StringFieldType,
+							Required: false,
+						},
+						{
+							Name:     "non_optional_string",
+							Type:     bigquery.StringFieldType,
+							Required: true,
+						},
+					},
+				},
+				{
+					Name:     "non_optional_nested",
+					Type:     bigquery.RecordFieldType,
+					Required: true,
+					Schema: bigquery.Schema{
+						{
+							Name:     "optional_string",
+							Type:     bigquery.StringFieldType,
+							Required: false,
+						},
+						{
+							Name:     "non_optional_string",
+							Type:     bigquery.StringFieldType,
+							Required: true,
+						},
+					},
+				},
+				{
+					Name:     "string_list",
+					Type:     bigquery.StringFieldType,
+					Repeated: true,
+					Required: false,
+				},
+				{
+					Name:     "optional_date_time",
+					Type:     bigquery.RecordFieldType,
+					Required: false,
+					Schema: bigquery.Schema{
+						{Name: "datetime", Type: bigquery.DateTimeFieldType},
+						{Name: "utc_offset", Type: bigquery.FloatFieldType},
+						{
+							Name: "time_zone",
+							Type: bigquery.RecordFieldType,
+							Schema: bigquery.Schema{
+								{Name: "id", Type: bigquery.StringFieldType},
+								{Name: "version", Type: bigquery.StringFieldType},
+							},
+						},
+					},
+				},
+				{
+					Name:     "non_optional_date_time",
+					Type:     bigquery.RecordFieldType,
+					Required: true,
+					Schema: bigquery.Schema{
+						{Name: "datetime", Type: bigquery.DateTimeFieldType},
+						{Name: "utc_offset", Type: bigquery.FloatFieldType},
+						{
+							Name: "time_zone",
+							Type: bigquery.RecordFieldType,
+							Schema: bigquery.Schema{
+								{Name: "id", Type: bigquery.StringFieldType},
+								{Name: "version", Type: bigquery.StringFieldType},
+							},
+						},
+					},
+				},
+				{
+					Name:     "string_to_string_map",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Required: false,
+					Schema: bigquery.Schema{
+						{Name: "key", Type: bigquery.StringFieldType, Required: true},
+						{Name: "value", Type: bigquery.StringFieldType, Required: true},
+					},
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
