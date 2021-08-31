@@ -1,0 +1,14 @@
+version: v1
+
+managed:
+  enabled: true
+  go_package_prefix:
+    default: go.einride.tech/protobuf-bigquery/internal/examples/proto/gen
+    except:
+      - buf.build/googleapis/googleapis
+
+plugins:
+  - name: go
+    out: gen
+    opt: module=go.einride.tech/protobuf-bigquery/internal/examples/proto/gen
+    path: ./build/protoc-gen-go

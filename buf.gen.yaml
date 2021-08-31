@@ -1,6 +1,0 @@
-version: v1beta1
-
-plugins:
-  - name: go
-    out: internal/examples/proto/gen
-    opt: module=go.einride.tech/internal/examples/proto/gen
