@@ -3,7 +3,7 @@ module go.einride.tech/protobuf-bigquery
 go 1.15
 
 require (
-	cloud.google.com/go v0.93.3
+	cloud.google.com/go v0.94.0
 	cloud.google.com/go/bigquery v1.22.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/go-cmp v0.5.6
