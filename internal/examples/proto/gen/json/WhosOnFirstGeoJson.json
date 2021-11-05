@@ -1,0 +1,42 @@
+[
+  {
+    "name": "geoid",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "body",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "geometry_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bounding_box",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "geom",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "last_modified",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "last_modified_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  }
+]

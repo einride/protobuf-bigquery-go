@@ -1,0 +1,62 @@
+[
+  {
+    "name": "id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "by",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "score",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "time",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "time_ts",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "title",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "url",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "text",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "deleted",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "dead",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "descendants",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "author",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

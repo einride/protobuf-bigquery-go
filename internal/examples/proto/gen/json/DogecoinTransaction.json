@@ -1,0 +1,151 @@
+[
+  {
+    "name": "hash",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "size",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "virtual_size",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "version",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "lock_time",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "block_hash",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "block_number",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "block_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "block_timestamp_month",
+    "type": "DATE",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "input_count",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "output_count",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "is_coinbase",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "inputs",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "spent_transaction_hash",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "spent_output_index",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "script_asm",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "script_hex",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "sequence",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "required_signatures",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "addresses",
+        "type": "STRING",
+        "mode": "REPEATED"
+      }
+    ]
+  },
+  {
+    "name": "outputs",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "script_asm",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "script_hex",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "required_signatures",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "addresses",
+        "type": "STRING",
+        "mode": "REPEATED"
+      }
+    ]
+  }
+]

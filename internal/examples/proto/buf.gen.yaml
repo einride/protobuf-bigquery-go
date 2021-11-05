@@ -9,6 +9,11 @@ managed:
 
 plugins:
   - name: go
-    out: gen
+    out: gen/go
     opt: module=go.einride.tech/protobuf-bigquery/internal/examples/proto/gen
     path: ./build/protoc-gen-go
+
+  - name: bq-json-schema
+    out: gen/json
+    opt: format=true
+    path: ./build/protoc-gen-bq-json-schema

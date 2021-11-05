@@ -1,0 +1,34 @@
+[
+  {
+    "name": "int64_list",
+    "type": "INTEGER",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "string_list",
+    "type": "STRING",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "enum_list",
+    "type": "STRING",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "nested_list",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "string_list",
+        "type": "STRING",
+        "mode": "REPEATED"
+      }
+    ]
+  },
+  {
+    "name": "float_value_list",
+    "type": "FLOAT",
+    "mode": "REPEATED"
+  }
+]

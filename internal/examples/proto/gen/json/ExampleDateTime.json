@@ -1,0 +1,36 @@
+[
+  {
+    "name": "date_time",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "datetime",
+        "type": "DATETIME",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "utc_offset",
+        "type": "FLOAT",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "time_zone",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "id",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "version",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      }
+    ]
+  }
+]
