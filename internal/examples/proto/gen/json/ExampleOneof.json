@@ -1,0 +1,19 @@
+[
+  {
+    "name": "oneof_bool_1",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "oneof_message",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "string_value",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  }
+]

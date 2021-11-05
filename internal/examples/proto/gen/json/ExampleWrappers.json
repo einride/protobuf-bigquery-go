@@ -1,0 +1,47 @@
+[
+  {
+    "name": "float_value",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "double_value",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "string_value",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bytes_value",
+    "type": "BYTES",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "int32_value",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "int64_value",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "uint32_value",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "uint64_value",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bool_value",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  }
+]

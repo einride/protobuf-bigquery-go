@@ -1,0 +1,47 @@
+[
+  {
+    "name": "stop_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "trip_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "stop_sequence",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "arrival_time",
+    "type": "TIME",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "arrives_next_day",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "departure_time",
+    "type": "TIME",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "departs_next_day",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "dropoff_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "exact_timepoint",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  }
+]

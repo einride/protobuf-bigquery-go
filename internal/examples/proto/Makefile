@@ -14,6 +14,11 @@ build/protoc-gen-go: ../../../go.mod
 	$(info [$@] building binary...)
 	@go build -o $@ google.golang.org/protobuf/cmd/protoc-gen-go
 
+.PHONY: build/protoc-gen-bq-json-schema
+build/protoc-gen-bq-json-schema:
+	$(info [$@] building binary...)
+	@go build -o $@ ../../../protoc-gen-bq-json-schema
+
 .PHONY: buf-lint
 buf-lint: $(buf)
 	$(info [$@] linting proto schemas...)
@@ -28,7 +33,7 @@ clang-format: $(clang_format)
 		$(shell find einride -type f -name '*.proto')
 
 .PHONY: buf-generate
-buf-generate: $(buf) build/protoc-gen-go
+buf-generate: $(buf) build/protoc-gen-go build/protoc-gen-bq-json-schema
 	$(info [$@] generating protobuf stubs...)
 	@$(buf) generate \
 		--template buf.gen.yaml \

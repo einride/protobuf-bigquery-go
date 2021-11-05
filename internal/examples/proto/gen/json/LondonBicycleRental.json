@@ -1,0 +1,62 @@
+[
+  {
+    "name": "rental_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "duration",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bike_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "end_date",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "end_station_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "end_station_name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "start_date",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "start_station_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "start_station_name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "end_station_logical_terminal",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "start_station_logical_terminal",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "end_station_priority_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  }
+]
