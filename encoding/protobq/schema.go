@@ -29,11 +29,11 @@ type SchemaOptions struct {
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
 // MarshalOptions.
 func (o SchemaOptions) InferSchema(msg proto.Message) bigquery.Schema {
-	return o.inferMessageSchema(msg.ProtoReflect().Descriptor())
+	return o.InferMessageSchema(msg.ProtoReflect().Descriptor())
 }
 
-// inferMessageSchema infers the BigQuery schema for the given protoreflect.MessageDescriptor.
-func (o SchemaOptions) inferMessageSchema(msg protoreflect.MessageDescriptor) bigquery.Schema {
+// InferMessageSchema infers the BigQuery schema for the given protoreflect.MessageDescriptor.
+func (o SchemaOptions) InferMessageSchema(msg protoreflect.MessageDescriptor) bigquery.Schema {
 	schema := make(bigquery.Schema, 0, msg.Fields().Len())
 	for i := 0; i < msg.Fields().Len(); i++ {
 		fieldSchema := o.inferFieldSchema(msg.Fields().Get(i))
@@ -64,7 +64,7 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		Repeated: field.IsList(),
 	}
 	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
-		fieldSchema.Schema = o.inferMessageSchema(field.Message())
+		fieldSchema.Schema = o.InferMessageSchema(field.Message())
 		if len(fieldSchema.Schema) == 0 {
 			return nil
 		}
