@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/bigquery v1.24.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/go-cmp v0.5.6
-	github.com/spf13/pflag v1.0.3
+	github.com/spf13/pflag v1.0.5
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
 	golang.org/x/text v0.3.7 // indirect
