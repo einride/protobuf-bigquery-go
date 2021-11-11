@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+import "google/api/field_behavior.proto";
+
+message ExampleAnnotations {
+  int64 required_int = 1 [(google.api.field_behavior) = REQUIRED];
+  int64 optional_int = 2;
+}

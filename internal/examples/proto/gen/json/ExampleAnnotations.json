@@ -1,0 +1,12 @@
+[
+  {
+    "name": "required_int",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "optional_int",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  }
+]
