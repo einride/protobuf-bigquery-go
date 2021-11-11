@@ -10,7 +10,9 @@ import (
 
 func GenerateSchemaFile(gen *protogen.Plugin, msg *protogen.Message, config Config) error {
 	g := gen.NewGeneratedFile(fmt.Sprintf("%s.json", msg.Desc.Name()), "")
-	schema := protobq.SchemaOptions{}.InferMessageSchema(msg.Desc)
+	schema := protobq.SchemaOptions{
+		UseModeFromFieldBehavior: config.UseModeFromFieldBehavior,
+	}.InferMessageSchema(msg.Desc)
 	jsonOpt := jsonbq.MarshalOptions{}
 	if config.Format {
 		jsonOpt.Indent = "  "

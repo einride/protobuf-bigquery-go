@@ -5,7 +5,9 @@ import (
 	"strings"
 
 	"cloud.google.com/go/bigquery"
+	"go.einride.tech/aip/fieldbehavior"
 	"go.einride.tech/protobuf-bigquery/internal/wkt"
+	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -24,6 +26,9 @@ type SchemaOptions struct {
 	// UseOneofFields adds an extra STRING field for oneof fields with the name of the oneof,
 	// containing the name of the field that is set.
 	UseOneofFields bool
+	// UseModeFromFieldBehavior sets the mode of a field to REQUIRED if the field is defined with REQUIRED behavior
+	// in proto.
+	UseModeFromFieldBehavior bool
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
@@ -68,6 +73,9 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		if len(fieldSchema.Schema) == 0 {
 			return nil
 		}
+	}
+	if o.UseModeFromFieldBehavior {
+		fieldSchema.Required = fieldbehavior.Has(field, annotations.FieldBehavior_REQUIRED)
 	}
 	return fieldSchema
 }

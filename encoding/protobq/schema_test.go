@@ -254,6 +254,26 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				},
 			},
 		},
+
+		{
+			name: "examplev1.ExampleAnnotations",
+			msg:  &examplev1.ExampleAnnotations{},
+			opt: SchemaOptions{
+				UseModeFromFieldBehavior: true,
+			},
+			expected: bigquery.Schema{
+				{
+					Name:     "required_int",
+					Type:     bigquery.IntegerFieldType,
+					Required: true,
+				},
+				{
+					Name:     "optional_int",
+					Type:     bigquery.IntegerFieldType,
+					Required: false,
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
