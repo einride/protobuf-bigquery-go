@@ -1,7 +1,8 @@
 package genjson
 
 import (
-	"github.com/spf13/pflag"
+	"flag"
+
 	"go.einride.tech/protobuf-bigquery/encoding/protobq"
 )
 
@@ -10,7 +11,7 @@ type Config struct {
 	SchemaOptions protobq.SchemaOptions
 }
 
-func (c *Config) AddToFlagSet(flags *pflag.FlagSet) {
+func (c *Config) AddToFlagSet(flags *flag.FlagSet) {
 	flags.BoolVar(
 		&c.Format,
 		"format",
