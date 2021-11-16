@@ -17,5 +17,5 @@ plugins:
     out: gen/json
     opt:
      - format=true
-     - field_behavior_mode=true
+     - mode_from_field_behavior=true
     path: ./build/protoc-gen-bq-json-schema
