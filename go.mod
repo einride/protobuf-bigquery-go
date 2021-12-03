@@ -9,10 +9,10 @@ require (
 	github.com/google/go-cmp v0.5.6
 	go.einride.tech/aip v0.52.1
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
-	golang.org/x/oauth2 v0.0.0-20211005180243-6b3c2da341f1
+	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/api v0.60.0
-	google.golang.org/genproto v0.0.0-20211021150943-2b146023228c
+	google.golang.org/api v0.61.0
+	google.golang.org/genproto v0.0.0-20211118181313-81c1377c94b1
 	google.golang.org/protobuf v1.27.1
 	gotest.tools/v3 v3.0.3
 )
