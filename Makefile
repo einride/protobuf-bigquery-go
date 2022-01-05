@@ -21,10 +21,6 @@ clean:
 	$(info [$@] removing build files...)
 	@rm -rf build
 
-.PHONY: internal/examples/proto/api-common-protos
-internal/examples/proto/api-common-protos:
-	@git submodule update --init --recursive $@
-
 .PHONY: go-test
 go-test:
 	$(info [$@] running Go tests...)
