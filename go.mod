@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	cloud.google.com/go v0.100.1
-	cloud.google.com/go/bigquery v1.25.0
+	cloud.google.com/go/bigquery v1.26.0
 	cloud.google.com/go/iam v0.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/go-cmp v0.5.6
