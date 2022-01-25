@@ -4,8 +4,7 @@ go 1.15
 
 require (
 	cloud.google.com/go v0.100.2
-	cloud.google.com/go/bigquery v1.26.0
-	cloud.google.com/go/iam v0.1.0 // indirect
+	cloud.google.com/go/bigquery v1.27.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/go-cmp v0.5.7
 	go.einride.tech/aip v0.54.0
@@ -13,7 +12,7 @@ require (
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/api v0.65.0
-	google.golang.org/genproto v0.0.0-20220107163113-42d7afdf6368
+	google.golang.org/genproto v0.0.0-20220111164026-67b88f271998
 	google.golang.org/protobuf v1.27.1
 	gotest.tools/v3 v3.1.0
 )
