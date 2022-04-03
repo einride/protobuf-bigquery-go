@@ -1,0 +1,23 @@
+name: release
+
+on:
+  push:
+    branches: [master]
+
+permissions: write-all
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Sage
+        uses: einride/sage/actions/setup@master
+
+      - name: Make
+        run: make
+
+      - name: Release
+        uses: go-semantic-release/action@v1.17
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-initial-development-versions: true

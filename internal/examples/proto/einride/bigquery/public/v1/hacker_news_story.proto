@@ -8,16 +8,16 @@ import "google/protobuf/timestamp.proto";
 //
 //  bigquery-public-data.hacker_news.stories
 message HackerNewsStory {
-  int64 id = 1;                           // INTEGER NULLABLE
-  string by = 2;                          // STRING NULLABLE
-  int32 score = 3;                        // INTEGER NULLABLE
-  int64 time = 4;                         // INTEGER NULLABLE
-  google.protobuf.Timestamp time_ts = 5;  // TIMESTAMP NULLABLE
-  string title = 6;                       // STRING NULLABLE
-  string url = 7;                         // STRING NULLABLE
-  string text = 8;                        // STRING NULLABLE
-  bool deleted = 9;                       // BOOLEAN NULLABLE
-  bool dead = 10;                         // BOOLEAN NULLABLE
-  int32 descendants = 11;                 // INTEGER NULLABLE
-  string author = 12;                     // STRING NULLABLE
+  int64 id = 1; // INTEGER NULLABLE
+  string by = 2; // STRING NULLABLE
+  int32 score = 3; // INTEGER NULLABLE
+  int64 time = 4; // INTEGER NULLABLE
+  google.protobuf.Timestamp time_ts = 5; // TIMESTAMP NULLABLE
+  string title = 6; // STRING NULLABLE
+  string url = 7; // STRING NULLABLE
+  string text = 8; // STRING NULLABLE
+  bool deleted = 9; // BOOLEAN NULLABLE
+  bool dead = 10; // BOOLEAN NULLABLE
+  int32 descendants = 11; // INTEGER NULLABLE
+  string author = 12; // STRING NULLABLE
 }

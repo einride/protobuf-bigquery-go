@@ -1,32 +1,21 @@
-# Protobuf + BigQuery + Go
+Protobuf + BigQuery + Go
+========================
 
-[![PkgGoDev][pkg-badge]][pkg]
-[![GoReportCard][report-badge]][report]
-[![Codecov][codecov-badge]][codecov]
-
-[pkg-badge]: https://pkg.go.dev/badge/go.einride.tech/protobuf-bigquery
-[pkg]: https://pkg.go.dev/go.einride.tech/protobuf-bigquery
-[report-badge]: https://goreportcard.com/badge/go.einride.tech/protobuf-bigquery
-[report]: https://goreportcard.com/report/go.einride.tech/protobuf-bigquery
-[codecov-badge]: https://codecov.io/gh/einride/protobuf-bigquery-go/branch/master/graph/badge.svg
-[codecov]: https://codecov.io/gh/einride/protobuf-bigquery-go
+[![PkgGoDev](https://pkg.go.dev/badge/go.einride.tech/protobuf-bigquery)](https://pkg.go.dev/go.einride.tech/protobuf-bigquery) [![GoReportCard](https://goreportcard.com/badge/go.einride.tech/protobuf-bigquery)](https://goreportcard.com/report/go.einride.tech/protobuf-bigquery) [![Codecov](https://codecov.io/gh/einride/protobuf-bigquery-go/branch/master/graph/badge.svg)](https://codecov.io/gh/einride/protobuf-bigquery-go)
 
 Seamlessly save and load protocol buffers to and from BigQuery using Go.
 
-This library provides add-ons to
-[cloud.google.com/bigquery][google-cloud-go-bigquery] for first-class
-protobuf support using [protobuf reflection][protobuf-apiv2].
+This library provides add-ons to [cloud.google.com/bigquery](https://pkg.go.dev/cloud.google.com/go/bigquery) for first-class protobuf support using [protobuf reflection](https://blog.golang.org/protobuf-apiv2).
 
-[google-cloud-go-bigquery]: https://pkg.go.dev/cloud.google.com/go/bigquery
-[protobuf-apiv2]: https://blog.golang.org/protobuf-apiv2
-
-## Installing
+Installing
+----------
 
 ```bash
 $ go get -u go.einride.tech/protobuf-bigquery
 ```
 
-## Examples
+Examples
+--------
 
 ### `protobq.InferSchema`
 
@@ -49,10 +38,7 @@ func ExampleInferSchema() {
 
 ### `protobq.MessageSaver`
 
-An implementation of [bigquery.ValueSaver][valuesaver] that saves
-arbitrary protobuf messages to BigQuery.
-
-[valuesaver]: https://pkg.go.dev/cloud.google.com/go/bigquery#ValueSaver
+An implementation of [bigquery.ValueSaver](https://pkg.go.dev/cloud.google.com/go/bigquery#ValueSaver) that saves arbitrary protobuf messages to BigQuery.
 
 ```go
 func ExampleMessageSaver() {
@@ -96,10 +82,7 @@ func ExampleMessageSaver() {
 
 ### `protobq.MessageLoader`
 
-An implementation of [bigquery.ValueLoader][valueloader] that loads
-arbitrary protobuf messages from BigQuery.
-
-[valueloader]: https://pkg.go.dev/cloud.google.com/go/bigquery#ValueLoader
+An implementation of [bigquery.ValueLoader](https://pkg.go.dev/cloud.google.com/go/bigquery#ValueLoader) that loads arbitrary protobuf messages from BigQuery.
 
 ```go
 func ExampleMessageLoader() {
@@ -135,12 +118,13 @@ func ExampleMessageLoader() {
 }
 ```
 
-## Features
+Features
+--------
 
-### Support for Well-Known Types (`google.protobuf`)
+### Support for Well-Known Types (`google.protobuf`\)
 
 | Protobuf                    | BigQuery        |
-| --------------------------- | --------------- |
+|-----------------------------|-----------------|
 | google.protobuf.Timestamp   | TIMESTAMP       |
 | google.protobuf.Duration    | FLOAT (seconds) |
 | google.protobuf.DoubleValue | FLOAT           |
@@ -154,19 +138,15 @@ func ExampleMessageLoader() {
 | google.protobuf.BytesValue  | BYTES           |
 | google.protobuf.StructValue | STRING (JSON)   |
 
-_[Reference ≫][well-known-types]_
+*[Reference ≫](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf)*
 
-[well-known-types]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf
-
-### Support for API Common Protos (`google.type`)
+### Support for API Common Protos (`google.type`\)
 
 | Protobuf              | BigQuery             |
-| --------------------- | -------------------- |
+|-----------------------|----------------------|
 | google.type.Date      | DATE                 |
 | google.type.DateTime  | RECORD (or DATETIME) |
 | google.type.LatLng    | GEOGRAPHY            |
 | google.type.TimeOfDay | TIME                 |
 
-_[Reference ≫][api-common-protos]_
-
-[api-common-protos]: https://github.com/googleapis/api-common-protos
+*[Reference ≫](https://github.com/googleapis/api-common-protos)*
