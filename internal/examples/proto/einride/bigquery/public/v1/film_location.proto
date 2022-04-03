@@ -6,15 +6,15 @@ package einride.bigquery.public.v1;
 //
 //  bigquery-public-data.san_francisco_film_locations.film_locations
 message FilmLocation {
-  string title = 1;               // STRING NULLABLE
-  int64 release_year = 2;         // INTEGER NULLABLE
-  string locations = 3;           // STRING NULLABLE
-  string fun_facts = 4;           // STRING NULLABLE
-  string production_company = 5;  // STRING NULLABLE
-  string distributor = 6;         // STRING NULLABLE
-  string director = 7;            // STRING NULLABLE
-  string writer = 8;              // STRING NULLABLE
-  string actor_1 = 9;             // STRING NULLABLE
-  string actor_2 = 10;            // STRING NULLABLE
-  string actor_3 = 11;            // STRING NULLABLE
+  string title = 1; // STRING NULLABLE
+  int64 release_year = 2; // INTEGER NULLABLE
+  string locations = 3; // STRING NULLABLE
+  string fun_facts = 4; // STRING NULLABLE
+  string production_company = 5; // STRING NULLABLE
+  string distributor = 6; // STRING NULLABLE
+  string director = 7; // STRING NULLABLE
+  string writer = 8; // STRING NULLABLE
+  string actor_1 = 9; // STRING NULLABLE
+  string actor_2 = 10; // STRING NULLABLE
+  string actor_3 = 11; // STRING NULLABLE
 }

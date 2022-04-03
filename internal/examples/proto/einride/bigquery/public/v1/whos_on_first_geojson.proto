@@ -9,12 +9,12 @@ import "google/protobuf/timestamp.proto";
 //
 //  bigquery-public-data.geo_whos_on_first.geojson
 message WhosOnFirstGeoJson {
-  string geoid = 1;                                       // STRING NULLABLE
-  int64 id = 2;                                           // INTEGER NULLABLE
-  google.protobuf.Struct body = 3;                        // STRING NULLABLE
-  string geometry_type = 4;                               // STRING NULLABLE
-  string bounding_box = 5;                                // GEOGRAPHY NULLABLE
-  string geom = 6;                                        // GEOGRAPHY NULLABLE
-  int64 last_modified = 7;                                // INTEGER NULLABLE
-  google.protobuf.Timestamp last_modified_timestamp = 8;  // TIMESTAMP NULLABLE
+  string geoid = 1; // STRING NULLABLE
+  int64 id = 2; // INTEGER NULLABLE
+  google.protobuf.Struct body = 3; // STRING NULLABLE
+  string geometry_type = 4; // STRING NULLABLE
+  string bounding_box = 5; // GEOGRAPHY NULLABLE
+  string geom = 6; // GEOGRAPHY NULLABLE
+  int64 last_modified = 7; // INTEGER NULLABLE
+  google.protobuf.Timestamp last_modified_timestamp = 8; // TIMESTAMP NULLABLE
 }
