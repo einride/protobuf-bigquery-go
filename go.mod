@@ -5,7 +5,7 @@ go 1.17
 require (
 	cloud.google.com/go v0.101.0
 	cloud.google.com/go/bigquery v1.31.0
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.5.8
 	go.einride.tech/aip v0.54.1
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 	google.golang.org/api v0.75.0
