@@ -8,7 +8,7 @@ require (
 	github.com/google/go-cmp v0.5.8
 	go.einride.tech/aip v0.54.1
 	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2
-	google.golang.org/api v0.90.0
+	google.golang.org/api v0.91.0
 	google.golang.org/genproto v0.0.0-20220624142145-8cd45d7dbd1f
 	google.golang.org/protobuf v1.28.0
 	gotest.tools/v3 v3.3.0
