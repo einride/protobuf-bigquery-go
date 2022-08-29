@@ -4,13 +4,13 @@ go 1.17
 
 require (
 	cloud.google.com/go v0.103.0
-	cloud.google.com/go/bigquery v1.37.0
+	cloud.google.com/go/bigquery v1.39.0
 	github.com/google/go-cmp v0.5.8
 	go.einride.tech/aip v0.54.1
 	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2
-	google.golang.org/api v0.90.0
-	google.golang.org/genproto v0.0.0-20220802133213-ce4fa296bf78
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/api v0.93.0
+	google.golang.org/genproto v0.0.0-20220819153447-c7cd466b0e09
+	google.golang.org/protobuf v1.28.1
 	gotest.tools/v3 v3.3.0
 )
 
@@ -21,7 +21,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
-	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
+	github.com/googleapis/gax-go/v2 v2.5.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
 	golang.org/x/sys v0.0.0-20220624220833-87e55d714810 // indirect
