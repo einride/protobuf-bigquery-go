@@ -1,0 +1,26 @@
+[
+  {
+    "name": "field_with_leading_commment",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "This is a leading comment"
+  },
+  {
+    "name": "field_with_trailing_commment",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "This is a trailing comment"
+  },
+  {
+    "name": "field_with_both_leading_and_trailing_commment",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "This is a leading comment\nThis is a trailing comment"
+  },
+  {
+    "name": "field_with_multi_line_commment",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "This is a comment spanning\nmultiple lines"
+  }
+]

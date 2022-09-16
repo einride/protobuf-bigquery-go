@@ -29,6 +29,8 @@ type SchemaOptions struct {
 	// UseModeFromFieldBehavior sets the mode of a field to REQUIRED if the field is defined with REQUIRED behavior
 	// in proto.
 	UseModeFromFieldBehavior bool
+	// UseProtoCommentsAsDescription use the proto comments to populate the description of the BigQuery field
+	UseProtoCommentsAsDescription bool
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
@@ -64,9 +66,10 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		return o.inferDateTimeFieldSchema(field)
 	}
 	fieldSchema := &bigquery.FieldSchema{
-		Name:     string(field.Name()),
-		Type:     o.inferFieldSchemaType(field),
-		Repeated: field.IsList(),
+		Name:        string(field.Name()),
+		Type:        o.inferFieldSchemaType(field),
+		Repeated:    field.IsList(),
+		Description: o.buildDescription(field),
 	}
 	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
 		fieldSchema.Schema = o.InferMessageSchema(field.Message())
@@ -78,6 +81,27 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		fieldSchema.Required = fieldbehavior.Has(field, annotations.FieldBehavior_REQUIRED)
 	}
 	return fieldSchema
+}
+
+func appendNonEmpty(parts []string, value string) []string {
+	trimmed := strings.TrimSpace(value)
+	if len(trimmed) > 0 {
+		parts = append(parts, trimmed)
+	}
+	return parts
+}
+
+func (o SchemaOptions) buildDescription(field protoreflect.FieldDescriptor) string {
+	if !o.UseProtoCommentsAsDescription {
+		return ""
+	}
+	sourceLocation := field.ParentFile().SourceLocations().ByDescriptor(field)
+	var parts []string
+	for _, comment := range strings.Split(sourceLocation.LeadingComments, "\n") {
+		parts = appendNonEmpty(parts, comment)
+	}
+	parts = appendNonEmpty(parts, sourceLocation.TrailingComments)
+	return strings.Join(parts, "\n")
 }
 
 func (o SchemaOptions) inferOneofFieldSchema(oneof protoreflect.OneofDescriptor) *bigquery.FieldSchema {
@@ -96,8 +120,9 @@ func (o SchemaOptions) inferOneofFieldSchema(oneof protoreflect.OneofDescriptor)
 
 func (o SchemaOptions) inferDateTimeFieldSchema(field protoreflect.FieldDescriptor) *bigquery.FieldSchema {
 	fieldSchema := &bigquery.FieldSchema{
-		Name:     string(field.Name()),
-		Repeated: field.IsList(),
+		Name:        string(field.Name()),
+		Repeated:    field.IsList(),
+		Description: o.buildDescription(field),
 	}
 	if o.UseDateTimeWithoutOffset {
 		fieldSchema.Type = bigquery.DateTimeFieldType
@@ -185,9 +210,10 @@ func (o SchemaOptions) inferEnumFieldType(field protoreflect.FieldDescriptor) bi
 
 func (o SchemaOptions) inferMapFieldSchema(field protoreflect.FieldDescriptor) *bigquery.FieldSchema {
 	return &bigquery.FieldSchema{
-		Name:     string(field.Name()),
-		Repeated: true,
-		Type:     bigquery.RecordFieldType,
+		Name:        string(field.Name()),
+		Repeated:    true,
+		Type:        bigquery.RecordFieldType,
+		Description: o.buildDescription(field),
 		Schema: bigquery.Schema{
 			o.inferFieldSchema(field.MapKey()),
 			o.inferFieldSchema(field.MapValue()),

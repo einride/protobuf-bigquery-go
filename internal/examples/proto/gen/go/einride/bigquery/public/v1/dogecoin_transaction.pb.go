@@ -30,25 +30,20 @@ type DogecoinTransaction struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Hash                string                 `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`                                                            // STRING REQUIRED
-	Size                int64                  `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`                                                           // INTEGER NULLABLE
-	VirtualSize         int64                  `protobuf:"varint,3,opt,name=virtual_size,json=virtualSize,proto3" json:"virtual_size,omitempty"`                          // INTEGER NULLABLE
-	Version             int64                  `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`                                                     // INTEGER NULLABLE
-	LockTime            int64                  `protobuf:"varint,5,opt,name=lock_time,json=lockTime,proto3" json:"lock_time,omitempty"`                                   // INTEGER NULLABLE
-	BlockHash           string                 `protobuf:"bytes,6,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`                                 // STRING REQUIRED
-	BlockNumber         int64                  `protobuf:"varint,7,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`                          // INTEGER REQUIRED
-	BlockTimestamp      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=block_timestamp,json=blockTimestamp,proto3" json:"block_timestamp,omitempty"`                  // TIMESTAMP REQUIRED
-	BlockTimestampMonth *date.Date             `protobuf:"bytes,9,opt,name=block_timestamp_month,json=blockTimestampMonth,proto3" json:"block_timestamp_month,omitempty"` // DATE REQUIRED
-	InputCount          int64                  `protobuf:"varint,10,opt,name=input_count,json=inputCount,proto3" json:"input_count,omitempty"`                            // INTEGER NULLABLE
-	OutputCount         int64                  `protobuf:"varint,11,opt,name=output_count,json=outputCount,proto3" json:"output_count,omitempty"`                         // INTEGER NULLABLE
-	// TOOD: Figure out if there's a common protobuf type for NUMERIC.
-	// string input_value = 12; // NUMERIC NULLABLE
-	// string output_value = 13; // NUMERIC NULLABLE
-	IsCoinbase bool `protobuf:"varint,14,opt,name=is_coinbase,json=isCoinbase,proto3" json:"is_coinbase,omitempty"` // BOOLEAN NULLABLE
-	// TOOD: Figure out if there's a common protobuf type for NUMERIC.
-	// string fee = 15; // NUMERIC NULLABLE
-	Inputs  []*DogecoinTransaction_Input  `protobuf:"bytes,16,rep,name=inputs,proto3" json:"inputs,omitempty"`   // RECORD REPEATED
-	Outputs []*DogecoinTransaction_Output `protobuf:"bytes,17,rep,name=outputs,proto3" json:"outputs,omitempty"` // RECORD REPEATED
+	Hash                string                        `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`                                                            // STRING REQUIRED
+	Size                int64                         `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`                                                           // INTEGER NULLABLE
+	VirtualSize         int64                         `protobuf:"varint,3,opt,name=virtual_size,json=virtualSize,proto3" json:"virtual_size,omitempty"`                          // INTEGER NULLABLE
+	Version             int64                         `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`                                                     // INTEGER NULLABLE
+	LockTime            int64                         `protobuf:"varint,5,opt,name=lock_time,json=lockTime,proto3" json:"lock_time,omitempty"`                                   // INTEGER NULLABLE
+	BlockHash           string                        `protobuf:"bytes,6,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`                                 // STRING REQUIRED
+	BlockNumber         int64                         `protobuf:"varint,7,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`                          // INTEGER REQUIRED
+	BlockTimestamp      *timestamppb.Timestamp        `protobuf:"bytes,8,opt,name=block_timestamp,json=blockTimestamp,proto3" json:"block_timestamp,omitempty"`                  // TIMESTAMP REQUIRED
+	BlockTimestampMonth *date.Date                    `protobuf:"bytes,9,opt,name=block_timestamp_month,json=blockTimestampMonth,proto3" json:"block_timestamp_month,omitempty"` // DATE REQUIRED
+	InputCount          int64                         `protobuf:"varint,10,opt,name=input_count,json=inputCount,proto3" json:"input_count,omitempty"`                            // INTEGER NULLABLE
+	OutputCount         int64                         `protobuf:"varint,11,opt,name=output_count,json=outputCount,proto3" json:"output_count,omitempty"`                         // INTEGER NULLABLE
+	IsCoinbase          bool                          `protobuf:"varint,14,opt,name=is_coinbase,json=isCoinbase,proto3" json:"is_coinbase,omitempty"`                            // BOOLEAN NULLABLE
+	Inputs              []*DogecoinTransaction_Input  `protobuf:"bytes,16,rep,name=inputs,proto3" json:"inputs,omitempty"`                                                       // RECORD REPEATED
+	Outputs             []*DogecoinTransaction_Output `protobuf:"bytes,17,rep,name=outputs,proto3" json:"outputs,omitempty"`                                                     // RECORD REPEATED
 }
 
 func (x *DogecoinTransaction) Reset() {

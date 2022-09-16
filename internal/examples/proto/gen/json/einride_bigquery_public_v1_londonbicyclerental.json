@@ -2,61 +2,73 @@
   {
     "name": "rental_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER REQUIRED"
   },
   {
     "name": "duration",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "bike_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "end_date",
     "type": "TIMESTAMP",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "TIMESTAMP NULLABLE"
   },
   {
     "name": "end_station_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "end_station_name",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "start_date",
     "type": "TIMESTAMP",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "TIMESTAMP NULLABLE"
   },
   {
     "name": "start_station_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "start_station_name",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "end_station_logical_terminal",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "start_station_logical_terminal",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "end_station_priority_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   }
 ]
