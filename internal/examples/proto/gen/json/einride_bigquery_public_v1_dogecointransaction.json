@@ -2,112 +2,134 @@
   {
     "name": "hash",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING REQUIRED"
   },
   {
     "name": "size",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "virtual_size",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "version",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "lock_time",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "block_hash",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING REQUIRED"
   },
   {
     "name": "block_number",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER REQUIRED"
   },
   {
     "name": "block_timestamp",
     "type": "TIMESTAMP",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "TIMESTAMP REQUIRED"
   },
   {
     "name": "block_timestamp_month",
     "type": "DATE",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "DATE REQUIRED"
   },
   {
     "name": "input_count",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "output_count",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "is_coinbase",
     "type": "BOOLEAN",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "BOOLEAN NULLABLE"
   },
   {
     "name": "inputs",
     "type": "RECORD",
     "mode": "REPEATED",
+    "description": "RECORD REPEATED",
     "fields": [
       {
         "name": "index",
         "type": "INTEGER",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "INTEGER REQUIRED"
       },
       {
         "name": "spent_transaction_hash",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "spent_output_index",
         "type": "INTEGER",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "INTEGER NULLABLE"
       },
       {
         "name": "script_asm",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "script_hex",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "sequence",
         "type": "INTEGER",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "INTEGER NULLABLE"
       },
       {
         "name": "required_signatures",
         "type": "INTEGER",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "INTEGER NULLABLE"
       },
       {
         "name": "type",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "addresses",
         "type": "STRING",
-        "mode": "REPEATED"
+        "mode": "REPEATED",
+        "description": "STRING REPEATED"
       }
     ]
   },
@@ -115,36 +137,43 @@
     "name": "outputs",
     "type": "RECORD",
     "mode": "REPEATED",
+    "description": "RECORD REPEATED",
     "fields": [
       {
         "name": "index",
         "type": "INTEGER",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "INTEGER REQUIRED"
       },
       {
         "name": "script_asm",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "script_hex",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "required_signatures",
         "type": "INTEGER",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "INTEGER NULLABLE"
       },
       {
         "name": "type",
         "type": "STRING",
-        "mode": "NULLABLE"
+        "mode": "NULLABLE",
+        "description": "STRING NULLABLE"
       },
       {
         "name": "addresses",
         "type": "STRING",
-        "mode": "REPEATED"
+        "mode": "REPEATED",
+        "description": "STRING REPEATED"
       }
     ]
   }

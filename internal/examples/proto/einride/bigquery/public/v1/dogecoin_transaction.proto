@@ -23,9 +23,11 @@ message DogecoinTransaction {
   // TOOD: Figure out if there's a common protobuf type for NUMERIC.
   //string input_value = 12; // NUMERIC NULLABLE
   //string output_value = 13; // NUMERIC NULLABLE
+
   bool is_coinbase = 14; // BOOLEAN NULLABLE
   // TOOD: Figure out if there's a common protobuf type for NUMERIC.
   //string fee = 15; // NUMERIC NULLABLE
+
   repeated Input inputs = 16; // RECORD REPEATED
   repeated Output outputs = 17; // RECORD REPEATED
 

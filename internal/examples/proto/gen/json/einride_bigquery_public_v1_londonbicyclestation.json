@@ -2,61 +2,73 @@
   {
     "name": "id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "installed",
     "type": "BOOLEAN",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "BOOLEAN NULLABLE"
   },
   {
     "name": "latitude",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "FLOAT NULLABLE"
   },
   {
     "name": "locked",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "longitude",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "FLOAT NULLABLE"
   },
   {
     "name": "name",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "bikes_count",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "docks_count",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "temporary",
     "type": "BOOLEAN",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "int64 nbEmptyDocks = 9; // INTEGER NULLABLE\nBOOLEAN NULLABLE"
   },
   {
     "name": "terminal_name",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "install_date",
     "type": "DATE",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "DATE NULLABLE"
   },
   {
     "name": "removal_date",
     "type": "DATE",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "DATE NULLABLE"
   }
 ]

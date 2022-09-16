@@ -43,4 +43,10 @@ func (c *Config) AddToFlagSet(flags *flag.FlagSet) {
 		false,
 		"Set the mode of a field to REQUIRED if the field is defined with REQUIRED behavior in proto.",
 	)
+	flags.BoolVar(
+		&c.SchemaOptions.UseProtoCommentsAsDescription,
+		"proto_comments_as_description",
+		true,
+		"Use the proto comments to populate the description of the BigQuery field.",
+	)
 }

@@ -2,52 +2,62 @@
   {
     "name": "episode_id",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "event_id",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "state",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "state_fips_code",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "event_type",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "cz_type",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "cz_fips_code",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "cz_name",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "wfo",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "event_begin_time",
     "type": "RECORD",
     "mode": "NULLABLE",
+    "description": "DATETIME NULLABLE",
     "fields": [
       {
         "name": "datetime",
@@ -81,12 +91,14 @@
   {
     "name": "event_timezone",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "event_end_time",
     "type": "RECORD",
     "mode": "NULLABLE",
+    "description": "DATETIME NULLABLE",
     "fields": [
       {
         "name": "datetime",
@@ -120,106 +132,127 @@
   {
     "name": "injuries_direct",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "injuries_indirect",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "deaths_direct",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "deaths_indirect",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "damage_property",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "damage_crops",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
   },
   {
     "name": "source",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "magnitude",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "FLOAT NULLABLE"
   },
   {
     "name": "magnitude_type",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "flood_cause",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "tor_f_scale",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "tor_length",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "tor_width",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "tor_other_wfo",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "location_index",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "event_range",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "FLOAT NULLABLE"
   },
   {
     "name": "event_azimuth",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "reference_location",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   },
   {
     "name": "event_latitude",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "FLOAT NULLABLE"
   },
   {
     "name": "event_longitude",
     "type": "FLOAT",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "FLOAT NULLABLE"
   },
   {
     "name": "event_point",
     "type": "GEOGRAPHY",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "GEOGRAPHY NULLABLE"
   }
 ]
