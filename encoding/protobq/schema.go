@@ -101,7 +101,14 @@ func (o SchemaOptions) buildDescription(field protoreflect.FieldDescriptor) stri
 		parts = appendNonEmpty(parts, comment)
 	}
 	parts = appendNonEmpty(parts, sourceLocation.TrailingComments)
-	return strings.Join(parts, "\n")
+
+	// Prune the result in case it is long. The maximum description supported in bigquery is 1024 characters.
+	// https://cloud.google.com/bigquery/docs/schemas#column_descriptions
+	result := []rune(strings.Join(parts, "\n"))
+	if len(result) > 1024 {
+		return string(result[:1024])
+	}
+	return string(result)
 }
 
 func (o SchemaOptions) inferOneofFieldSchema(oneof protoreflect.OneofDescriptor) *bigquery.FieldSchema {

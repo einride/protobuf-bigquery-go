@@ -1,0 +1,8 @@
+[
+  {
+    "name": "field_with_long_description",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra rhoncus odio congue sodales. Suspendisse id nisi congue, maximus lectus lobortis, viverra magna. Donec viverra mauris at justo blandit, non posuere lacus dapibus. Pellentesque nec neque aliquet augue vehicula fringilla et et diam. Praesent eget lacus arcu. Donec consectetur arcu odio, eu pulvinar libero porta sit amet. In rutrum elit at mattis posuere. Aenean ac facilisis lacus. Fusce nisi arcu, rutrum varius felis sit amet, fermentum molestie lectus. Aliquam et erat rutrum, bibendum nisl non, posuere quam.\nDuis eu tincidunt sapien, hendrerit vulputate dui. In tristique eu urna ut tempus. Donec ullamcorper tincidunt mi a hendrerit. Maecenas viverra ornare nunc, id bibendum nunc iaculis in. Nam faucibus maximus nisi, nec vehicula mi porta nec. Vivamus ultrices risus et velit blandit, vitae mattis erat viverra. Aliquam sed elit eu turpis tempus maximus. Nullam at ipsum non urna iaculis facilisis et nec orci. Pellentesque habitant morbi tr"
+  }
+]
