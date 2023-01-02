@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.107.0
 	cloud.google.com/go/bigquery v1.44.0
 	github.com/google/go-cmp v0.5.9
-	go.einride.tech/aip v0.58.1
+	go.einride.tech/aip v0.60.0
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
 	google.golang.org/api v0.105.0
 	google.golang.org/genproto v0.0.0-20221206210731-b1a01be3a5f6
