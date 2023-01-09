@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	cloud.google.com/go v0.107.0
-	cloud.google.com/go/bigquery v1.44.0
+	cloud.google.com/go/bigquery v1.45.0
 	github.com/google/go-cmp v0.5.9
 	go.einride.tech/aip v0.60.0
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
