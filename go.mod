@@ -3,7 +3,7 @@ module go.einride.tech/protobuf-bigquery
 go 1.19
 
 require (
-	cloud.google.com/go v0.107.0
+	cloud.google.com/go v0.108.0
 	cloud.google.com/go/bigquery v1.44.0
 	github.com/google/go-cmp v0.5.9
 	go.einride.tech/aip v0.60.0
