@@ -7,11 +7,14 @@ import (
 	"cloud.google.com/go/bigquery"
 	"cloud.google.com/go/civil"
 	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/example/v1"
+	publicv1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/genproto/googleapis/type/datetime"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
+	"google.golang.org/protobuf/types/known/structpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gotest.tools/v3/assert"
 )
@@ -46,7 +49,54 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				Read:   true,
 			},
 		},
-
+		{
+			name: "publicv1.WhosOnFirstGeoJson",
+			row: []bigquery.Value{
+				"geoid",
+				int64(1192980459),
+				`{"lat": 76.16119999999999, "lon": 14.03075}`,
+				"Point",
+				"76.1612,14.03075,76.1612,14.03075",
+				"geonames",
+				int64(1536368481),
+				time.Date(2023, 1, 10, 0, 0, 0, 0, time.UTC),
+			},
+			schema: bigquery.Schema{
+				{Name: "geoid", Type: bigquery.StringFieldType},
+				{Name: "id", Type: bigquery.IntegerFieldType},
+				{Name: "body", Type: bigquery.JSONFieldType},
+				{Name: "geometry_type", Type: bigquery.StringFieldType},
+				{Name: "bounding_box", Type: bigquery.StringFieldType},
+				{Name: "geom", Type: bigquery.StringFieldType},
+				{Name: "last_modified", Type: bigquery.IntegerFieldType},
+				{Name: "last_modified_timestamp", Type: bigquery.TimestampFieldType},
+			},
+			expected: &publicv1.WhosOnFirstGeoJson{
+				Geoid: "geoid",
+				Id:    1192980459,
+				Body: &structpb.Struct{
+					Fields: map[string]*structpb.Value{
+						"lat": &structpb.Value{
+							Kind: &structpb.Value_NumberValue{
+								NumberValue: 76.16119999999999,
+							},
+						},
+						"lon": &structpb.Value{
+							Kind: &structpb.Value_NumberValue{
+								NumberValue: 14.03075,
+							},
+						},
+					},
+				},
+				GeometryType: "Point",
+				BoundingBox:  "76.1612,14.03075,76.1612,14.03075",
+				Geom:         "geonames",
+				LastModified: 1536368481,
+				LastModifiedTimestamp: &timestamppb.Timestamp{
+					Seconds: 1673308800,
+				},
+			},
+		},
 		{
 			name: "library.UpdateBookRequest",
 			row: []bigquery.Value{

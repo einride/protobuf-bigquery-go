@@ -191,7 +191,7 @@ func (o SchemaOptions) inferFieldSchemaType(field protoreflect.FieldDescriptor) 
 		case wkt.BytesValue:
 			return bigquery.BytesFieldType
 		case wkt.Struct:
-			return bigquery.StringFieldType // JSON string
+			return bigquery.JSONFieldType
 		case wkt.Date:
 			return bigquery.DateFieldType
 		case wkt.DateTime:

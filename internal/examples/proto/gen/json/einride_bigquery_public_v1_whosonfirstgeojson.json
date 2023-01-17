@@ -13,7 +13,7 @@
   },
   {
     "name": "body",
-    "type": "STRING",
+    "type": "JSON",
     "mode": "NULLABLE",
     "description": "STRING NULLABLE"
   },
