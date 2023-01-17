@@ -31,6 +31,8 @@ type SchemaOptions struct {
 	UseModeFromFieldBehavior bool
 	// UseProtoCommentsAsDescription use the proto comments to populate the description of the BigQuery field
 	UseProtoCommentsAsDescription bool
+	// UseJSONStructs use JSON type instead of string for STRUCT type
+	UseJSONStructs bool
 }
 
 // InferSchema infers a BigQuery schema for the given proto.Message using options in
@@ -191,7 +193,10 @@ func (o SchemaOptions) inferFieldSchemaType(field protoreflect.FieldDescriptor) 
 		case wkt.BytesValue:
 			return bigquery.BytesFieldType
 		case wkt.Struct:
-			return bigquery.JSONFieldType
+			if o.UseJSONStructs {
+				return bigquery.JSONFieldType
+			}
+			return bigquery.StringFieldType
 		case wkt.Date:
 			return bigquery.DateFieldType
 		case wkt.DateTime:
