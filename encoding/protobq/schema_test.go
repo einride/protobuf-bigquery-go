@@ -5,6 +5,7 @@ import (
 
 	"cloud.google.com/go/bigquery"
 	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/example/v1"
+	publicv1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
 	"gotest.tools/v3/assert"
@@ -270,6 +271,53 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				{
 					Name:     "optional_int",
 					Type:     bigquery.IntegerFieldType,
+					Required: false,
+				},
+			},
+		},
+
+		{
+			name: "publicv1.WhosOnFirstGeoJson",
+			msg:  &publicv1.WhosOnFirstGeoJson{},
+			expected: bigquery.Schema{
+				{
+					Name:     "geoid",
+					Type:     bigquery.StringFieldType,
+					Required: false,
+				},
+				{
+					Name:     "id",
+					Type:     bigquery.IntegerFieldType,
+					Required: false,
+				},
+				{
+					Name:     "body",
+					Type:     bigquery.JSONFieldType,
+					Required: false,
+				},
+				{
+					Name:     "geometry_type",
+					Type:     bigquery.StringFieldType,
+					Required: false,
+				},
+				{
+					Name:     "bounding_box",
+					Type:     bigquery.StringFieldType,
+					Required: false,
+				},
+				{
+					Name:     "geom",
+					Type:     bigquery.StringFieldType,
+					Required: false,
+				},
+				{
+					Name:     "last_modified",
+					Type:     bigquery.IntegerFieldType,
+					Required: false,
+				},
+				{
+					Name:     "last_modified_timestamp",
+					Type:     bigquery.TimestampFieldType,
 					Required: false,
 				},
 			},
