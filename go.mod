@@ -8,20 +8,20 @@ require (
 	github.com/google/go-cmp v0.5.9
 	go.einride.tech/aip v0.60.0
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
-	google.golang.org/api v0.105.0
-	google.golang.org/genproto v0.0.0-20221206210731-b1a01be3a5f6
+	google.golang.org/api v0.109.0
+	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef
 	google.golang.org/protobuf v1.28.1
 	gotest.tools/v3 v3.4.0
 )
 
 require (
-	cloud.google.com/go/compute v1.13.0 // indirect
-	cloud.google.com/go/compute/metadata v0.2.2 // indirect
+	cloud.google.com/go/compute v1.14.0 // indirect
+	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v0.8.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.2.0 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.2.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.7.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b // indirect
