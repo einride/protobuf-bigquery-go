@@ -42,8 +42,8 @@ message DogecoinTransaction {
     string type = 8; // STRING NULLABLE
     repeated string addresses = 9; // STRING REPEATED
 
-  // TOOD: Figure out if there's a common protobuf type for NUMERIC.
-  //string value = 10; // NUMERIC NULLABLE
+    // TOOD: Figure out if there's a common protobuf type for NUMERIC.
+    //string value = 10; // NUMERIC NULLABLE
   }
 
   message Output {
@@ -54,7 +54,7 @@ message DogecoinTransaction {
     string type = 5; // STRING NULLABLE
     repeated string addresses = 6; // STRING REPEATED
 
-  // TOOD: Figure out if there's a common protobuf type for NUMERIC.
-  //string value = 7; // NUMERIC NULLABLE
+    // TOOD: Figure out if there's a common protobuf type for NUMERIC.
+    //string value = 7; // NUMERIC NULLABLE
   }
 }

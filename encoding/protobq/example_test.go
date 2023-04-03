@@ -109,7 +109,8 @@ func ExampleMarshal() {
 	}
 	row, err := protobq.Marshal(msg)
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error properly.
+		panic(err)
 	}
 	expected := map[string]bigquery.Value{
 		"name":   "publishers/123/books/456",
@@ -130,7 +131,8 @@ func ExampleUnmarshal() {
 	}
 	msg := &library.Book{}
 	if err := protobq.Unmarshal(row, msg); err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error properly.
+		panic(err)
 	}
 	expected := &library.Book{
 		Name:   "publishers/123/books/456",
@@ -157,7 +159,8 @@ func ExampleLoad() {
 	}
 	msg := &library.Book{}
 	if err := protobq.Load(row, schema, msg); err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error properly.
+		panic(err)
 	}
 	expected := &library.Book{
 		Name:   "publishers/123/books/456",

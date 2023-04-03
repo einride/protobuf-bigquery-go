@@ -1,10 +1,7 @@
 version: v1
-
 name: buf.build/einride/protobuf-bigquery-examples
-
 deps:
   - buf.build/googleapis/googleapis
-
 lint:
   use:
     - DEFAULT

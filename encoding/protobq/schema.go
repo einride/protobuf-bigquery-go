@@ -213,7 +213,7 @@ func (o SchemaOptions) inferFieldSchemaType(field protoreflect.FieldDescriptor) 
 	return bigquery.RecordFieldType
 }
 
-func (o SchemaOptions) inferEnumFieldType(field protoreflect.FieldDescriptor) bigquery.FieldType {
+func (o SchemaOptions) inferEnumFieldType(_ protoreflect.FieldDescriptor) bigquery.FieldType {
 	if o.UseEnumNumbers {
 		return bigquery.IntegerFieldType
 	}
