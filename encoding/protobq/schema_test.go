@@ -372,6 +372,20 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "examplev1.ExampleStruct (with enable `UseJSONValues`)",
+			opt: SchemaOptions{
+				UseJSONValues: true,
+			},
+			msg: &examplev1.ExampleStruct{},
+			expected: bigquery.Schema{
+				{
+					Name:     "value",
+					Type:     bigquery.JSONFieldType,
+					Required: false,
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
