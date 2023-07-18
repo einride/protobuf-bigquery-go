@@ -55,6 +55,11 @@ func (o SchemaOptions) InferMessageSchema(msg protoreflect.MessageDescriptor) bi
 	if o.UseOneofFields {
 		for i := 0; i < msg.Oneofs().Len(); i++ {
 			oneof := msg.Oneofs().Get(i)
+			// The `optional` keyword creates a synthetic field treated as an oneof
+			// which creates a new field with _ as prefix missmatching the schema creation
+			if oneof.IsSynthetic() {
+				continue
+			}
 			schema = append(schema, o.inferOneofFieldSchema(oneof))
 		}
 	}
@@ -220,7 +225,7 @@ func (o SchemaOptions) inferFieldSchemaType(field protoreflect.FieldDescriptor) 
 	return bigquery.RecordFieldType
 }
 
-func (o SchemaOptions) inferEnumFieldType(field protoreflect.FieldDescriptor) bigquery.FieldType {
+func (o SchemaOptions) inferEnumFieldType(_ protoreflect.FieldDescriptor) bigquery.FieldType {
 	if o.UseEnumNumbers {
 		return bigquery.IntegerFieldType
 	}

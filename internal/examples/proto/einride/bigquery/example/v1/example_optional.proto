@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+message ExampleOptional {
+  optional double opt = 1;
+}
