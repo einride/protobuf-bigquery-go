@@ -76,12 +76,12 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 				Id:    1192980459,
 				Body: &structpb.Struct{
 					Fields: map[string]*structpb.Value{
-						"lat": &structpb.Value{
+						"lat": {
 							Kind: &structpb.Value_NumberValue{
 								NumberValue: 76.16119999999999,
 							},
 						},
-						"lon": &structpb.Value{
+						"lon": {
 							Kind: &structpb.Value_NumberValue{
 								NumberValue: 14.03075,
 							},

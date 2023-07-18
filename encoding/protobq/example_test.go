@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"strconv"
 
 	"cloud.google.com/go/bigquery"
@@ -109,7 +110,7 @@ func ExampleMarshal() {
 	}
 	row, err := protobq.Marshal(msg)
 	if err != nil {
-		// TODO: Handle error.
+		log.Fatal(err)
 	}
 	expected := map[string]bigquery.Value{
 		"name":   "publishers/123/books/456",
@@ -130,7 +131,7 @@ func ExampleUnmarshal() {
 	}
 	msg := &library.Book{}
 	if err := protobq.Unmarshal(row, msg); err != nil {
-		// TODO: Handle error.
+		log.Fatal(err)
 	}
 	expected := &library.Book{
 		Name:   "publishers/123/books/456",
@@ -157,7 +158,7 @@ func ExampleLoad() {
 	}
 	msg := &library.Book{}
 	if err := protobq.Load(row, schema, msg); err != nil {
-		// TODO: Handle error.
+		log.Fatal(err)
 	}
 	expected := &library.Book{
 		Name:   "publishers/123/books/456",
