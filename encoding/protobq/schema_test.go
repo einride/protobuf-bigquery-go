@@ -386,6 +386,20 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "examplev1.ExampleOptional (with enable `UseOneofFields`)",
+			opt: SchemaOptions{
+				UseOneofFields: true,
+			},
+			msg: &examplev1.ExampleOptional{},
+			expected: bigquery.Schema{
+				{
+					Name:     "opt",
+					Type:     bigquery.FloatFieldType,
+					Required: false,
+				},
+			},
+		},
 	} {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
