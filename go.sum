@@ -118,8 +118,8 @@ github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5t
 github.com/zeebo/assert v1.3.0 h1:g7C04CbJuIDKNPFHmsk4hwZDO5O+kntRxzaUoNXj+IQ=
 github.com/zeebo/xxh3 v1.0.2 h1:xZmwmqxHZA8AI603jOQ0tMqmBr9lPeFwGg6d+xy9DC0=
 github.com/zeebo/xxh3 v1.0.2/go.mod h1:5NWz9Sef7zIDm2JHfFlcQvNekmcEl9ekUZQQKCYaDcA=
-go.einride.tech/aip v0.61.0 h1:H7r59BtQDcj8kGNa0Dytw88so1iWrzp6mSOEQgcIJWI=
-go.einride.tech/aip v0.61.0/go.mod h1:YVrCQRL7SCB5Mv7i2ZF1R6vkLPh844RQBCLrrLcefaU=
+go.einride.tech/aip v0.62.0 h1:DVHT0kgIhHfEqcbTUZ/tKTc+YButvOuTVT4JQFWDGo0=
+go.einride.tech/aip v0.62.0/go.mod h1:YVrCQRL7SCB5Mv7i2ZF1R6vkLPh844RQBCLrrLcefaU=
 go.opencensus.io v0.24.0 h1:y73uSU6J157QMP2kn2r30vwW1A2W2WFwSCGnAVxeaD0=
 go.opencensus.io v0.24.0/go.mod h1:vNK8G9p7aAivkbmorf4v+7Hgx+Zs0yY+0fOtgBfjQKo=
 go.opentelemetry.io/proto/otlp v0.7.0/go.mod h1:PqfVotwruBrMGOCsRd/89rSnXhoiJIqeYNgFYFoEGnI=
