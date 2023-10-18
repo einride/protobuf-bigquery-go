@@ -5,13 +5,25 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*" 
 
   - package-ecosystem: gomod
     directory: /
     schedule:
       interval: monthly
+    groups:
+      root-go-dependencies:
+        patterns:
+          - "*" 
 
   - package-ecosystem: gomod
     directory: .sage
     schedule:
       interval: monthly
+    groups:
+      sage-go-dependencies:
+        patterns:
+          - "*" 
