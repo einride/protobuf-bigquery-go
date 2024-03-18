@@ -70,5 +70,17 @@
     "type": "INTEGER",
     "mode": "NULLABLE",
     "description": "INTEGER NULLABLE"
+  },
+  {
+    "name": "duration_ms",
+    "type": "FLOAT",
+    "mode": "NULLABLE",
+    "description": "INTEGER NULLABLE"
+  },
+  {
+    "name": "bike_model",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "STRING NULLABLE"
   }
 ]
