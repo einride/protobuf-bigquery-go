@@ -43,14 +43,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 
 		{
 			ProjectID: "bigquery-public-data",
-			DatasetID: "hacker_news",
-			TableID:   "stories",
-			Limit:     10,
-			Message:   &publicv1.HackerNewsStory{},
-		},
-
-		{
-			ProjectID: "bigquery-public-data",
 			DatasetID: "london_bicycles",
 			TableID:   "cycle_hire",
 			Limit:     10,
