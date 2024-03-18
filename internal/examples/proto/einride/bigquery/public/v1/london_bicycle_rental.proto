@@ -21,4 +21,6 @@ message LondonBicycleRental {
   int64 end_station_logical_terminal = 10; // INTEGER NULLABLE
   int64 start_station_logical_terminal = 11; // INTEGER NULLABLE
   int64 end_station_priority_id = 12; // INTEGER NULLABLE
+  google.protobuf.Duration duration_ms = 13; // INTEGER NULLABLE
+  string bike_model = 14; // STRING NULLABLE
 }
