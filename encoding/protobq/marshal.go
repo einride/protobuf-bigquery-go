@@ -304,9 +304,9 @@ func (o MarshalOptions) marshalWellKnownTypeValue(
 			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.Date, value)
 		}
 		return civil.Date{
-			Year:  int(d.Year),
-			Month: time.Month(d.Month),
-			Day:   int(d.Day),
+			Year:  int(d.GetYear()),
+			Month: time.Month(d.GetMonth()),
+			Day:   int(d.GetDay()),
 		}, nil
 	case wkt.DateTime:
 		d, ok := value.Message().Interface().(*datetime.DateTime)
@@ -316,15 +316,15 @@ func (o MarshalOptions) marshalWellKnownTypeValue(
 		if o.Schema.UseDateTimeWithoutOffset {
 			return civil.DateTime{
 				Date: civil.Date{
-					Year:  int(d.Year),
-					Month: time.Month(d.Month),
-					Day:   int(d.Day),
+					Year:  int(d.GetYear()),
+					Month: time.Month(d.GetMonth()),
+					Day:   int(d.GetDay()),
 				},
 				Time: civil.Time{
-					Hour:       int(d.Hours),
-					Minute:     int(d.Minutes),
-					Second:     int(d.Seconds),
-					Nanosecond: int(d.Nanos),
+					Hour:       int(d.GetHours()),
+					Minute:     int(d.GetMinutes()),
+					Second:     int(d.GetSeconds()),
+					Nanosecond: int(d.GetNanos()),
 				},
 			}, nil
 		}
@@ -334,17 +334,17 @@ func (o MarshalOptions) marshalWellKnownTypeValue(
 		if !ok {
 			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.LatLng, value)
 		}
-		return fmt.Sprintf("POINT(%f %f)", latLng.Longitude, latLng.Latitude), nil
+		return fmt.Sprintf("POINT(%f %f)", latLng.GetLongitude(), latLng.GetLatitude()), nil
 	case wkt.TimeOfDay:
 		timeOfDay, ok := value.Message().Interface().(*timeofday.TimeOfDay)
 		if !ok {
 			return nil, fmt.Errorf("unexpected value for %s: %v", wkt.TimeOfDay, value)
 		}
 		return civil.Time{
-			Hour:       int(timeOfDay.Hours),
-			Minute:     int(timeOfDay.Minutes),
-			Second:     int(timeOfDay.Seconds),
-			Nanosecond: int(timeOfDay.Nanos),
+			Hour:       int(timeOfDay.GetHours()),
+			Minute:     int(timeOfDay.GetMinutes()),
+			Second:     int(timeOfDay.GetSeconds()),
+			Nanosecond: int(timeOfDay.GetNanos()),
 		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported well-known-type %s", field.Message().FullName())
