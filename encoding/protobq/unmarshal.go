@@ -477,6 +477,8 @@ func (o UnmarshalOptions) unmarshalStruct(bqValue bigquery.Value) (*structpb.Str
 		return nil, fmt.Errorf("unsupported BigQuery value for %s: %#v", wkt.Struct, bqValue)
 	}
 	var structValue structpb.Struct
+	// Linter issue https://github.com/ghostiam/protogetter/issues/8
+	//nolint:protogetter
 	if err := structValue.UnmarshalJSON([]byte(s)); err != nil {
 		return nil, fmt.Errorf("invalid BigQuery value for %s: %#v: %w", wkt.Struct, bqValue, err)
 	}
