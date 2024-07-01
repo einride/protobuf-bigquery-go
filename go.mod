@@ -3,23 +3,23 @@ module go.einride.tech/protobuf-bigquery
 go 1.20
 
 require (
-	cloud.google.com/go v0.114.0
+	cloud.google.com/go v0.115.0
 	cloud.google.com/go/bigquery v1.61.0
 	github.com/google/go-cmp v0.6.0
 	go.einride.tech/aip v0.67.1
-	golang.org/x/oauth2 v0.20.0
-	google.golang.org/api v0.180.0
-	google.golang.org/genproto v0.0.0-20240401170217-c3f982113cda
-	google.golang.org/genproto/googleapis/api v0.0.0-20240513163218-0867130af1f8
-	google.golang.org/protobuf v1.34.1
+	golang.org/x/oauth2 v0.21.0
+	google.golang.org/api v0.183.0
+	google.golang.org/genproto v0.0.0-20240528184218-531527333157
+	google.golang.org/genproto/googleapis/api v0.0.0-20240604185151-ef581f913117
+	google.golang.org/protobuf v1.34.2
 	gotest.tools/v3 v3.5.1
 )
 
 require (
-	cloud.google.com/go/auth v0.4.1 // indirect
+	cloud.google.com/go/auth v0.5.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
-	cloud.google.com/go/iam v1.1.7 // indirect
+	cloud.google.com/go/iam v1.1.8 // indirect
 	github.com/apache/arrow/go/v15 v15.0.2 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
@@ -52,6 +52,6 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.20.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240513163218-0867130af1f8 // indirect
-	google.golang.org/grpc v1.63.2 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240604185151-ef581f913117 // indirect
+	google.golang.org/grpc v1.64.0 // indirect
 )
