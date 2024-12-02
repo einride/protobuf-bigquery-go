@@ -552,7 +552,6 @@ func TestUnmarshalOptions_Load(t *testing.T) {
 			},
 		},
 	} {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			actual := proto.Clone(tt.expected)
 			proto.Reset(actual)
