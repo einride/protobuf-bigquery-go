@@ -401,7 +401,6 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 			},
 		},
 	} {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			actual := tt.opt.InferSchema(tt.msg)
 			assert.DeepEqual(t, tt.expected, actual)

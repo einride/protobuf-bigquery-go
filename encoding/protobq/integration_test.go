@@ -101,7 +101,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Message: &publicv1.DogecoinTransaction{},
 		},
 	} {
-		tt := tt
 		t.Run(fmt.Sprintf("%s.%s.%s", tt.ProjectID, tt.DatasetID, tt.TableID), func(t *testing.T) {
 			t.Parallel()
 			client, err := bigquery.NewClient(context.Background(), tt.ProjectID)

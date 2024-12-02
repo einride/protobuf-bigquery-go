@@ -179,7 +179,6 @@ func TestMarshalSchema(t *testing.T) {
 			},
 		},
 	} {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := MarshalSchema(tt.schema)
 			assert.NilError(t, err)

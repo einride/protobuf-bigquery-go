@@ -336,7 +336,6 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 			expected: map[string]bigquery.Value{},
 		},
 	} {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			actual, err := tt.opt.Marshal(tt.msg)
 			assert.NilError(t, err)
