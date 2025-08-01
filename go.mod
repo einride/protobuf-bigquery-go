@@ -5,12 +5,12 @@ go 1.23.0
 toolchain go1.23.4
 
 require (
-	cloud.google.com/go v0.121.3
+	cloud.google.com/go v0.121.4
 	cloud.google.com/go/bigquery v1.69.0
 	github.com/google/go-cmp v0.7.0
-	go.einride.tech/aip v0.72.0
+	go.einride.tech/aip v0.73.0
 	golang.org/x/oauth2 v0.30.0
-	google.golang.org/api v0.237.0
+	google.golang.org/api v0.239.0
 	google.golang.org/genproto v0.0.0-20250505200425-f936aa4a68b2
 	google.golang.org/genproto/googleapis/api v0.0.0-20250512202823-5a2f75b736a9
 	google.golang.org/protobuf v1.36.6
