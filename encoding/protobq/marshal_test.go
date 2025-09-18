@@ -6,7 +6,7 @@ import (
 
 	"cloud.google.com/go/bigquery"
 	"cloud.google.com/go/civil"
-	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/example/v1"
+	examplev1 "github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/example/v1"
 	expr "google.golang.org/genproto/googleapis/api/expr/v1beta1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/genproto/googleapis/type/datetime"
@@ -334,6 +334,44 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 			msg:      &examplev1.ExampleOneof{},
 			opt:      MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
 			expected: map[string]bigquery.Value{},
+		},
+		{
+			name: "RecursiveMessageWrapper",
+			msg: &examplev1.RecursiveMessageWrapper{
+				Id: "1",
+				RecursiveMessage: &examplev1.RecursiveMessage{
+					Id: "2",
+					Child: &examplev1.RecursiveMessage{
+						Id: "3",
+					},
+				},
+				RepeatedRecursiveWrapper: []*examplev1.RecursiveListWrapper{
+					{
+						Id: "4",
+						Child: &examplev1.RecursiveMessage{
+							Id: "5",
+						},
+					},
+				},
+				RepeatedRecursiveMessage: []*examplev1.RecursiveMessage{
+					{
+						Id: "6",
+						Child: &examplev1.RecursiveMessage{
+							Id: "7",
+						},
+					},
+				},
+			},
+			expected: map[string]bigquery.Value{
+				"id": "1",
+				// recursive_message omitted
+				"repeated_recursive_wrapper": []bigquery.Value{
+					map[string]bigquery.Value{
+						"id": string("4"),
+					},
+				},
+				// repeated_recursive_message omitted
+			},
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

@@ -14,7 +14,7 @@ first-class protobuf support using
 ## Installing
 
 ```bash
-$ go get -u go.einride.tech/protobuf-bigquery
+$ go get -u github.com/goalsgame/protobuf-bigquery
 ```
 
 ## Examples

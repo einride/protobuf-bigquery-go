@@ -197,8 +197,8 @@ const file_einride_bigquery_public_v1_london_bicycle_rental_proto_rawDesc = "" +
 	"\vduration_ms\x18\r \x01(\v2\x19.google.protobuf.DurationR\n" +
 	"durationMs\x12\x1d\n" +
 	"\n" +
-	"bike_model\x18\x0e \x01(\tR\tbikeModelB\xaa\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B\x18LondonBicycleRentalProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"bike_model\x18\x0e \x01(\tR\tbikeModelB\xaf\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B\x18LondonBicycleRentalProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_london_bicycle_rental_proto_rawDescOnce sync.Once

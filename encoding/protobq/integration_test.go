@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
-	"go.einride.tech/protobuf-bigquery/encoding/protobq"
-	publicv1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
+	"github.com/goalsgame/protobuf-bigquery/encoding/protobq"
+	publicv1 "github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/iterator"
 	"google.golang.org/protobuf/proto"

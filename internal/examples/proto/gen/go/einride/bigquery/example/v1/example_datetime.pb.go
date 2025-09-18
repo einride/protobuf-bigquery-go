@@ -72,8 +72,8 @@ const file_einride_bigquery_example_v1_example_datetime_proto_rawDesc = "" +
 	"\n" +
 	"2einride/bigquery/example/v1/example_datetime.proto\x12\x1beinride.bigquery.example.v1\x1a\x1agoogle/type/datetime.proto\"E\n" +
 	"\x0fExampleDateTime\x122\n" +
-	"\tdate_time\x18\x01 \x01(\v2\x15.google.type.DateTimeR\bdateTimeB\xab\x02\n" +
-	"\x1fcom.einride.bigquery.example.v1B\x14ExampleDatetimeProtoP\x01Zcgo.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
+	"\tdate_time\x18\x01 \x01(\v2\x15.google.type.DateTimeR\bdateTimeB\xb0\x02\n" +
+	"\x1fcom.einride.bigquery.example.v1B\x14ExampleDatetimeProtoP\x01Zhgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_example_v1_example_datetime_proto_rawDescOnce sync.Once

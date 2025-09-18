@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"cloud.google.com/go/bigquery"
-	examplev1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/example/v1"
-	publicv1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
+	examplev1 "github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/example/v1"
+	publicv1 "github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/proto"
 	"gotest.tools/v3/assert"
@@ -397,6 +397,24 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 					Name:     "opt",
 					Type:     bigquery.FloatFieldType,
 					Required: false,
+				},
+			},
+		},
+		{
+			name: "examplev1.RecursiveMessageWrapper",
+			msg:  &examplev1.RecursiveMessageWrapper{},
+			expected: bigquery.Schema{
+				{
+					Name: "id",
+					Type: bigquery.StringFieldType,
+				},
+				{
+					Name:     "repeated_recursive_wrapper",
+					Type:     bigquery.RecordFieldType,
+					Repeated: true,
+					Schema: bigquery.Schema{
+						{Name: "id", Type: bigquery.StringFieldType},
+					},
 				},
 			},
 		},

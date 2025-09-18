@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package einride.bigquery.example.v1;
+
+message RecursiveMessageWrapper {
+  string id = 1;
+  RecursiveMessage recursive_message = 2;
+  repeated RecursiveListWrapper repeated_recursive_wrapper = 3;
+  repeated RecursiveMessage repeated_recursive_message = 4;
+}
+
+message RecursiveListWrapper {
+  string id = 1;
+  RecursiveMessage child = 2;
+}
+
+message RecursiveMessage {
+  string id = 1;
+  RecursiveMessage child = 2;
+}

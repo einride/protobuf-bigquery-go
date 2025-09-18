@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/bigquery"
-	"go.einride.tech/protobuf-bigquery/internal/wkt"
+	"github.com/goalsgame/protobuf-bigquery/internal/wkt"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )

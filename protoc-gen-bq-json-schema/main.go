@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"go.einride.tech/protobuf-bigquery/protoc-gen-bq-json-schema/genjson"
+	"github.com/goalsgame/protobuf-bigquery/protoc-gen-bq-json-schema/genjson"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
 )

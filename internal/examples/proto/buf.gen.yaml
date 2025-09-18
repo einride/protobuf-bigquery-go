@@ -3,14 +3,14 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: go.einride.tech/protobuf-bigquery/internal/examples/proto/gen
+    default: github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen
     except:
       - buf.build/googleapis/googleapis
 
 plugins:
   - name: go
     out: gen/go
-    opt: module=go.einride.tech/protobuf-bigquery/internal/examples/proto/gen
+    opt: module=github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen
 
   - name: bq-json-schema
     out: gen/json

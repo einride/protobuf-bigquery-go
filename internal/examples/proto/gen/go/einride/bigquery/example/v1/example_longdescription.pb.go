@@ -73,8 +73,8 @@ const file_einride_bigquery_example_v1_example_longdescription_proto_rawDesc = "
 	"\n" +
 	"9einride/bigquery/example/v1/example_longdescription.proto\x12\x1beinride.bigquery.example.v1\"W\n" +
 	"\x16ExampleLongDescription\x12=\n" +
-	"\x1bfield_with_long_description\x18\x01 \x01(\x03R\x18fieldWithLongDescriptionB\xb2\x02\n" +
-	"\x1fcom.einride.bigquery.example.v1B\x1bExampleLongdescriptionProtoP\x01Zcgo.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
+	"\x1bfield_with_long_description\x18\x01 \x01(\x03R\x18fieldWithLongDescriptionB\xb7\x02\n" +
+	"\x1fcom.einride.bigquery.example.v1B\x1bExampleLongdescriptionProtoP\x01Zhgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_example_v1_example_longdescription_proto_rawDescOnce sync.Once

@@ -147,8 +147,8 @@ const file_einride_bigquery_public_v1_san_fransisco_transit_stop_time_proto_rawD
 	"\x0edeparture_time\x18\x06 \x01(\v2\x16.google.type.TimeOfDayR\rdepartureTime\x12(\n" +
 	"\x10departs_next_day\x18\a \x01(\bR\x0edepartsNextDay\x12!\n" +
 	"\fdropoff_type\x18\b \x01(\tR\vdropoffType\x12'\n" +
-	"\x0fexact_timepoint\x18\t \x01(\bR\x0eexactTimepointB\xb2\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B SanFransiscoTransitStopTimeProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"\x0fexact_timepoint\x18\t \x01(\bR\x0eexactTimepointB\xb7\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B SanFransiscoTransitStopTimeProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_san_fransisco_transit_stop_time_proto_rawDescOnce sync.Once

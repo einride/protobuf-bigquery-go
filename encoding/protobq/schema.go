@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"cloud.google.com/go/bigquery"
+	"github.com/goalsgame/protobuf-bigquery/internal/wkt"
 	"go.einride.tech/aip/fieldbehavior"
-	"go.einride.tech/protobuf-bigquery/internal/wkt"
 	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -81,6 +81,9 @@ func (o SchemaOptions) inferFieldSchema(field protoreflect.FieldDescriptor) *big
 		Description: o.buildDescription(field),
 	}
 	if fieldSchema.Type == bigquery.RecordFieldType && fieldSchema.Schema == nil {
+		if isFieldRecursive(field) {
+			return nil
+		}
 		fieldSchema.Schema = o.InferMessageSchema(field.Message())
 		if len(fieldSchema.Schema) == 0 {
 			return nil

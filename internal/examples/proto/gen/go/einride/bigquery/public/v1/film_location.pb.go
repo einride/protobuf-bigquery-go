@@ -165,8 +165,8 @@ const file_einride_bigquery_public_v1_film_location_proto_rawDesc = "" +
 	"\aactor_1\x18\t \x01(\tR\x06actor1\x12\x17\n" +
 	"\aactor_2\x18\n" +
 	" \x01(\tR\x06actor2\x12\x17\n" +
-	"\aactor_3\x18\v \x01(\tR\x06actor3B\xa3\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B\x11FilmLocationProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"\aactor_3\x18\v \x01(\tR\x06actor3B\xa8\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B\x11FilmLocationProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_film_location_proto_rawDescOnce sync.Once

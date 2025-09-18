@@ -372,8 +372,8 @@ const file_einride_bigquery_public_v1_historic_severe_storm_proto_rawDesc = "" +
 	"\x0eevent_latitude\x18\x1f \x01(\x01R\reventLatitude\x12'\n" +
 	"\x0fevent_longitude\x18  \x01(\x01R\x0eeventLongitude\x124\n" +
 	"\vevent_point\x18! \x01(\v2\x13.google.type.LatLngR\n" +
-	"eventPointB\xaa\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B\x18HistoricSevereStormProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"eventPointB\xaf\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B\x18HistoricSevereStormProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_historic_severe_storm_proto_rawDescOnce sync.Once

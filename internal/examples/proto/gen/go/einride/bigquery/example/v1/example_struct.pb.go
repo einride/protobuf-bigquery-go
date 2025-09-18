@@ -72,8 +72,8 @@ const file_einride_bigquery_example_v1_example_struct_proto_rawDesc = "" +
 	"\n" +
 	"0einride/bigquery/example/v1/example_struct.proto\x12\x1beinride.bigquery.example.v1\x1a\x1cgoogle/protobuf/struct.proto\"=\n" +
 	"\rExampleStruct\x12,\n" +
-	"\x05value\x18\x01 \x01(\v2\x16.google.protobuf.ValueR\x05valueB\xa9\x02\n" +
-	"\x1fcom.einride.bigquery.example.v1B\x12ExampleStructProtoP\x01Zcgo.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
+	"\x05value\x18\x01 \x01(\v2\x16.google.protobuf.ValueR\x05valueB\xae\x02\n" +
+	"\x1fcom.einride.bigquery.example.v1B\x12ExampleStructProtoP\x01Zhgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_example_v1_example_struct_proto_rawDescOnce sync.Once

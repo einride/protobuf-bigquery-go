@@ -102,8 +102,8 @@ const file_einride_bigquery_example_v1_example_comments_proto_rawDesc = "" +
 	"\x1bfield_with_leading_commment\x18\x01 \x01(\x03R\x18fieldWithLeadingCommment\x12?\n" +
 	"\x1cfield_with_trailing_commment\x18\x02 \x01(\x03R\x19fieldWithTrailingCommment\x12^\n" +
 	"-field_with_both_leading_and_trailing_commment\x18\x03 \x01(\x03R'fieldWithBothLeadingAndTrailingCommment\x12B\n" +
-	"\x1efield_with_multi_line_commment\x18\x04 \x01(\x03R\x1afieldWithMultiLineCommmentB\xab\x02\n" +
-	"\x1fcom.einride.bigquery.example.v1B\x14ExampleCommentsProtoP\x01Zcgo.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
+	"\x1efield_with_multi_line_commment\x18\x04 \x01(\x03R\x1afieldWithMultiLineCommmentB\xb0\x02\n" +
+	"\x1fcom.einride.bigquery.example.v1B\x14ExampleCommentsProtoP\x01Zhgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_example_v1_example_comments_proto_rawDescOnce sync.Once

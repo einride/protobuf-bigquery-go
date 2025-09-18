@@ -410,8 +410,8 @@ const file_einride_bigquery_public_v1_dogecoin_transaction_proto_rawDesc = "" +
 	"script_hex\x18\x03 \x01(\tR\tscriptHex\x12/\n" +
 	"\x13required_signatures\x18\x04 \x01(\x03R\x12requiredSignatures\x12\x12\n" +
 	"\x04type\x18\x05 \x01(\tR\x04type\x12\x1c\n" +
-	"\taddresses\x18\x06 \x03(\tR\taddressesB\xaa\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B\x18DogecoinTransactionProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"\taddresses\x18\x06 \x03(\tR\taddressesB\xaf\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B\x18DogecoinTransactionProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_dogecoin_transaction_proto_rawDescOnce sync.Once

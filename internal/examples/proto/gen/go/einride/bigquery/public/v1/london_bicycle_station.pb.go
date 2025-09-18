@@ -178,8 +178,8 @@ const file_einride_bigquery_public_v1_london_bicycle_station_proto_rawDesc = "" 
 	" \x01(\bR\ttemporary\x12#\n" +
 	"\rterminal_name\x18\v \x01(\tR\fterminalName\x124\n" +
 	"\finstall_date\x18\f \x01(\v2\x11.google.type.DateR\vinstallDate\x124\n" +
-	"\fremoval_date\x18\r \x01(\v2\x11.google.type.DateR\vremovalDateB\xab\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B\x19LondonBicycleStationProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"\fremoval_date\x18\r \x01(\v2\x11.google.type.DateR\vremovalDateB\xb0\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B\x19LondonBicycleStationProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_london_bicycle_station_proto_rawDescOnce sync.Once

@@ -139,8 +139,8 @@ const file_einride_bigquery_public_v1_whos_on_first_geojson_proto_rawDesc = "" +
 	"\fbounding_box\x18\x05 \x01(\tR\vboundingBox\x12\x12\n" +
 	"\x04geom\x18\x06 \x01(\tR\x04geom\x12#\n" +
 	"\rlast_modified\x18\a \x01(\x03R\flastModified\x12R\n" +
-	"\x17last_modified_timestamp\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x15lastModifiedTimestampB\xa9\x02\n" +
-	"\x1ecom.einride.bigquery.public.v1B\x17WhosOnFirstGeojsonProtoP\x01Zago.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
+	"\x17last_modified_timestamp\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x15lastModifiedTimestampB\xae\x02\n" +
+	"\x1ecom.einride.bigquery.public.v1B\x17WhosOnFirstGeojsonProtoP\x01Zfgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/public/v1;publicv1\xa2\x02\x03EBP\xaa\x02\x1aEinride.Bigquery.Public.V1\xca\x02\x1bEinride\\Bigquery\\Public_\\V1\xe2\x02'Einride\\Bigquery\\Public_\\V1\\GPBMetadata\xea\x02\x1dEinride::Bigquery::Public::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_public_v1_whos_on_first_geojson_proto_rawDescOnce sync.Once

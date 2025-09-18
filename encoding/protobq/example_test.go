@@ -9,9 +9,9 @@ import (
 	"strconv"
 
 	"cloud.google.com/go/bigquery"
+	"github.com/goalsgame/protobuf-bigquery/encoding/protobq"
+	publicv1 "github.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
 	"github.com/google/go-cmp/cmp"
-	"go.einride.tech/protobuf-bigquery/encoding/protobq"
-	publicv1 "go.einride.tech/protobuf-bigquery/internal/examples/proto/gen/go/einride/bigquery/public/v1"
 	"google.golang.org/api/iterator"
 	"google.golang.org/genproto/googleapis/example/library/v1"
 	"google.golang.org/protobuf/encoding/prototext"

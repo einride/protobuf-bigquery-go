@@ -125,8 +125,8 @@ const file_einride_bigquery_example_v1_example_enum_proto_rawDesc = "" +
 	"\x04Enum\x12\x14\n" +
 	"\x10ENUM_UNSPECIFIED\x10\x00\x12\x0f\n" +
 	"\vENUM_VALUE1\x10\x01\x12\x0f\n" +
-	"\vENUM_VALUE2\x10\x02B\xa7\x02\n" +
-	"\x1fcom.einride.bigquery.example.v1B\x10ExampleEnumProtoP\x01Zcgo.einride.tech/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
+	"\vENUM_VALUE2\x10\x02B\xac\x02\n" +
+	"\x1fcom.einride.bigquery.example.v1B\x10ExampleEnumProtoP\x01Zhgithub.com/goalsgame/protobuf-bigquery/internal/examples/proto/gen/einride/bigquery/example/v1;examplev1\xa2\x02\x03EBE\xaa\x02\x1bEinride.Bigquery.Example.V1\xca\x02\x1bEinride\\Bigquery\\Example\\V1\xe2\x02'Einride\\Bigquery\\Example\\V1\\GPBMetadata\xea\x02\x1eEinride::Bigquery::Example::V1b\x06proto3"
 
 var (
 	file_einride_bigquery_example_v1_example_enum_proto_rawDescOnce sync.Once

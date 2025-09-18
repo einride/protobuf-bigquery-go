@@ -6,7 +6,7 @@ import (
 
 	"cloud.google.com/go/bigquery"
 	"cloud.google.com/go/civil"
-	"go.einride.tech/protobuf-bigquery/internal/wkt"
+	"github.com/goalsgame/protobuf-bigquery/internal/wkt"
 	"google.golang.org/genproto/googleapis/type/date"
 	"google.golang.org/genproto/googleapis/type/datetime"
 	"google.golang.org/genproto/googleapis/type/latlng"

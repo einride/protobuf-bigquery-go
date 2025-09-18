@@ -1,0 +1,7 @@
+[
+  {
+    "name": "id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
