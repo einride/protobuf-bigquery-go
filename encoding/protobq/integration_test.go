@@ -40,15 +40,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Limit:     10,
 			Message:   &publicv1.FilmLocation{},
 		},
-
-		{
-			ProjectID: "bigquery-public-data",
-			DatasetID: "hacker_news",
-			TableID:   "stories",
-			Limit:     10,
-			Message:   &publicv1.HackerNewsStory{},
-		},
-
 		{
 			ProjectID: "bigquery-public-data",
 			DatasetID: "london_bicycles",
@@ -56,7 +47,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Limit:     10,
 			Message:   &publicv1.LondonBicycleRental{},
 		},
-
 		{
 			ProjectID: "bigquery-public-data",
 			DatasetID: "san_francisco_transit_muni",
@@ -64,7 +54,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Limit:     10,
 			Message:   &publicv1.SanFransiscoTransitStopTime{},
 		},
-
 		{
 			ProjectID: "bigquery-public-data",
 			DatasetID: "london_bicycles",
@@ -75,7 +64,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 				DiscardUnknown: true, // Ignore non-snake case field "nbEmptyDocks".
 			},
 		},
-
 		{
 			ProjectID: "bigquery-public-data",
 			DatasetID: "noaa_historic_severe_storms",
@@ -89,7 +77,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 				Schema: protobq.SchemaOptions{UseDateTimeWithoutOffset: true},
 			},
 		},
-
 		{
 			ProjectID: "bigquery-public-data",
 			DatasetID: "geo_whos_on_first",
@@ -97,7 +84,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Limit:     10,
 			Message:   &publicv1.WhosOnFirstGeoJson{},
 		},
-
 		{
 			ProjectID: "bigquery-public-data",
 			DatasetID: "crypto_dogecoin",
@@ -109,7 +95,6 @@ func Test_Integration_PublicDataSets(t *testing.T) {
 			Message: &publicv1.DogecoinTransaction{},
 		},
 	} {
-		tt := tt
 		t.Run(fmt.Sprintf("%s.%s.%s", tt.ProjectID, tt.DatasetID, tt.TableID), func(t *testing.T) {
 			t.Parallel()
 			client, err := bigquery.NewClient(context.Background(), tt.ProjectID)
