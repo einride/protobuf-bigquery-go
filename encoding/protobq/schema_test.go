@@ -394,9 +394,31 @@ func TestSchemaOptions_InferSchema(t *testing.T) {
 			msg: &examplev1.ExampleOptional{},
 			expected: bigquery.Schema{
 				{
-					Name:     "opt",
+					Name:     "opt_double_1",
 					Type:     bigquery.FloatFieldType,
 					Required: false,
+				},
+				{
+					Name:   "opt_message_2",
+					Type:   "RECORD",
+					Schema: bigquery.Schema{{Name: "string_value", Type: bigquery.StringFieldType}},
+				},
+				{
+					Name:     "opt_oneof_message_3",
+					Type:     bigquery.RecordFieldType,
+					Required: false,
+					Schema: bigquery.Schema{
+						{
+							Name:   "oneof_message_2",
+							Type:   bigquery.RecordFieldType,
+							Schema: bigquery.Schema{{Name: "string_value", Type: bigquery.StringFieldType}},
+						},
+						{
+							Name:        "oneof_fields_1",
+							Description: "One of: oneof_empty_message_1, oneof_message_2.",
+							Type:        bigquery.StringFieldType,
+						},
+					},
 				},
 			},
 		},
