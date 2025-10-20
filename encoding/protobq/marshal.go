@@ -84,10 +84,9 @@ func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]big
 				continue
 			}
 			oneofField := msg.WhichOneof(oneofDescriptor)
-			if oneofField == nil {
-				continue
+			if oneofField != nil {
+				result[string(oneofDescriptor.Name())] = string(oneofField.Name())
 			}
-			result[string(oneofDescriptor.Name())] = string(oneofField.Name())
 		}
 	}
 	return result, nil
