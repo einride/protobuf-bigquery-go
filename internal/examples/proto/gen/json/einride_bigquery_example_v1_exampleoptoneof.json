@@ -1,0 +1,14 @@
+[
+  {
+    "name": "oneof_message_2",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "string_value",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  }
+]
