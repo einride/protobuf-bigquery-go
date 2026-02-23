@@ -7,6 +7,6 @@ deps:
 
 lint:
   use:
-    - DEFAULT
+    - STANDARD
   ignore:
     - google
