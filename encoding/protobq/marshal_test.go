@@ -335,6 +335,40 @@ func TestMarshalOptions_Marshal(t *testing.T) {
 			opt:      MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
 			expected: map[string]bigquery.Value{},
 		},
+
+		{
+			name: "optional oneof and optional message",
+			msg: &examplev1.ExampleOptional{
+				OptMessage_2: &examplev1.ExampleOptMessage{
+					StringValue: "opt_message_string_value",
+				},
+				OptOneofMessage_3: &examplev1.ExampleOptOneof{
+					OneofFields_1: &examplev1.ExampleOptOneof_OneofMessage_2{
+						OneofMessage_2: &examplev1.ExampleOptOneof_Message{
+							StringValue: "opt_one_of_message_string_value",
+						},
+					},
+				},
+			},
+			opt: MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
+			expected: map[string]bigquery.Value{
+				"opt_message_2": map[string]bigquery.Value{"string_value": string("opt_message_string_value")},
+				"opt_oneof_message_3": map[string]bigquery.Value{
+					"oneof_fields_1":  string("oneof_message_2"),
+					"oneof_message_2": map[string]bigquery.Value{"string_value": string("opt_one_of_message_string_value")},
+				},
+			},
+		},
+
+		{
+			name: "optional empty oneof and optional empty message",
+			msg: &examplev1.ExampleOptional{
+				OptMessage_2:      nil,
+				OptOneofMessage_3: nil,
+			},
+			opt:      MarshalOptions{Schema: SchemaOptions{UseOneofFields: true}},
+			expected: map[string]bigquery.Value{},
+		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			actual, err := tt.opt.Marshal(tt.msg)
