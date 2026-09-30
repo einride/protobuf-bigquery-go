@@ -6,6 +6,10 @@ updates:
     schedule:
       interval: monthly
     groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
       github-actions-dependencies:
         patterns:
           - "*"
@@ -21,6 +25,10 @@ updates:
     schedule:
       interval: monthly
     groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
       root-go-dependencies:
         patterns:
           - "*"
@@ -39,6 +47,10 @@ updates:
     schedule:
       interval: monthly
     groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
       sage-go-dependencies:
         patterns:
           - "*"
