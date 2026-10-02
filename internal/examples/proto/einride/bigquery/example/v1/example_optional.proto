@@ -3,5 +3,22 @@ syntax = "proto3";
 package einride.bigquery.example.v1;
 
 message ExampleOptional {
-  optional double opt = 1;
+  optional double opt_double_1 = 1;
+  optional ExampleOptMessage opt_message_2 = 2;
+  optional ExampleOptOneof opt_oneof_message_3 = 3;
+}
+
+message ExampleOptMessage {
+  string string_value = 1;
+}
+
+message ExampleOptOneof {
+  oneof oneof_fields_1 {
+    EmptyMessage oneof_empty_message_1 = 1;
+    Message oneof_message_2 = 2;
+  }
+  message EmptyMessage {}
+  message Message {
+    string string_value = 1;
+  }
 }

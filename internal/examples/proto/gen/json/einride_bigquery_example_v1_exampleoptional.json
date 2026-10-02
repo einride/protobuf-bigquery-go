@@ -1,7 +1,38 @@
 [
   {
-    "name": "opt",
+    "name": "opt_double_1",
     "type": "FLOAT",
     "mode": "NULLABLE"
+  },
+  {
+    "name": "opt_message_2",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "string_value",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "opt_oneof_message_3",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "oneof_message_2",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "string_value",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      }
+    ]
   }
 ]
