@@ -80,6 +80,9 @@ func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]big
 	if o.Schema.UseOneofFields {
 		for i := 0; i < msg.Descriptor().Oneofs().Len(); i++ {
 			oneofDescriptor := msg.Descriptor().Oneofs().Get(i)
+			if oneofDescriptor.IsSynthetic() {
+				continue
+			}
 			oneofField := msg.WhichOneof(oneofDescriptor)
 			if oneofField != nil {
 				result[string(oneofDescriptor.Name())] = string(oneofField.Name())

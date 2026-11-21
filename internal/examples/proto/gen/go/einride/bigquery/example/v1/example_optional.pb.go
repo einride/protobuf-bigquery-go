@@ -25,6 +25,10 @@ type ExampleOptional struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Opt           *float64               `protobuf:"fixed64,1,opt,name=opt,proto3,oneof" json:"opt,omitempty"`
 	unknownFields protoimpl.UnknownFields
+
+	OptDouble_1       *float64           `protobuf:"fixed64,1,opt,name=opt_double_1,json=optDouble1,proto3,oneof" json:"opt_double_1,omitempty"`
+	OptMessage_2      *ExampleOptMessage `protobuf:"bytes,2,opt,name=opt_message_2,json=optMessage2,proto3,oneof" json:"opt_message_2,omitempty"`
+	OptOneofMessage_3 *ExampleOptOneof   `protobuf:"bytes,3,opt,name=opt_oneof_message_3,json=optOneofMessage3,proto3,oneof" json:"opt_oneof_message_3,omitempty"`
 	sizeCache     protoimpl.SizeCache
 }
 
@@ -58,11 +62,238 @@ func (*ExampleOptional) Descriptor() ([]byte, []int) {
 	return file_einride_bigquery_example_v1_example_optional_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ExampleOptional) GetOpt() float64 {
-	if x != nil && x.Opt != nil {
-		return *x.Opt
+func (x *ExampleOptional) GetOptDouble_1() float64 {
+	if x != nil && x.OptDouble_1 != nil {
+		return *x.OptDouble_1
 	}
 	return 0
+}
+
+func (x *ExampleOptional) GetOptMessage_2() *ExampleOptMessage {
+	if x != nil {
+		return x.OptMessage_2
+	}
+	return nil
+}
+
+func (x *ExampleOptional) GetOptOneofMessage_3() *ExampleOptOneof {
+	if x != nil {
+		return x.OptOneofMessage_3
+	}
+	return nil
+}
+
+type ExampleOptMessage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	StringValue string `protobuf:"bytes,1,opt,name=string_value,json=stringValue,proto3" json:"string_value,omitempty"`
+}
+
+func (x *ExampleOptMessage) Reset() {
+	*x = ExampleOptMessage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExampleOptMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExampleOptMessage) ProtoMessage() {}
+
+func (x *ExampleOptMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExampleOptMessage.ProtoReflect.Descriptor instead.
+func (*ExampleOptMessage) Descriptor() ([]byte, []int) {
+	return file_einride_bigquery_example_v1_example_optional_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ExampleOptMessage) GetStringValue() string {
+	if x != nil {
+		return x.StringValue
+	}
+	return ""
+}
+
+type ExampleOptOneof struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to OneofFields_1:
+	//
+	//	*ExampleOptOneof_OneofEmptyMessage_1
+	//	*ExampleOptOneof_OneofMessage_2
+	OneofFields_1 isExampleOptOneof_OneofFields_1 `protobuf_oneof:"oneof_fields_1"`
+}
+
+func (x *ExampleOptOneof) Reset() {
+	*x = ExampleOptOneof{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExampleOptOneof) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExampleOptOneof) ProtoMessage() {}
+
+func (x *ExampleOptOneof) ProtoReflect() protoreflect.Message {
+	mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExampleOptOneof.ProtoReflect.Descriptor instead.
+func (*ExampleOptOneof) Descriptor() ([]byte, []int) {
+	return file_einride_bigquery_example_v1_example_optional_proto_rawDescGZIP(), []int{2}
+}
+
+func (m *ExampleOptOneof) GetOneofFields_1() isExampleOptOneof_OneofFields_1 {
+	if m != nil {
+		return m.OneofFields_1
+	}
+	return nil
+}
+
+func (x *ExampleOptOneof) GetOneofEmptyMessage_1() *ExampleOptOneof_EmptyMessage {
+	if x, ok := x.GetOneofFields_1().(*ExampleOptOneof_OneofEmptyMessage_1); ok {
+		return x.OneofEmptyMessage_1
+	}
+	return nil
+}
+
+func (x *ExampleOptOneof) GetOneofMessage_2() *ExampleOptOneof_Message {
+	if x, ok := x.GetOneofFields_1().(*ExampleOptOneof_OneofMessage_2); ok {
+		return x.OneofMessage_2
+	}
+	return nil
+}
+
+type isExampleOptOneof_OneofFields_1 interface {
+	isExampleOptOneof_OneofFields_1()
+}
+
+type ExampleOptOneof_OneofEmptyMessage_1 struct {
+	OneofEmptyMessage_1 *ExampleOptOneof_EmptyMessage `protobuf:"bytes,1,opt,name=oneof_empty_message_1,json=oneofEmptyMessage1,proto3,oneof"`
+}
+
+type ExampleOptOneof_OneofMessage_2 struct {
+	OneofMessage_2 *ExampleOptOneof_Message `protobuf:"bytes,2,opt,name=oneof_message_2,json=oneofMessage2,proto3,oneof"`
+}
+
+func (*ExampleOptOneof_OneofEmptyMessage_1) isExampleOptOneof_OneofFields_1() {}
+
+func (*ExampleOptOneof_OneofMessage_2) isExampleOptOneof_OneofFields_1() {}
+
+type ExampleOptOneof_EmptyMessage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ExampleOptOneof_EmptyMessage) Reset() {
+	*x = ExampleOptOneof_EmptyMessage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExampleOptOneof_EmptyMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExampleOptOneof_EmptyMessage) ProtoMessage() {}
+
+func (x *ExampleOptOneof_EmptyMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExampleOptOneof_EmptyMessage.ProtoReflect.Descriptor instead.
+func (*ExampleOptOneof_EmptyMessage) Descriptor() ([]byte, []int) {
+	return file_einride_bigquery_example_v1_example_optional_proto_rawDescGZIP(), []int{2, 0}
+}
+
+type ExampleOptOneof_Message struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	StringValue string `protobuf:"bytes,1,opt,name=string_value,json=stringValue,proto3" json:"string_value,omitempty"`
+}
+
+func (x *ExampleOptOneof_Message) Reset() {
+	*x = ExampleOptOneof_Message{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExampleOptOneof_Message) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExampleOptOneof_Message) ProtoMessage() {}
+
+func (x *ExampleOptOneof_Message) ProtoReflect() protoreflect.Message {
+	mi := &file_einride_bigquery_example_v1_example_optional_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExampleOptOneof_Message.ProtoReflect.Descriptor instead.
+func (*ExampleOptOneof_Message) Descriptor() ([]byte, []int) {
+	return file_einride_bigquery_example_v1_example_optional_proto_rawDescGZIP(), []int{2, 1}
+}
+
+func (x *ExampleOptOneof_Message) GetStringValue() string {
+	if x != nil {
+		return x.StringValue
+	}
+	return ""
 }
 
 var File_einride_bigquery_example_v1_example_optional_proto protoreflect.FileDescriptor
@@ -87,16 +318,24 @@ func file_einride_bigquery_example_v1_example_optional_proto_rawDescGZIP() []byt
 	return file_einride_bigquery_example_v1_example_optional_proto_rawDescData
 }
 
-var file_einride_bigquery_example_v1_example_optional_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_einride_bigquery_example_v1_example_optional_proto_goTypes = []any{
-	(*ExampleOptional)(nil), // 0: einride.bigquery.example.v1.ExampleOptional
+var file_einride_bigquery_example_v1_example_optional_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_einride_bigquery_example_v1_example_optional_proto_goTypes = []interface{}{
+	(*ExampleOptional)(nil),              // 0: einride.bigquery.example.v1.ExampleOptional
+	(*ExampleOptMessage)(nil),            // 1: einride.bigquery.example.v1.ExampleOptMessage
+	(*ExampleOptOneof)(nil),              // 2: einride.bigquery.example.v1.ExampleOptOneof
+	(*ExampleOptOneof_EmptyMessage)(nil), // 3: einride.bigquery.example.v1.ExampleOptOneof.EmptyMessage
+	(*ExampleOptOneof_Message)(nil),      // 4: einride.bigquery.example.v1.ExampleOptOneof.Message
 }
 var file_einride_bigquery_example_v1_example_optional_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: einride.bigquery.example.v1.ExampleOptional.opt_message_2:type_name -> einride.bigquery.example.v1.ExampleOptMessage
+	2, // 1: einride.bigquery.example.v1.ExampleOptional.opt_oneof_message_3:type_name -> einride.bigquery.example.v1.ExampleOptOneof
+	3, // 2: einride.bigquery.example.v1.ExampleOptOneof.oneof_empty_message_1:type_name -> einride.bigquery.example.v1.ExampleOptOneof.EmptyMessage
+	4, // 3: einride.bigquery.example.v1.ExampleOptOneof.oneof_message_2:type_name -> einride.bigquery.example.v1.ExampleOptOneof.Message
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_einride_bigquery_example_v1_example_optional_proto_init() }
@@ -104,14 +343,80 @@ func file_einride_bigquery_example_v1_example_optional_proto_init() {
 	if File_einride_bigquery_example_v1_example_optional_proto != nil {
 		return
 	}
-	file_einride_bigquery_example_v1_example_optional_proto_msgTypes[0].OneofWrappers = []any{}
+	if !protoimpl.UnsafeEnabled {
+		file_einride_bigquery_example_v1_example_optional_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExampleOptional); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_einride_bigquery_example_v1_example_optional_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExampleOptMessage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_einride_bigquery_example_v1_example_optional_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExampleOptOneof); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_einride_bigquery_example_v1_example_optional_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExampleOptOneof_EmptyMessage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_einride_bigquery_example_v1_example_optional_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExampleOptOneof_Message); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+	}
+	file_einride_bigquery_example_v1_example_optional_proto_msgTypes[0].OneofWrappers = []interface{}{}
+	file_einride_bigquery_example_v1_example_optional_proto_msgTypes[2].OneofWrappers = []interface{}{
+		(*ExampleOptOneof_OneofEmptyMessage_1)(nil),
+		(*ExampleOptOneof_OneofMessage_2)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_einride_bigquery_example_v1_example_optional_proto_rawDesc), len(file_einride_bigquery_example_v1_example_optional_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
