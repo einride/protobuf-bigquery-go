@@ -28,6 +28,10 @@ func Marshal(msg proto.Message) (map[string]bigquery.Value, error) {
 type MarshalOptions struct {
 	// Schema contains the schema options.
 	Schema SchemaOptions
+	// SkipSyntheticOneofFields skips the synthetic oneof fields created by the `optional` keyword.
+	// If this is not set and your schema has an optional field, marshaling against a schema generated
+	// with InferSchema will fail.
+	SkipSyntheticOneofFields bool
 }
 
 // Marshal marshals the given proto.Message in the BigQuery format using options in
@@ -80,6 +84,12 @@ func (o MarshalOptions) marshalMessage(msg protoreflect.Message) (map[string]big
 	if o.Schema.UseOneofFields {
 		for i := 0; i < msg.Descriptor().Oneofs().Len(); i++ {
 			oneofDescriptor := msg.Descriptor().Oneofs().Get(i)
+			// The `optional` keyword creates a synthetic field treated as an oneof
+			// which creates a new field with _ as prefix.
+			// The schema generation skips these fields, so the marshaling should skip them too.
+			if o.SkipSyntheticOneofFields && oneofDescriptor.IsSynthetic() {
+				continue
+			}
 			oneofField := msg.WhichOneof(oneofDescriptor)
 			if oneofField != nil {
 				result[string(oneofDescriptor.Name())] = string(oneofField.Name())
